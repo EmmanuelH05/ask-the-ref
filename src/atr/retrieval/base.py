@@ -1,3 +1,5 @@
+import hashlib
+from collections.abc import Mapping
 from pathlib import Path
 from typing import NamedTuple, Protocol
 
@@ -42,3 +44,17 @@ def load_docs(corpus_dir: Path, languages: tuple[Language, ...]) -> list[Doc]:
         for passage in map(Passage.model_validate_json, lines):
             docs.append(Doc(passage.passage_id, passage.language, passage.text))
     return docs
+
+
+def verify_docs(docs: list[Doc], pins: Mapping[tuple[str, str], str]) -> None:
+    """Refuse docs whose text is not the text the corpus manifest pinned.
+
+    `pins` maps (language, passage id) to the sha256 of the passage text. Without this a
+    stale or edited local corpus would be scored under the frozen corpus pin.
+    """
+    for doc in docs:
+        expected = pins.get((doc.language, doc.passage_id))
+        actual = hashlib.sha256(doc.text.encode("utf-8")).hexdigest()
+        if expected != actual:
+            state = "is not in the corpus manifest" if expected is None else "has changed"
+            raise ValueError(f"{doc.language} passage {doc.passage_id} {state}; rebuild the corpus")

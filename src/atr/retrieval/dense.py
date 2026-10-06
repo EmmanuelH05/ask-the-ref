@@ -14,6 +14,8 @@ Kind = Literal["query", "passage"]
 
 
 class Encoder(Protocol):
+    # Identifies the vector space: the model and how texts are prefixed. Cache keys use it.
+    fingerprint: str
     name: str
 
     def encode_queries(self, texts: list[str]) -> NDArray[np.float32]: ...
@@ -57,6 +59,7 @@ class SentenceTransformerEncoder:
         # Any: the model is imported lazily, so its type cannot be named at module level.
         self._model: Any = None
         self.name = spec.key
+        self.fingerprint = f"{spec.model_name}|{spec.query_prefix}|{spec.passage_prefix}"
 
     @property
     def is_loaded(self) -> bool:
@@ -86,9 +89,10 @@ class CachedEncoder:
         self._inner = inner
         self._dir = cache_dir
         self.name = inner.name
+        self.fingerprint = inner.fingerprint
 
     def _path(self, kind: Kind, text: str) -> Path:
-        key = cache_key(self._inner.name, kind, text)
+        key = cache_key(self._inner.fingerprint, kind, text)
         return self._dir / key[:2] / f"{key}.npy"
 
     def _encode(self, kind: Kind, texts: list[str]) -> NDArray[np.float32]:

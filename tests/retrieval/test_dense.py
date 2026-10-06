@@ -33,6 +33,7 @@ def _stack(texts: list[str], suffix: str = "") -> NDArray[np.float32]:
 
 class FakeEncoder:
     name = "fake"
+    fingerprint = "fake|v1"
 
     def __init__(self) -> None:
         self.query_batches: list[list[str]] = []
@@ -116,7 +117,7 @@ def test_cached_returns_same_vectors_and_writes_one_file_per_text(tmp_path: Path
     np.testing.assert_allclose(out, FakeEncoder().encode_passages(texts))
     assert out.dtype == np.float32
     assert len(list(tmp_path.rglob("*.npy"))) == 2
-    key = cache_key("fake", "passage", "ab")
+    key = cache_key("fake|v1", "passage", "ab")
     assert (tmp_path / key[:2] / f"{key}.npy").exists()
 
 
@@ -181,3 +182,20 @@ def test_sentence_transformer_encoder_construction_loads_nothing() -> None:
     encoder = SentenceTransformerEncoder(ENCODERS["me5-small"], device="cpu")
     assert encoder.name == "me5-small"
     assert encoder.is_loaded is False
+
+
+def test_cache_is_keyed_by_the_encoder_fingerprint_not_its_name(tmp_path: Path) -> None:
+    first = FakeEncoder()
+    CachedEncoder(first, tmp_path).encode_passages(["zorb"])
+    changed = FakeEncoder()
+    changed.fingerprint = "fake|v2"
+    CachedEncoder(changed, tmp_path).encode_passages(["zorb"])
+    assert changed.passage_batches == [["zorb"]]
+
+
+def test_sentence_transformer_fingerprint_covers_model_and_both_prefixes() -> None:
+    spec = ENCODERS["me5-small"]
+    encoder = SentenceTransformerEncoder(spec)
+    assert spec.model_name in encoder.fingerprint
+    other = SentenceTransformerEncoder(spec.model_copy(update={"passage_prefix": "p: "}))
+    assert other.fingerprint != encoder.fingerprint

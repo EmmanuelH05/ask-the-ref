@@ -124,3 +124,11 @@ def test_name_defaults_and_can_be_set() -> None:
 def test_satisfies_retriever_protocol() -> None:
     retriever: Retriever = BM25Retriever([doc("a", "zorb")])
     assert retriever.search("zorb", 1)[0].passage_id == "a"
+
+
+def test_scores_do_not_depend_on_the_order_query_terms_are_summed_in() -> None:
+    docs = [Doc("L1.1", "en", "zorb quix plim wobble gate zorb"), Doc("L1.2", "en", "plim gate")]
+    retriever = BM25Retriever(docs)
+    forward = retriever.search("zorb quix plim wobble gate", 2)
+    backward = retriever.search("gate wobble plim quix zorb", 2)
+    assert forward == backward

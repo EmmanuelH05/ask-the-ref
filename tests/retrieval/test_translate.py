@@ -12,7 +12,7 @@ from atr.retrieval.translate import Identity, OllamaTranslator, QueryRewriter
 
 SPANISH = "¿Puede el portero recoger el balón con la mano tras un pase de un compañero?"
 MIXED = "Can the keeper agarrar la pelota after a throw-in?"
-ANSWER = "Can the keeper pick it up?"
+ANSWER = "Can the keeper pick up the ball by hand after a pass from a teammate?"
 
 
 class FakePost:
@@ -155,7 +155,7 @@ def test_cost_ms_replays_the_original_compute_time_even_from_the_cache(
 ) -> None:
     ticks = iter([10.0, 10.25])
     monkeypatch.setattr(translate.time, "perf_counter", lambda: next(ticks))
-    monkeypatch.setattr(translate, "_post", lambda url, payload, timeout: {"response": "Hi?"})
+    monkeypatch.setattr(translate, "_post", lambda url, payload, timeout: {"response": ANSWER})
     first = make(tmp_path)
     assert first.cost_ms(SPANISH, "es") == 0.0
     first.rewrite(SPANISH, "es")
@@ -166,3 +166,49 @@ def test_cost_ms_replays_the_original_compute_time_even_from_the_cache(
 
 def test_identity_costs_nothing() -> None:
     assert Identity().cost_ms("anything", "es") == 0.0
+
+
+@pytest.mark.parametrize(
+    "reply",
+    [
+        "What card?",
+        "The keeper 守门员 picks it up and what happens next in the zorb match today?",
+        "Does the zorb count if it wobbles over the long gate twice?\n\nEnglish: Does it count?",
+    ],
+)
+def test_a_truncated_mixed_script_or_repeated_reply_is_rejected_and_not_cached(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, reply: str
+) -> None:
+    calls = []
+
+    def fake(url: str, payload: dict[str, object], timeout: float) -> dict[str, object]:
+        calls.append(1)
+        return {"response": reply}
+
+    monkeypatch.setattr(translate, "_post", fake)
+    long_question = "¿Cuenta el zorb si se tambalea dos veces sobre la puerta larga del campo?"
+    for _ in range(2):
+        with pytest.raises(RuntimeError, match="m1"):
+            make(tmp_path).rewrite(long_question, "es")
+    assert len(calls) == 4
+
+
+def test_prompt_asks_for_every_sentence() -> None:
+    assert "every sentence" in translate.PROMPT_TEMPLATE
+
+
+def test_a_rejected_reply_falls_back_to_the_second_model(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    asked: list[object] = []
+
+    def fake(url: str, payload: dict[str, object], timeout: float) -> dict[str, object]:
+        asked.append((payload["model"], payload.get("think")))
+        return {"response": "What card?" if payload["model"] == "m1" else ANSWER}
+
+    monkeypatch.setattr(translate, "_post", fake)
+    monkeypatch.setattr(translate, "LOW_EFFORT_REASONERS", frozenset({"m2"}))
+    translator = OllamaTranslator(model="m1", fallback_model="m2", cache=JsonCache(tmp_path))
+    assert translator.rewrite(SPANISH, "es") == ANSWER
+    assert asked == [("m1", None), ("m2", "low")]
+    assert translator.name == "translate:m1"

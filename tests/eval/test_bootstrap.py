@@ -93,14 +93,24 @@ def test_clustered_interval_is_wider_than_naive_for_identical_clusters() -> None
     assert (naive.n, naive.n_clusters) == (200, 200)
 
 
-def test_unequal_cluster_sizes_use_pooled_mean() -> None:
-    # Cluster "a" has 1 value of 0, cluster "b" has 3 values of 1. Each resample
-    # is a weighted mean: both a (0), both b (1), or a mix (3/4 for one each, etc.)
-    result = bootstrap_ci([0.0, 1.0, 1.0, 1.0], clusters=["a", "b", "b", "b"], resamples=2000)
-    assert result.mean == pytest.approx(0.75)
-    assert result.low == pytest.approx(0.0)
-    assert result.high == pytest.approx(1.0)
-    assert result.n_clusters == 2
+def test_unequal_cluster_sizes_match_a_brute_force_pooled_bootstrap() -> None:
+    values = [0.0, 1.0, 1.0, 1.0, 0.2, 0.4, 0.9, 0.9, 0.1]
+    labels = ["a", "b", "b", "b", "c", "c", "d", "d", "e"]
+    groups = [[0.0], [1.0, 1.0, 1.0], [0.2, 0.4], [0.9, 0.9], [0.1]]
+    resamples, seed = 4000, 3
+    # The same draws as the implementation (one rng.integers call), then a plain loop that
+    # pools the VALUES of the drawn clusters. A mean of cluster means would give other numbers.
+    drawn = np.random.default_rng(seed).integers(0, len(groups), size=(resamples, len(groups)))
+    means = []
+    for row in drawn:
+        pooled = [value for index in row for value in groups[int(index)]]
+        means.append(sum(pooled) / len(pooled))
+    low, high = np.quantile(means, [0.025, 0.975])
+    result = bootstrap_ci(values, clusters=labels, resamples=resamples, seed=seed)
+    assert result.low == pytest.approx(float(low))
+    assert result.high == pytest.approx(float(high))
+    unweighted = [float(np.mean([np.mean(groups[int(i)]) for i in row])) for row in drawn]
+    assert float(np.quantile(unweighted, 0.975)) != pytest.approx(result.high)
 
 
 def test_cluster_bootstrap_is_fast() -> None:

@@ -10,12 +10,13 @@ from numpy.typing import NDArray
 from pydantic import BaseModel, ConfigDict
 
 from atr.cache import JsonCache
+from atr.corpus.build import CorpusManifest
 from atr.corpus.models import Language
 from atr.eval.metrics import score_question
 from atr.eval.report import Record, SliceRow, format_rows, latency_summary, summarize
 from atr.evalset.freeze import CORPUS_MANIFEST, verify_frozen
 from atr.evalset.models import Question, Split, expand
-from atr.retrieval.base import Retriever, load_docs
+from atr.retrieval.base import Retriever, load_docs, verify_docs
 from atr.retrieval.bm25 import BM25Retriever
 from atr.retrieval.dense import (
     ENCODERS,
@@ -60,6 +61,7 @@ class _PassageCachedEncoder:
 
     def __init__(self, inner: Encoder, cache_dir: Path) -> None:
         self.name = inner.name
+        self.fingerprint = inner.fingerprint
         self._inner = inner
         self._cached = CachedEncoder(inner, cache_dir)
 
@@ -70,7 +72,13 @@ class _PassageCachedEncoder:
         return self._cached.encode_passages(texts)
 
 
-def check_split_allowed(split: Split, *, unreviewed_groups: int) -> None:
+def check_split_allowed(split: Split, *, unreviewed_groups: int, manifest_unreviewed: int) -> None:
+    """`unreviewed_groups` is counted from the questions; the manifest's own count is unhashed."""
+    if unreviewed_groups != manifest_unreviewed:
+        raise ValueError(
+            f"the manifest says {manifest_unreviewed} unreviewed groups but the questions "
+            f"file has {unreviewed_groups}"
+        )
     if split == "test" and unreviewed_groups > 0:
         raise PermissionError(
             f"the test split is barred: {unreviewed_groups} question groups have had no human "
@@ -136,6 +144,8 @@ def evaluate(
 
 def build_retriever(key: str, index: str, corpus_dir: Path) -> Retriever:
     docs = load_docs(corpus_dir, INDEXES[index])
+    manifest = CorpusManifest.model_validate_json(CORPUS_MANIFEST.read_text(encoding="utf-8"))
+    verify_docs(docs, {(e.language, e.passage_id): e.sha256 for e in manifest.passages})
     encoder_key = RETRIEVERS[key]
     if encoder_key is None:
         return BM25Retriever(docs, name=key)
@@ -183,7 +193,11 @@ def print_run(info: RunInfo) -> None:
 def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
     groups, manifest = verify_frozen(args.questions, args.manifest, CORPUS_MANIFEST)
-    check_split_allowed(args.split, unreviewed_groups=manifest.unreviewed_groups)
+    check_split_allowed(
+        args.split,
+        unreviewed_groups=sum(1 for group in groups if not group.spanish_reviewed),
+        manifest_unreviewed=manifest.unreviewed_groups,
+    )
     questions = [q for g in groups if manifest.splits[g.group_id] == args.split for q in expand(g)]
     retriever = build_retriever(args.retriever, args.index, args.corpus_dir)
     rewriter: QueryRewriter = (

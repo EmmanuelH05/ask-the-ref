@@ -376,3 +376,23 @@ served from the cache does not report a rewrite latency near zero. Passage vecto
 cached; query vectors never are, for the same reason. One warm-up search runs before timing.
 The rewrite latency rows include English questions, which cost 0.
 The `test` split is refused while the manifest counts any unreviewed group (D18).
+
+## D28. Fixes from the phase 3 review (main session, 2026-10-05)
+
+- Translation (amends D26): the first prompt made the model translate only the last sentence
+  of a scenario, and one reply drifted into Chinese. The prompt now asks for every sentence.
+  `translation_problem(source, translation)` rejects a reply with non-Latin script, a reply
+  that repeats the prompt, and a reply whose word count is under 0.5 or over 2.0 times the
+  source. A rejected reply goes to a fallback model (`gpt-oss:20b`, `think: low`); temperature
+  is 0, so asking the same model again would change nothing. If both are rejected the run
+  stops. The cache key includes both model names and the prompt.
+  Measured on the 90 non-English dev questions with the new prompt: `qwen2.5:14b` alone was
+  rejected on 1 (`uv run python <scratch>/translator_probe.py qwen2.5:14b none 90`, a
+  scratch probe, not kept in the repo).
+- The test-split bar (D18) counts unreviewed groups from the questions file itself and
+  refuses a manifest that disagrees.
+- Embedding cache keys use the encoder `fingerprint` (model name and both prefixes), not its
+  short key (amends D25).
+- A run checks every indexed passage's text hash against `corpus/manifest.json`.
+- BM25 sums query terms in sorted order, so scores do not depend on the hash seed.
+- All seven dev runs were regenerated with the committed code.

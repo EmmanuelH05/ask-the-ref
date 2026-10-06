@@ -27,11 +27,11 @@ def question(question_id: str, gold: list[str], kind: str = "plain") -> Question
 
 
 def test_check_split_allowed_bars_test_while_groups_are_unreviewed() -> None:
-    check_split_allowed("dev", unreviewed_groups=5)
-    check_split_allowed("heldout", unreviewed_groups=5)
-    check_split_allowed("test", unreviewed_groups=0)
+    check_split_allowed("dev", unreviewed_groups=5, manifest_unreviewed=5)
+    check_split_allowed("heldout", unreviewed_groups=5, manifest_unreviewed=5)
+    check_split_allowed("test", unreviewed_groups=0, manifest_unreviewed=0)
     with pytest.raises(PermissionError, match="D18"):
-        check_split_allowed("test", unreviewed_groups=5)
+        check_split_allowed("test", unreviewed_groups=5, manifest_unreviewed=5)
 
 
 def test_run_name_encodes_retriever_rewriter_index_and_split() -> None:
@@ -56,3 +56,8 @@ def test_evaluate_scores_questions_with_gold_and_leaves_the_rest_unscored() -> N
     assert unscored.metrics is None and unscored.ranked == ["L1.1", "L1.2"]
     assert set(scored.latency_ms) == {"rewrite", "search"}
     assert all(value >= 0 for value in scored.latency_ms.values())
+
+
+def test_check_split_allowed_refuses_a_manifest_that_disagrees_with_the_questions() -> None:
+    with pytest.raises(ValueError, match="manifest"):
+        check_split_allowed("dev", unreviewed_groups=5, manifest_unreviewed=0)

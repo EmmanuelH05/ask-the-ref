@@ -32,7 +32,7 @@ class BM25Retriever:
 
     def search(self, query: str, k: int) -> list[Hit]:
         scores: dict[int, float] = {}
-        for term in set(search_tokens(query)):
+        for term in sorted(set(search_tokens(query))):
             postings = self._postings.get(term, [])
             idf = self._idf(len(postings))
             for index, tf in postings:

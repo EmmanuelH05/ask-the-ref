@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from atr.corpus.models import Passage, count_words
-from atr.retrieval.base import Doc, Hit, load_docs, top_hits
+from atr.retrieval.base import Doc, Hit, load_docs, top_hits, verify_docs
 
 
 def test_top_hits_keeps_the_best_score_per_passage_and_orders_by_score_then_id() -> None:
@@ -34,3 +34,15 @@ def test_load_docs_reads_the_requested_editions_in_order(tmp_path: Path) -> None
         (tmp_path / f"{language}.jsonl").write_text(passage.model_dump_json() + "\n")
     assert load_docs(tmp_path, ("en",)) == [Doc("L1.1", "en", "blue wombats")]
     assert [d.language for d in load_docs(tmp_path, ("en", "es"))] == ["en", "es"]
+
+
+def test_verify_docs_accepts_matching_text_and_names_a_changed_or_unknown_passage() -> None:
+    import hashlib
+
+    good = Doc("L1.1", "en", "blue wombats")
+    pins = {("en", "L1.1"): hashlib.sha256(b"blue wombats").hexdigest()}
+    verify_docs([good], pins)
+    with pytest.raises(ValueError, match=r"L1\.1"):
+        verify_docs([Doc("L1.1", "en", "red wombats")], pins)
+    with pytest.raises(ValueError, match=r"L9\.9"):
+        verify_docs([Doc("L9.9", "en", "blue wombats")], pins)
