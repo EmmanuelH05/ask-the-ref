@@ -235,3 +235,33 @@ group has `spanish_reviewed` true, writes the questions file and the manifest, p
 Amends D12 before any question is frozen: single-character tokens are dropped (a possessive
 left a stray "s" that matched across texts), and "cannot", "antes", "después" and "durante"
 join `STOPWORDS`. Found from false leak flags on the first review sheet.
+
+## D17. Fixes from the phase 2 review (main session, 2026-10-05)
+
+- Stemming (amends D12, D16): apostrophes are deleted before tokenizing, so contractions stay
+  one stopword and possessives stem to the noun; a token of 4 or more characters loses a
+  final "s" unless it ends in "ss", and then a final "e". That makes "jugadores" meet
+  "jugador" and "offences" meet "offence".
+- `build_manifest(groups, splits, *, seed, test_fraction, corpus_pin, reviewed_by)`: `splits` is
+  positional (amends D15). The manifest field is `corpus_pin`, a hash of the sorted
+  (language, passage id, text hash) entries of `corpus/manifest.json`, not of the file bytes,
+  so a refetch of identical text keeps the pin.
+- `verify_frozen(questions, manifest, corpus_manifest)` recomputes the hash and the pin and
+  raises on any mismatch. The stats command and every later eval run go through it.
+- The freeze CLI takes `--allow-unreviewed`; the manifest records `unreviewed_groups`.
+- The blind-check flag fires for any group without gold, not only out_of_scope; an unchecked
+  group is flagged "not blind-checked"; a missing blind directory, a repeated group and picks
+  for unknown groups raise. Code-switched paraphrases are leak-checked against both editions.
+
+## D18. Provisional freeze (main session, 2026-10-05)
+
+mannie said to keep going before reviewing the questions. The set is frozen now with
+`--allow-unreviewed` so that the split and the gold labels are locked before any retrieval
+work. `reviewed_by` says the review is pending, and the manifest counts every group as
+unreviewed. Rules that follow:
+- No test-split result is produced or looked at until mannie has reviewed the set and it
+  has been re-frozen under his name. Dev and held-out results before that are provisional.
+- A re-freeze after his fixes keeps every existing group in its current split (the old
+  manifest's splits are reused; only new groups are assigned), so edits cannot reshuffle test.
+- Nothing may claim that the Spanish or code-switched text was written or reviewed by a
+  native speaker until that re-freeze.

@@ -29,7 +29,7 @@ def test_summarize_of_nothing_is_none() -> None:
     assert summarize([]) is None
 
 
-def test_count_table_counts_questions_as_three_per_group() -> None:
+def test_count_table_counts_groups_per_type_and_split() -> None:
     groups = [group("A-1", "plain", ["L1.1"]), group("A-2", "plain", ["L1.2"])]
     groups.append(group("A-3", "out_of_scope", []))
     splits = {"A-1": "dev", "A-2": "test", "A-3": "dev"}

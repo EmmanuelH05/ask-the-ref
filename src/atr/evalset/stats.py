@@ -5,8 +5,8 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 
 from atr.corpus.models import Passage
-from atr.evalset.freeze import EvalManifest
-from atr.evalset.models import QUESTION_LANGUAGES, QUESTION_TYPES, QuestionGroup, Split
+from atr.evalset.freeze import CORPUS_MANIFEST, verify_frozen
+from atr.evalset.models import QUESTION_LANGUAGES, QUESTION_TYPES, QuestionGroup, Split, expand
 from atr.evalset.overlap import GroupOverlap, group_overlap
 from atr.evalset.split import assign_splits
 from atr.evalset.store import load_groups
@@ -65,9 +65,12 @@ def _print_counts(groups: list[QuestionGroup], splits: dict[str, Split]) -> None
     totals = [sum(table[(kind, split)] for kind in QUESTION_TYPES) for split in SPLITS]
     print(f"  {'all':<14}" + "".join(f"{n:>9}" for n in totals) + f"{sum(totals):>9}")
     print("\nQuestions by language and split")
+    questions = [(q.language, splits[q.group_id]) for g in groups for q in expand(g)]
     for language in QUESTION_LANGUAGES:
-        print(f"  {language:<14}" + "".join(f"{n:>9}" for n in totals) + f"{sum(totals):>9}")
-    print(f"  {'all':<14}" + "".join(f"{3 * n:>9}" for n in totals) + f"{3 * sum(totals):>9}")
+        row = [questions.count((language, split)) for split in SPLITS]
+        print(f"  {language:<14}" + "".join(f"{n:>9}" for n in row) + f"{sum(row):>9}")
+    row = [sum(1 for _, s in questions if s == split) for split in SPLITS]
+    print(f"  {'all':<14}" + "".join(f"{n:>9}" for n in row) + f"{sum(row):>9}")
 
 
 def _print_overlap(groups: list[QuestionGroup], scores: dict[str, GroupOverlap]) -> None:
@@ -96,13 +99,16 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--manifest", type=Path, default=Path("evalset/manifest.json"))
     parser.add_argument("--draft-dir", type=Path, default=Path("evalset/draft"))
     parser.add_argument("--corpus-dir", type=Path, default=Path("data/corpus"))
+    parser.add_argument("--corpus-manifest", type=Path, default=CORPUS_MANIFEST)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args(argv)
     if args.manifest.exists():
-        manifest = EvalManifest.model_validate_json(args.manifest.read_text(encoding="utf-8"))
-        groups = load_groups(args.questions.parent)
+        groups, manifest = verify_frozen(args.questions, args.manifest, args.corpus_manifest)
         splits = manifest.splits
-        print(f"FROZEN set, hash {manifest.hash}, reviewed by {manifest.reviewed_by}\n")
+        print(f"FROZEN set, hash {manifest.hash} (recomputed and matched)")
+        print(f"Reviewed by: {manifest.reviewed_by}")
+        print(f"Groups without a human review: {manifest.unreviewed_groups} of {len(groups)}")
+        print(f"Seed {manifest.seed}, held-out laws {manifest.held_out_laws}\n")
     else:
         groups = load_groups(args.draft_dir)
         splits = assign_splits(groups, seed=args.seed)

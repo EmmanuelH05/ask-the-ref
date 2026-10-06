@@ -17,11 +17,13 @@ STOPWORDS: frozenset[str] = frozenset(
     doing have has had having i me my we our you your he him his she her it its they them their
     what which who whom this that these those would could may might must shall also as until
     while many much per whose whether either neither because since cannot
+    doesnt dont didnt isnt arent wasnt werent cant wont wouldnt couldnt shouldnt hasnt havent
+    theyre youre were im ive hes shes thats whats theres lets
     el la los las un una unos unas y e o u pero ni que de del al ante bajo con contra desde en
     entre hacia hasta para por segun sin sobre tras yo tu ella nosotros vosotros ellos
     ellas mi mis tus su sus te se lo le les nos
     os es son era eran fue fueron ser sido siendo somos estar esta estan estaba estoy
-    estamos estas este esto estos ese eso esos esas aquel haber ha han
+    estamos estas este esto estos ese esa eso esos esas aquel haber ha han
     hay habia hemos has tener tiene tienen tengo puede pueden poder podria debe deben deber como
     cuando donde cual cuales quien quienes cuanto cuanta cuantos cuantas porque si mas muy
     tambien ya otro otra otros otras todo toda todos todas algun alguna ningun cada
@@ -46,13 +48,23 @@ class GroupOverlap(BaseModel):
 
 
 def _fold(text: str) -> str:
-    decomposed = unicodedata.normalize("NFKD", text.lower())
+    # Apostrophes are deleted, not split on: "doesn't" must stay one (stop)word and
+    # "keeper's" must stem back to "keeper".
+    decomposed = unicodedata.normalize("NFKD", text.lower().replace("'", "").replace("\u2019", ""))
     return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
 def _stem(token: str) -> str:
-    if len(token) >= _MIN_STRIPPABLE_LENGTH and token.endswith("s"):
-        return token[:-1]
+    """Drop a plural "s", then a final "e", so singular and plural meet in both languages.
+
+    "offences" and "offence" both become "offenc"; "jugadores" and "jugador" both become
+    "jugador". A double "s" is kept ("pass").
+    """
+    long_enough = len(token) >= _MIN_STRIPPABLE_LENGTH
+    if long_enough and token.endswith("s") and not token.endswith("ss"):
+        token = token[:-1]
+    if len(token) >= _MIN_STRIPPABLE_LENGTH and token.endswith("e"):
+        token = token[:-1]
     return token
 
 

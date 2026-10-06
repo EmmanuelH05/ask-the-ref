@@ -37,16 +37,16 @@ def test_accents_folded() -> None:
 
 
 def test_case_folded() -> None:
-    assert content_tokens("ZORB Gate") == ["zorb", "gate"]
+    assert content_tokens("ZORB Gate") == ["zorb", "gat"]
 
 
 def test_punctuation_and_inverted_marks_dropped() -> None:
-    assert content_tokens("¿Cuándo, zorb gate?!") == ["zorb", "gate"]
+    assert content_tokens("¿Cuándo, zorb gate?!") == ["zorb", "gat"]
 
 
 def test_english_stopwords_dropped() -> None:
-    assert content_tokens("What is the gate") == ["gate"]
-    assert content_tokens("This was the gate") == ["gate"]
+    assert content_tokens("What is the gate") == ["gat"]
+    assert content_tokens("This was the gate") == ["gat"]
 
 
 def test_spanish_stopwords_dropped() -> None:
@@ -55,15 +55,15 @@ def test_spanish_stopwords_dropped() -> None:
 
 
 def test_trailing_s_only_on_tokens_longer_than_three() -> None:
-    assert content_tokens("bus gas zorbs gates") == ["bus", "gas", "zorb", "gate"]
+    assert content_tokens("bus gas zorbs gates") == ["bus", "gas", "zorb", "gat"]
 
 
-def test_only_one_trailing_s_is_removed() -> None:
-    assert content_tokens("zorbss") == ["zorbs"]
+def test_double_s_is_not_a_plural() -> None:
+    assert content_tokens("zorbss") == ["zorbss"]
 
 
 def test_order_and_duplicates_kept_and_digits_are_tokens() -> None:
-    assert content_tokens("gate 12 zorb gate") == ["gate", "12", "zorb", "gate"]
+    assert content_tokens("gate 12 zorb gate") == ["gat", "12", "zorb", "gat"]
 
 
 def test_overlap_fraction() -> None:
@@ -134,8 +134,28 @@ def test_group_overlap_none_when_any_gold_is_missing() -> None:
 
 def test_single_letter_tokens_are_dropped() -> None:
     # A possessive leaves a stray "s" ("keeper's" -> "keeper", "s") that would match any other.
-    assert content_tokens("the zorb's wobble") == ["zorb", "wobble"]
+    assert content_tokens("the zorb's wobble") == ["zorb", "wobbl"]
 
 
 def test_cannot_antes_despues_and_durante_are_stopwords() -> None:
     assert content_tokens("cannot antes después durante zorb") == ["zorb"]
+
+
+def test_contractions_and_possessives_do_not_leave_debris() -> None:
+    assert content_tokens("the zorb's keeper doesn't wobble, they\u2019re late") == [
+        "zorb",
+        "keeper",
+        "wobbl",
+        "lat",
+    ]
+
+
+def test_plural_and_singular_meet_in_both_languages() -> None:
+    assert content_tokens("jugadores jugador") == ["jugador", "jugador"]
+    assert content_tokens("offences offence") == ["offenc", "offenc"]
+    assert content_tokens("passes pass") == ["pass", "pass"]
+    assert content_tokens("pases pase") == ["pas", "pas"]
+
+
+def test_esa_is_a_stopword() -> None:
+    assert content_tokens("esa zorba") == ["zorba"]

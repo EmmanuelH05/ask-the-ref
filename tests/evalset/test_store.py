@@ -1,10 +1,18 @@
+import json
 from pathlib import Path
 
 import pytest
 
 from atr.corpus.build import CorpusManifest, ManifestEntry
 from atr.evalset.models import QUESTION_TYPES, QuestionGroup
-from atr.evalset.store import corpus_ids, load_groups, validate, write_groups
+from atr.evalset.store import (
+    corpus_ids,
+    corpus_pin,
+    load_file,
+    load_groups,
+    validate,
+    write_groups,
+)
 
 _GOLD = {
     "plain": ["L1.1"],
@@ -143,3 +151,28 @@ def test_corpus_ids_splits_by_language(tmp_path: Path) -> None:
     path.write_text(manifest.model_dump_json(), encoding="utf-8")
 
     assert corpus_ids(path) == ({"L1.1", "L1.2"}, {"L1.1"})
+
+
+def test_corpus_pin_ignores_fetch_time_and_order_but_not_text_hashes(tmp_path: Path) -> None:
+    def write(name: str, fetched_at: str, entries: list[tuple[str, str, str]]) -> Path:
+        passages = [
+            {"passage_id": i, "language": lang, "sha256": sha, "word_count": 1}
+            for i, lang, sha in entries
+        ]
+        manifest = {"edition": "e", "source": "s", "fetched_at": fetched_at, "passages": passages}
+        path = tmp_path / name
+        path.write_text(json.dumps(manifest))
+        return path
+
+    base = [("L1.1", "en", "aa"), ("L1.1", "es", "bb")]
+    first = corpus_pin(write("a.json", "2031-01-01", base))
+    assert corpus_pin(write("b.json", "2032-02-02", list(reversed(base)))) == first
+    assert (
+        corpus_pin(write("c.json", "2031-01-01", [("L1.1", "en", "aa"), ("L1.1", "es", "cc")]))
+        != first
+    )
+
+
+def test_load_file_reads_exactly_one_file(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="does not exist"):
+        load_file(tmp_path / "missing.jsonl")

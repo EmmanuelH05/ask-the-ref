@@ -18,13 +18,20 @@ def leak_tokens(question: str, passages: list[str]) -> list[str]:
 
 def blind_flag(group: QuestionGroup, picked: list[str] | None) -> str | None:
     if picked is None:
-        return None
-    if group.type == "out_of_scope":
+        return "not blind-checked"
+    if not group.gold:
         return f"blind check found an answer in {', '.join(picked)}" if picked else None
     missed = [passage_id for passage_id in group.gold if passage_id not in picked]
     if not missed:
         return None
     return f"blind check missed {', '.join(missed)}; it picked {', '.join(picked) or 'nothing'}"
+
+
+def extra_picks(group: QuestionGroup, picked: list[str] | None) -> list[str]:
+    """Passages the blind checker cited that are not gold: candidates for a second answer."""
+    if picked is None or not group.gold:
+        return []
+    return [passage_id for passage_id in picked if passage_id not in group.gold]
 
 
 def _excerpt(text: str, max_words: int) -> str:
@@ -43,8 +50,15 @@ def _flags(
 ) -> list[str]:
     flags: list[str] = []
     if group.type == "paraphrase":
-        for language, question, edition in (("en", group.en, en), ("es", group.es, es)):
-            shared = leak_tokens(question, [edition[i] for i in group.gold if i in edition])
+        en_gold = [en[i] for i in group.gold if i in en]
+        es_gold = [es[i] for i in group.gold if i in es]
+        checks = (
+            ("en", group.en, en_gold),
+            ("es", group.es, es_gold),
+            ("cs", group.cs, [*en_gold, *es_gold]),
+        )
+        for language, question, passages in checks:
+            shared = leak_tokens(question, passages)
             if shared:
                 flags.append(
                     f"paraphrase shares words with its gold passage ({language}): "
@@ -84,6 +98,9 @@ def render_group(
         f"es→en {_fmt(scores.es_vs_en)}, cs→en {_fmt(scores.cs_vs_en)}, "
         f"cs→es {_fmt(scores.cs_vs_es)}"
     )
+    also = extra_picks(group, picked)
+    if also:
+        lines.append(f"- Blind check also cited: {', '.join(also)}")
     lines.extend(f"- FLAG {flag}" for flag in _flags(group, en, es, picked))
     return "\n".join(lines)
 
@@ -92,7 +109,7 @@ def load_blind(directory: Path) -> dict[str, list[str]]:
     """Blind-check picks by group id, from every jsonl file of {"group_id", "picked"} lines."""
     picks: dict[str, list[str]] = {}
     if not directory.is_dir():
-        return picks
+        raise ValueError(f"blind-check directory {directory} does not exist")
     for path in sorted(directory.glob("*.jsonl")):
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             if not line.strip():
@@ -100,6 +117,8 @@ def load_blind(directory: Path) -> dict[str, list[str]]:
             row = json.loads(line)
             if not isinstance(row.get("group_id"), str) or not isinstance(row.get("picked"), list):
                 raise ValueError(f"{path.name}:{number}: need group_id and picked")
+            if row["group_id"] in picks:
+                raise ValueError(f"{path.name}:{number}: {row['group_id']} appears twice")
             picks[row["group_id"]] = [str(item) for item in row["picked"]]
     return picks
 
@@ -122,6 +141,9 @@ def render_sheet(
     picks: Mapping[str, list[str]],
     excerpt_words: int,
 ) -> str:
+    unknown = sorted(set(picks) - {g.group_id for g in groups})
+    if unknown:
+        raise ValueError(f"blind-check picks for unknown groups: {unknown}")
     blocks = {
         g.group_id: render_group(
             g, en, es, labels, picked=picks.get(g.group_id), excerpt_words=excerpt_words

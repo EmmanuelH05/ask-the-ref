@@ -1,3 +1,4 @@
+import hashlib
 from collections import defaultdict
 from pathlib import Path
 
@@ -16,13 +17,21 @@ def _parse_line(path: Path, number: int, line: str) -> QuestionGroup:
         raise ValueError(f"{path.name}:{number}: {error}") from error
 
 
+def load_file(path: Path) -> list[QuestionGroup]:
+    if not path.is_file():
+        raise ValueError(f"{path} does not exist")
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return [
+        _parse_line(path, number, line)
+        for number, line in enumerate(lines, start=1)
+        if line.strip()
+    ]
+
+
 def load_groups(directory: Path) -> list[QuestionGroup]:
     groups: list[QuestionGroup] = []
     for path in sorted(directory.glob("*.jsonl")):
-        text = path.read_text(encoding="utf-8")
-        for number, line in enumerate(text.splitlines(), start=1):
-            if line.strip():
-                groups.append(_parse_line(path, number, line))
+        groups.extend(load_file(path))
     return groups
 
 
@@ -75,3 +84,14 @@ def corpus_ids(manifest_path: Path) -> tuple[set[str], set[str]]:
     en = {e.passage_id for e in manifest.passages if e.language == "en"}
     es = {e.passage_id for e in manifest.passages if e.language == "es"}
     return en, es
+
+
+def corpus_pin(manifest_path: Path) -> str:
+    """Hash of the corpus content the gold ids point at.
+
+    Built from the passage hashes alone, so refetching identical text gives the same pin
+    while any change of wording or numbering gives a different one.
+    """
+    manifest = CorpusManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+    rows = sorted(f"{e.language}\t{e.passage_id}\t{e.sha256}" for e in manifest.passages)
+    return hashlib.sha256("\n".join(rows).encode("utf-8")).hexdigest()

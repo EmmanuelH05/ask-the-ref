@@ -8,7 +8,14 @@ from pydantic import BaseModel, ConfigDict
 
 from atr.evalset.models import HELD_OUT_LAWS, QuestionGroup, Split
 from atr.evalset.split import assign_splits
-from atr.evalset.store import corpus_ids, load_groups, validate, write_groups
+from atr.evalset.store import (
+    corpus_ids,
+    corpus_pin,
+    load_file,
+    load_groups,
+    validate,
+    write_groups,
+)
 
 SPLIT_NAMES: tuple[Split, ...] = ("dev", "test", "heldout")
 CORPUS_MANIFEST = Path("corpus/manifest.json")
@@ -21,8 +28,9 @@ class EvalManifest(BaseModel):
     seed: int
     test_fraction: float
     held_out_laws: list[int]
-    corpus_manifest_sha256: str
+    corpus_pin: str
     reviewed_by: str
+    unreviewed_groups: int
     counts: dict[str, int]
     splits: dict[str, Split]
 
@@ -53,7 +61,7 @@ def build_manifest(
     *,
     seed: int,
     test_fraction: float,
-    corpus_manifest_sha256: str,
+    corpus_pin: str,
     reviewed_by: str,
 ) -> EvalManifest:
     return EvalManifest(
@@ -61,8 +69,9 @@ def build_manifest(
         seed=seed,
         test_fraction=test_fraction,
         held_out_laws=list(HELD_OUT_LAWS),
-        corpus_manifest_sha256=corpus_manifest_sha256,
+        corpus_pin=corpus_pin,
         reviewed_by=reviewed_by,
+        unreviewed_groups=sum(1 for group in groups if not group.spanish_reviewed),
         counts={name: sum(1 for value in splits.values() if value == name) for name in SPLIT_NAMES},
         splits=dict(splits),
     )
@@ -74,14 +83,39 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--draft-dir", type=Path, default=Path("evalset/draft"))
     parser.add_argument("--out", type=Path, default=Path("evalset/questions.jsonl"))
     parser.add_argument("--manifest", type=Path, default=Path("evalset/manifest.json"))
+    parser.add_argument("--corpus-manifest", type=Path, default=CORPUS_MANIFEST)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--allow-unreviewed",
+        action="store_true",
+        help="freeze although some groups lack a human review; the manifest records how many",
+    )
     return parser.parse_args(argv)
+
+
+def verify_frozen(
+    questions: Path, manifest_path: Path, corpus_manifest: Path
+) -> tuple[list[QuestionGroup], EvalManifest]:
+    """Load the frozen set and refuse it if it no longer matches its own manifest."""
+    manifest = EvalManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+    groups = load_file(questions)
+    actual = evalset_hash(groups, manifest.splits)
+    if actual != manifest.hash:
+        raise ValueError(
+            f"{questions} does not match its manifest: hash {actual}, frozen {manifest.hash}"
+        )
+    pin = corpus_pin(corpus_manifest)
+    if pin != manifest.corpus_pin:
+        raise ValueError(
+            f"the corpus changed since the freeze: pin {pin}, frozen {manifest.corpus_pin}"
+        )
+    return groups, manifest
 
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     groups = load_groups(args.draft_dir)
-    en_ids, es_ids = corpus_ids(CORPUS_MANIFEST)
+    en_ids, es_ids = corpus_ids(args.corpus_manifest)
     problems = validate(groups, en_ids, es_ids)
     errors = [problem for problem in problems if not problem.startswith("warn: ")]
     for problem in problems:
@@ -89,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
     if errors:
         return 1
     unreviewed = [group.group_id for group in groups if not group.spanish_reviewed]
-    if unreviewed:
+    if unreviewed and not args.allow_unreviewed:
         print(f"spanish_reviewed is false for: {unreviewed}", file=sys.stderr)
         return 1
     test_fraction = 0.5
@@ -99,7 +133,7 @@ def main(argv: list[str] | None = None) -> int:
         splits,
         seed=args.seed,
         test_fraction=test_fraction,
-        corpus_manifest_sha256=hashlib.sha256(CORPUS_MANIFEST.read_bytes()).hexdigest(),
+        corpus_pin=corpus_pin(args.corpus_manifest),
         reviewed_by=args.reviewed_by,
     )
     write_groups(groups, args.out)
