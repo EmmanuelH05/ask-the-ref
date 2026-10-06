@@ -1,0 +1,1 @@
+{ "verify": "uv run pytest -q && uv run mypy --strict src && uv run ruff check ." }
