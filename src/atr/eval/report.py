@@ -150,7 +150,7 @@ def format_rows(rows: list[SliceRow] | list[DifferenceRow]) -> str:
     return "\n".join(lines)
 
 
-def _nearest_rank(ordered: list[float], percent: int) -> float:
+def nearest_rank(ordered: list[float], percent: int) -> float:
     return ordered[max(math.ceil(percent / 100 * len(ordered)), 1) - 1]
 
 
@@ -161,8 +161,8 @@ def latency_summary(records: list[Record]) -> dict[str, dict[str, float]]:
             stages.setdefault(stage, []).append(value)
     return {
         stage: {
-            "p50": _nearest_rank(sorted(values), 50),
-            "p95": _nearest_rank(sorted(values), 95),
+            "p50": nearest_rank(sorted(values), 50),
+            "p95": nearest_rank(sorted(values), 95),
             "n": len(values),
         }
         for stage, values in stages.items()

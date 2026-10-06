@@ -480,3 +480,30 @@ returns the STORED ms, so a rerun reports what the call really cost. HTTP failur
 a missing or empty response raise `RuntimeError` naming the model, and nothing is cached. The
 network call is one module function `_post(url, payload, timeout) -> dict[str, object]`
 (urllib only) that tests monkeypatch. No test touches the network.
+
+## D35. Rulebook rewrite (phase 4, main session)
+
+`src/atr/retrieval/rewrite.py`: `RulebookRewriter(llm, model="qwen2.5:14b").expand(text)` asks
+a local model to restate the question in the Laws' vocabulary and returns
+`question + "\n" + restatement` (query expansion, so the original words are kept). A reply
+under 0.3 or over 3.0 times the question's word count falls back to the question alone.
+The restatement is a search query only; it never reaches the user or the answer.
+
+## D36. Decomposition (phase 4, main session)
+
+`src/atr/retrieval/decompose.py`: `Decomposer(llm, model).split(text)` returns two or three
+sub-questions parsed from a JSON array, or an empty list for anything else (one element,
+more than three, not JSON). The pipeline always searches the full question as well and
+fuses all rankings with RRF.
+
+## D37. Pipeline (phase 4, main session)
+
+`src/atr/pipeline.py`: `PipelineConfig` (frozen) holds `label`, `index`, `translate`, `dense`
+(encoder key or None), `bm25`, `title_prefix`, `chunking`, `reranker`, `rewrite`, `decompose`.
+`config_id` is the first 10 hex characters of the sha256 of the config without its label,
+and names the run directory, so a cached run can never be read under another configuration.
+Stage order in `Pipeline.search`: translate; rewrite; decompose; first stage (each retriever
+on each query, depth 50); RRF when there is more than one ranking; rerank the top 20
+passages with the translated-or-original question (never the expanded one), scoring every
+indexed chunk of those passages and keeping the best per passage. The title prefix applies to
+dense docs only. Each stage's time is recorded under its own name.

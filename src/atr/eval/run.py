@@ -56,7 +56,7 @@ class RunInfo(BaseModel):
     table: list[SliceRow]
 
 
-class _PassageCachedEncoder:
+class PassageCachedEncoder:
     """Cache passage vectors but always compute query vectors, so query latency stays real."""
 
     def __init__(self, inner: Encoder, cache_dir: Path) -> None:
@@ -149,7 +149,7 @@ def build_retriever(key: str, index: str, corpus_dir: Path) -> Retriever:
     encoder_key = RETRIEVERS[key]
     if encoder_key is None:
         return BM25Retriever(docs, name=key)
-    encoder = _PassageCachedEncoder(
+    encoder = PassageCachedEncoder(
         SentenceTransformerEncoder(ENCODERS[encoder_key]), CACHE_DIR / "embeddings"
     )
     return DenseRetriever(docs, encoder, name=key)
