@@ -1,92 +1,59 @@
-# Phase 1 plan: corpus in two languages
+# Phase 2 plan: evaluation set
 
-Goal: turn the 2026/27 IFAB Laws of the Game, English and Spanish, into aligned structured
-passages under `data/corpus/`, with a committed manifest of passage IDs and hashes (no text).
+Goal: at least 300 questions with gold passage ids, in English, Spanish and code-switched
+Spanish-English, reviewed by mannie, then split and frozen with a committed hash.
 
-## What the source looks like (verified 2026-10-05)
+This phase is high-stakes: a wrong gold label or a leaky split still produces numbers that
+look fine.
 
-theifab.com is a Gatsby site. Every law page has a JSON twin at
-`https://www.theifab.com/page-data/{es/}laws/latest/<slug>/page-data.json` whose
-`result.pageContext` holds:
+## Shape of the set
 
-- `chapterIndex` (1..17), `chapter.header` ("Law 11" / "Regla 11"), `chapter.title`
-- `chapter.sections[]`: `sectionIndex` (1.., or `null` for an unnumbered introduction),
-  `slug` (identical in both languages), `lawSectionCategoryName` (the section title in that
-  language), `content` (CMS HTML), `images[]`
-- `nextChapterPath`: the chain from Law 1 to Law 17
-- `questionsAndAnswers[]`: IFAB's FAQ, which we do not use
+A question is written once as a `QuestionGroup` (`src/atr/evalset/models.py`): one type, one
+list of gold passage ids, and three texts (`en`, `es`, `cs`). 112 groups give 336 questions.
+The three versions of a group always land in the same split, because a Spanish question in
+dev and its English twin in test would leak.
 
-Glossary pages (`glossary/football-terms`, `glossary/referee-terms`, `glossary/football-bodies`)
-hold `contentBlocks[]` with `htmlContent` of repeated `<h4>Term</h4><p>definition</p>`.
-Spanish glossary terms carry the English term as `Término (→ english term)`.
+| type | groups | gold |
+|---|---|---|
+| plain | 24 | 1 or more passages |
+| paraphrase | 24 | 1 or more, and the question avoids the passage's content words |
+| scenario | 24 | 1 or more, the question is a match situation needing a ruling |
+| multi_rule | 16 | 2 or more, each one needed |
+| false_premise | 12 | the passage that corrects the premise, or none |
+| out_of_scope | 12 | none |
 
-The `notes-on-the-laws` page names the edition ("the 2026/27 edition of the Laws") and says
-English is authoritative when wordings diverge.
+Held-out laws are 3, 5 and 16 (D11). A group with any gold passage in those laws goes to the
+`heldout` slice. Every other group is split dev/test, half each, stratified by type, seeded.
 
-Section `content` markup, counted over all 17 laws in both languages: `p`, `ul`/`li`, `h3`
-(sub-headings, 48 in each language), `strong`, `em`, `br`, and IFAB's change-tracking tags
-`added`, `deleted`, `explanation`, `addedexplanation`, `deletedexplanation` (each with a
-`data-explanation` attribute holding the rationale), plus `ResponsiveImage`,
-`TheFieldInteractivePicture` and `img`. No `<table>` anywhere. Law 14's "Summary table"
-section is a single PNG in both languages.
+## Steps
 
-## Passage model
-
-One passage = the finest unit IFAB's own structure gives. A section with no `h3` is one
-passage. A section with `h3` sub-headings is split at them. Rationale: Law 12 section 4 is
-about 23,000 characters, and a citation to it would point at five pages; the sub-headings
-are IFAB's structure, not ours, and they come in equal numbers in both languages.
-
-Passage ID, identical across languages:
-
-- `L{law}.{section}` for a law section (`L11.1`); `L{law}.0` for an unnumbered introduction
-- `L{law}.{section}.{k}` for the k-th `h3` block of a section (k from 1); `k = 0` for lead text
-  before the first `h3` when it is non-empty
-- `G.{page}.{slug}` for a glossary entry, slug from the English term (`G.football-terms.advantage`)
-
-Alignment: law passages align on ID, checked by equal section `slug` and equal `h3` counts per
-section; glossary football-terms align by the English term in the Spanish arrow annotation;
-referee-terms and football-bodies align by position. Anything that fails is listed, not guessed.
-
-## What is kept, what is dropped
-
-Kept: text inside `added`, `addedexplanation` and `explanation` (that is the current law
-text); list items as `- ` lines; paragraphs separated by a blank line; sub-heading text as
-the passage title.
-Dropped and counted: text inside `deleted` and `deletedexplanation` (previous edition's
-wording); every `data-explanation` attribute (change rationale, not law); all images,
-including the Law 14 summary table (there is no text version); the FAQ blocks (they would hand
-the scenario questions their answers); `about-the-laws`, `notes-on-the-laws`, the VAR protocol
-and the other protocols and guidelines (no law number, out of scope for "cite the law").
+1. Tooling (crew): overlap, split, load and validate, freeze, then review sheet and stats.
+2. Drafting (agents, not builders): English questions with gold from the corpus, then Spanish
+   and code-switched drafts. Drafts live in `evalset/draft/*.jsonl`.
+3. Blind check: separate agents see only the English question and the corpus and name the
+   answering passage. Disagreement with the drafter's gold is flagged on the review sheet,
+   not resolved. An item and its gold label are never confirmed in the same pass.
+4. STOP. mannie reviews `data/review/questions.md`: every question, its gold passages, the
+   overlap numbers and the blind-check flags. Spanish and code-switched text is his to fix.
+5. After his fixes: validate, split, freeze, commit the hash, run the stats check.
 
 ## Files
 
 ```
-src/atr/corpus/models.py    Passage, Alignment, BuildReport (frozen pydantic, extra="forbid")
-src/atr/corpus/html.py      pure: CMS HTML -> text; h3 split; drop counts
-src/atr/corpus/parse.py     pure: one law page-data dict -> list[Passage]
-src/atr/corpus/glossary.py  pure: one glossary page-data dict -> list[Passage]
-src/atr/corpus/align.py     pure: en + es passages -> Alignment
-src/atr/corpus/fetch.py     network: page-data JSON -> data/raw/{en,es}/, data/raw/manifest.json
-src/atr/corpus/build.py     CLI: data/raw -> data/corpus/{en,es}.jsonl, alignment.json, report.json,
-                            corpus/manifest.json (committed: ids + sha256 + word counts, no text)
-src/atr/corpus/stats.py     CLI: the phase check
-tests/corpus/test_*.py      one per pure module; fixtures are invented text, never IFAB text
+src/atr/evalset/models.py    QuestionGroup, Question, types, HELD_OUT_LAWS (done)
+src/atr/evalset/overlap.py   pure: word overlap between a question and its gold passages
+src/atr/evalset/split.py     pure: seeded, stratified split by group
+src/atr/evalset/store.py     load draft jsonl files; validate against the corpus
+src/atr/evalset/freeze.py    canonical bytes, hash, manifest; CLI
+src/atr/evalset/review.py    CLI: the review sheet (contains law text, written under data/)
+src/atr/evalset/stats.py     CLI: the phase check
+tests/evalset/test_*.py
+evalset/draft/*.jsonl        drafts, one QuestionGroup per line
+evalset/questions.jsonl      the frozen set (after review)
+evalset/manifest.json        split per group, hash, corpus manifest hash
 ```
-
-Words are counted with the regex `\w+` on the cleaned text and reported as words, not model
-tokens; the embedding tokenizer arrives in phase 3.
-
-## Waves
-
-Wave 0 (main session): `models.py`, its test, decisions log.
-Wave 1: `html.py` + test, `align.py` + test, `fetch.py` + test of its pure URL helper.
-Wave 2: `parse.py` + test, `glossary.py` + test.
-Wave 3: `build.py`, `stats.py`.
-Then: fetch for real, build, run the check, review the full diff, commit.
 
 ## Check
 
-`uv run python -m atr.corpus.stats` prints passages per law per language, the word-length
-distribution, the alignment rate, every unaligned passage, the drop counts, and 5 random
-aligned pairs. `uv run pytest -q && uv run mypy --strict src && uv run ruff check .` is clean.
+`uv run python -m atr.evalset.stats` prints counts by type, language and split, and the
+overlap distribution per type; the frozen hash is committed and pinned by a test.

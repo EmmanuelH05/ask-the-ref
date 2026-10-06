@@ -1504,6 +1504,12 @@
       "word_count": 52
     },
     {
+      "passage_id": "G.football-terms.semi-automated-offside-technology-saot",
+      "language": "es",
+      "sha256": "8605a029ef78cd1fff1a291b50569a69ed1cf8384e955c736a132fb07e26f23e",
+      "word_count": 32
+    },
+    {
       "passage_id": "G.football-terms.sending-off",
       "language": "es",
       "sha256": "47b5f6f58445e8fc8cf4621d64723341aa6c3fd06cd4e989a6ed48f815713af4",
@@ -1568,12 +1574,6 @@
       "language": "es",
       "sha256": "da508ce3c9ceffb858ea558b9324d9232e0e760009eb15f18df9bec32d3cfc51",
       "word_count": 26
-    },
-    {
-      "passage_id": "G.football-terms.tecnolog-a-semiautomatizada-para-la-detecci-n-del-fuera-de-juego",
-      "language": "es",
-      "sha256": "8605a029ef78cd1fff1a291b50569a69ed1cf8384e955c736a132fb07e26f23e",
-      "word_count": 32
     },
     {
       "passage_id": "G.football-terms.temporary-dismissal",

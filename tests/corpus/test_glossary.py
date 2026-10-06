@@ -202,3 +202,23 @@ def test_bold_line_with_break_is_an_entry_boundary_when_the_cms_forgot_the_h4() 
         ("G.football-terms.zorb", "A round thing."),
         ("G.football-terms.quib-qb", "A square thing."),
     ]
+
+
+def test_spanish_term_without_an_arrow_can_be_joined_by_a_recorded_override() -> None:
+    page = {
+        "result": {
+            "pageContext": {
+                "title": "Términos",
+                "contentBlocks": [
+                    {
+                        "htmlContent": "<h4>Zorbo (&rarr; zorb)</h4><p>Una cosa redonda.</p>"
+                        "<h4>Tecnología semiautomatizada para la detección del fuera de juego</h4>"
+                        "<p>Una cosa nueva.</p>"
+                    }
+                ],
+            }
+        }
+    }
+    passages, _ = parse_glossary(page, "es", "football-terms")
+    assert passages[1].passage_id == "G.football-terms.semi-automated-offside-technology-saot"
+    assert passages[1].section_title.startswith("Tecnología")

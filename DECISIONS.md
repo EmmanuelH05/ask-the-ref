@@ -161,3 +161,71 @@ corrects the first build of `html.py`, whose tests only used `<li>text</li>`.
   spaces under the item's bullet.
 - Known and left: a lead block holding only an image (no text) is not counted in `images`.
   The real data has none.
+
+## D11. Held-out laws are 3, 5 and 16 (mannie delegated the choice, 2026-10-05)
+
+Law 16 is short, Law 3 is long, Law 5 is long and list-heavy. Law 14 was dropped as a
+hold-out: its summary table is an image and it has only three passages, too few to carry a
+slice. No law in the online edition has a text table. `HELD_OUT_LAWS` in
+`src/atr/evalset/models.py` is the single source.
+
+## D12. Word overlap (phase 2)
+
+`src/atr/evalset/overlap.py`:
+`content_tokens(text: str) -> list[str]`: lowercase; Unicode NFKD with combining marks
+removed (so "árbitro" equals "arbitro"); tokens are `[a-z0-9]+` runs; tokens in `STOPWORDS`
+(one frozenset holding common English and Spanish function words, written out in the module)
+are dropped; a token longer than 3 characters loses one trailing "s". Order is kept and
+duplicates are kept.
+`overlap(question: str, passages: list[str]) -> float`: the share of DISTINCT question
+content tokens that occur among the content tokens of the passages joined together. 0.0 when
+the question has no content tokens or `passages` is empty.
+`GroupOverlap` (frozen): `group_id`, and for each question language a pair of floats or None:
+`en_vs_en`, `es_vs_es`, `cs_vs_en`, `cs_vs_es`, `es_vs_en`, `en_vs_es`. None when the group has
+no gold or the gold passage is missing in that edition.
+`group_overlap(group: QuestionGroup, en: Mapping[str, str], es: Mapping[str, str]) -> GroupOverlap`
+where the mappings go from passage id to passage text.
+
+## D13. Split (phase 2)
+
+`src/atr/evalset/split.py`:
+`assign_splits(groups: list[QuestionGroup], *, seed: int, test_fraction: float = 0.5)
+-> dict[str, Split]`. A group for which `is_held_out` is true gets "heldout". The rest are
+handled one type at a time: group ids sorted, shuffled with `random.Random(f"{seed}:{type}")`,
+the first `round(n * test_fraction)` get "test" and the others "dev". The result has the same
+key order as `groups`. Duplicate group ids raise `ValueError`. `test_fraction` outside (0, 1)
+raises `ValueError`.
+
+## D14. Store and validation (phase 2)
+
+`src/atr/evalset/store.py`:
+`load_groups(directory: Path) -> list[QuestionGroup]`: every `*.jsonl` file in the directory,
+files in name order, lines in file order, blank lines skipped; a bad line raises `ValueError`
+naming the file and line number.
+`write_groups(groups: list[QuestionGroup], path: Path) -> None`: one `model_dump_json()` per line.
+`validate(groups: list[QuestionGroup], en_ids: set[str], es_ids: set[str]) -> list[str]`:
+returns problems, empty when clean. Errors: a duplicate `group_id`; a gold id not in
+`en_ids`; a question type with no group; two groups with the same English text after
+lowercasing and collapsing whitespace. Warnings, prefixed `warn: `: a gold id in `en_ids`
+but not in `es_ids`.
+`corpus_ids(manifest_path: Path) -> tuple[set[str], set[str]]`: the en and es passage ids
+from `corpus/manifest.json`.
+
+## D15. Freeze (phase 2)
+
+`src/atr/evalset/freeze.py`:
+`canonical_bytes(groups: list[QuestionGroup], splits: dict[str, Split]) -> bytes`: UTF-8 JSON
+of a list sorted by `group_id`, each element the group's `model_dump()` minus
+`spanish_reviewed`, plus `"split"`; `sort_keys=True`, `ensure_ascii=False`,
+separators `(",", ":")`. A group with no split, or a split for an unknown group, raises
+`ValueError`.
+`evalset_hash(groups, splits) -> str`: sha256 hex of those bytes.
+`EvalManifest` (frozen): `hash`, `seed`, `test_fraction`, `held_out_laws: list[int]`,
+`corpus_manifest_sha256`, `reviewed_by`, `counts: dict[str, int]` (groups per split),
+`splits: dict[str, Split]`.
+`build_manifest(groups, *, seed, test_fraction, corpus_manifest_sha256, reviewed_by) -> EvalManifest`.
+CLI `python -m atr.evalset.freeze --reviewed-by NAME [--draft-dir evalset/draft]
+[--out evalset/questions.jsonl] [--manifest evalset/manifest.json] [--seed 0]`: loads,
+validates (any error aborts with exit code 1 and prints the problems), refuses unless every
+group has `spanish_reviewed` true, writes the questions file and the manifest, prints the hash.
+`--reviewed-by` is required: the set is only frozen after a named human reviewed it.

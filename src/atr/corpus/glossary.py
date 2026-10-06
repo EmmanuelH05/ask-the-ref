@@ -15,6 +15,13 @@ _ARROW = re.compile(r"\(\s*→\s*(.+?)\s*\)\s*$")
 # "V." is the Spanish edition's "see"; a stub this short only points at another entry.
 _CROSS_REFERENCE = re.compile(r"^(V\.|See)\s")
 CROSS_REFERENCE_MAX_WORDS = 6
+# Spanish entries IFAB published without the English cross-reference, joined by hand.
+# Key: slug of the Spanish term. Value: slug of its English twin.
+ES_SLUG_OVERRIDES = {
+    "tecnolog-a-semiautomatizada-para-la-detecci-n-del-fuera-de-juego": (
+        "semi-automated-offside-technology-saot"
+    ),
+}
 
 
 def _is_cross_reference(text: str) -> bool:
@@ -74,7 +81,9 @@ def _slugs(
             )
         return [(term, slugify(en)) for term, en in zip(terms, english_terms, strict=True)]
     return [
-        (term[: m.start()].rstrip(), slugify(m.group(1))) if m else (term, slugify(term))
+        (term[: m.start()].rstrip(), slugify(m.group(1)))
+        if m
+        else (term, ES_SLUG_OVERRIDES.get(slugify(term), slugify(term)))
         for term, m in zip(terms, arrows, strict=True)
     ]
 
