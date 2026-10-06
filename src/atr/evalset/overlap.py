@@ -1,10 +1,9 @@
-import re
-import unicodedata
 from collections.abc import Mapping
 
 from pydantic import BaseModel, ConfigDict
 
 from atr.evalset.models import QuestionGroup
+from atr.text import raw_tokens, stem
 
 # Stopwords are removed BEFORE the trailing-s rule runs, so this set holds surface forms as
 # typed (both "is" and "was", both "los" and "las"), lowercase and without accents.
@@ -31,9 +30,6 @@ STOPWORDS: frozenset[str] = frozenset(
     """.split()  # noqa: SIM905 (a word list reads better than a quoted list)
 )
 
-_NON_TOKEN = re.compile(r"[^a-z0-9]+")
-_MIN_STRIPPABLE_LENGTH = 4
-
 
 class GroupOverlap(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
@@ -47,31 +43,8 @@ class GroupOverlap(BaseModel):
     en_vs_es: float | None
 
 
-def _fold(text: str) -> str:
-    # Apostrophes are deleted, not split on: "doesn't" must stay one (stop)word and
-    # "keeper's" must stem back to "keeper".
-    decomposed = unicodedata.normalize("NFKD", text.lower().replace("'", "").replace("\u2019", ""))
-    return "".join(char for char in decomposed if not unicodedata.combining(char))
-
-
-def _stem(token: str) -> str:
-    """Drop a plural "s", then a final "e", so singular and plural meet in both languages.
-
-    "offences" and "offence" both become "offenc"; "jugadores" and "jugador" both become
-    "jugador". A double "s" is kept ("pass").
-    """
-    long_enough = len(token) >= _MIN_STRIPPABLE_LENGTH
-    if long_enough and token.endswith("s") and not token.endswith("ss"):
-        token = token[:-1]
-    if len(token) >= _MIN_STRIPPABLE_LENGTH and token.endswith("e"):
-        token = token[:-1]
-    return token
-
-
 def content_tokens(text: str) -> list[str]:
-    # Single letters are debris (the "s" of a possessive), never a content word.
-    tokens = [token for token in _NON_TOKEN.split(_fold(text)) if len(token) > 1]
-    return [_stem(token) for token in tokens if token not in STOPWORDS]
+    return [stem(token) for token in raw_tokens(text) if token not in STOPWORDS]
 
 
 def overlap(question: str, passages: list[str]) -> float:

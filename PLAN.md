@@ -1,59 +1,47 @@
-# Phase 2 plan: evaluation set
+# Phase 3 plan: harness and baselines
 
-Goal: at least 300 questions with gold passage ids, in English, Spanish and code-switched
-Spanish-English, reviewed by mannie, then split and frozen with a committed hash.
+Goal: an eval harness with intervals and a paired test, and baselines scored on dev.
 
-This phase is high-stakes: a wrong gold label or a leaky split still produces numbers that
-look fine.
+This phase is high-stakes in its metrics and bootstrap code: a wrong score still looks fine.
 
-## Shape of the set
+## Setup being measured
 
-A question is written once as a `QuestionGroup` (`src/atr/evalset/models.py`): one type, one
-list of gold passage ids, and three texts (`en`, `es`, `cs`). 112 groups give 336 questions.
-The three versions of a group always land in the same split, because a Spanish question in
-dev and its English twin in test would leak.
+The index is the English edition unless a run says otherwise. English is IFAB's authoritative
+text, and it makes Spanish and code-switched questions a real cross-language test. A second
+index option holds both editions, which gives keyword search a fair chance on Spanish
+questions. Gold labels are passage ids shared by both editions, so scoring is the same.
 
-| type | groups | gold |
-|---|---|---|
-| plain | 24 | 1 or more passages |
-| paraphrase | 24 | 1 or more, and the question avoids the passage's content words |
-| scenario | 24 | 1 or more, the question is a match situation needing a ruling |
-| multi_rule | 16 | 2 or more, each one needed |
-| false_premise | 12 | the passage that corrects the premise, or none |
-| out_of_scope | 12 | none |
+Every run retrieves the top 10 passages per question. Questions with no gold passage (all
+out_of_scope, and false_premise without gold) are not scored for retrieval; their count is
+printed. They come back in phase 6.
 
-Held-out laws are 3, 5 and 16 (D11). A group with any gold passage in those laws goes to the
-`heldout` slice. Every other group is split dev/test, half each, stratified by type, seeded.
+## Baselines (dev only; test is barred by D18 until the set is reviewed)
 
-## Steps
-
-1. Tooling (crew): overlap, split, load and validate, freeze, then review sheet and stats.
-2. Drafting (agents, not builders): English questions with gold from the corpus, then Spanish
-   and code-switched drafts. Drafts live in `evalset/draft/*.jsonl`.
-3. Blind check: separate agents see only the English question and the corpus and name the
-   answering passage. Disagreement with the drafter's gold is flagged on the review sheet,
-   not resolved. An item and its gold label are never confirmed in the same pass.
-4. STOP. mannie reviews `data/review/questions.md`: every question, its gold passages, the
-   overlap numbers and the blind-check flags. Spanish and code-switched text is his to fix.
-5. After his fixes: validate, split, freeze, commit the hash, run the stats check.
+| name | what |
+|---|---|
+| `bm25` | Okapi BM25 over stemmed tokens |
+| `dense-en` | `BAAI/bge-small-en-v1.5`, English-only, 33M parameters |
+| `dense-multi` | `intfloat/multilingual-e5-small`, 118M parameters |
+| `bm25+translate`, `dense-en+translate` | Spanish and code-switched questions are translated to English by a local Ollama model first |
 
 ## Files
 
 ```
-src/atr/evalset/models.py    QuestionGroup, Question, types, HELD_OUT_LAWS (done)
-src/atr/evalset/overlap.py   pure: word overlap between a question and its gold passages
-src/atr/evalset/split.py     pure: seeded, stratified split by group
-src/atr/evalset/store.py     load draft jsonl files; validate against the corpus
-src/atr/evalset/freeze.py    canonical bytes, hash, manifest; CLI
-src/atr/evalset/review.py    CLI: the review sheet (contains law text, written under data/)
-src/atr/evalset/stats.py     CLI: the phase check
-tests/evalset/test_*.py
-evalset/draft/*.jsonl        drafts, one QuestionGroup per line
-evalset/questions.jsonl      the frozen set (after review)
-evalset/manifest.json        split per group, hash, corpus manifest hash
+src/atr/text.py              fold, stem, tokens (done)
+src/atr/cache.py             hash-keyed disk cache (done)
+src/atr/retrieval/base.py    Hit, Doc, Retriever, top_hits, load_docs (done)
+src/atr/retrieval/bm25.py    D21
+src/atr/retrieval/dense.py   D25
+src/atr/retrieval/translate.py  D26
+src/atr/eval/metrics.py      D22
+src/atr/eval/bootstrap.py    D23
+src/atr/eval/run.py          CLI: score one configuration on one split (wave 2)
+src/atr/eval/compare.py      CLI: paired difference between two runs (wave 2)
+runs/<name>/                 run.json and records.jsonl, committed; runs/cache/ is not
 ```
 
 ## Check
 
-`uv run python -m atr.evalset.stats` prints counts by type, language and split, and the
-overlap distribution per type; the frozen hash is committed and pinned by a test.
+`uv run python -m atr.eval.run --retriever <name>` writes a results file and prints the
+table for each baseline; `uv run python -m atr.eval.compare <a> <b>` prints the paired
+difference with its interval.

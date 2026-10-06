@@ -265,3 +265,102 @@ unreviewed. Rules that follow:
   manifest's splits are reused; only new groups are assigned), so edits cannot reshuffle test.
 - Nothing may claim that the Spanish or code-switched text was written or reviewed by a
   native speaker until that re-freeze.
+
+## D19. Retrieval core (phase 3)
+
+`src/atr/retrieval/base.py` (written): `Hit(passage_id, score)` and `Doc(passage_id, language,
+text)` are NamedTuples; `Retriever` is a Protocol with `name: str` and
+`search(query: str, k: int) -> list[Hit]`; `top_hits(hits, k)` keeps the best score per
+passage id, sorted by score descending then id; `load_docs(corpus_dir, languages)`.
+Every retriever returns its result through `top_hits`, because several docs can share a
+passage id (two editions now, chunks in phase 4). `src/atr/text.py` holds `fold`, `stem`,
+`raw_tokens`, `search_tokens`. `src/atr/cache.py` holds `cache_key(*parts)` and `JsonCache`.
+
+## D21. BM25 (phase 3)
+
+`src/atr/retrieval/bm25.py`: `class BM25Retriever` with
+`__init__(self, docs: list[Doc], *, k1: float = 1.5, b: float = 0.75, name: str = "bm25")` and
+`search`. Tokens come from `atr.text.search_tokens` for docs and queries. For N docs, a term
+with document frequency df has `idf = ln(1 + (N - df + 0.5) / (df + 0.5))`. A doc of length dl
+(token count) scores, summed over the DISTINCT query tokens,
+`idf * tf * (k1 + 1) / (tf + k1 * (1 - b + b * dl / avgdl))`. Docs scoring 0 are not returned.
+An empty doc list raises `ValueError`. A query with no tokens returns `[]`. k1 and b are
+fixed defaults and are not tuned in this project. The index is built once in `__init__`
+(postings per term), and a search touches only the postings of the query terms.
+
+## D22. Metrics (phase 3)
+
+`src/atr/eval/metrics.py`, all pure, `ranked` being passage ids best first and `gold` a set:
+`recall_at_k(ranked, gold, k) = |gold ∩ ranked[:k]| / |gold|`;
+`reciprocal_rank(ranked, gold)` = 1 / (1-based rank of the first gold id), 0.0 if none;
+`ndcg_at_k(ranked, gold, k)` with binary relevance: DCG = sum over positions i (1-based, up to
+k) holding a gold id of `1 / log2(i + 1)`; IDCG = the same sum over the first `min(|gold|, k)`
+positions; result DCG / IDCG.
+`QuestionScores` (frozen pydantic): `recall_at_1`, `recall_at_5`, `mrr`, `ndcg_at_10`.
+`score_question(ranked: list[str], gold: set[str]) -> QuestionScores`.
+Every function raises `ValueError` on an empty gold set, on duplicate ids in `ranked`, and on
+k < 1. `METRICS: tuple[str, ...] = ("recall_at_1", "recall_at_5", "mrr", "ndcg_at_10")`.
+
+## D23. Bootstrap (phase 3)
+
+`src/atr/eval/bootstrap.py`, numpy with `numpy.random.default_rng(seed)`:
+`Interval` (frozen pydantic): `mean`, `low`, `high`, `n` (values), `n_clusters`, `resamples`,
+`seed`, `confidence`.
+`bootstrap_ci(values: Sequence[float], *, clusters: Sequence[str] | None = None,
+resamples: int = 10000, seed: int = 0, confidence: float = 0.95) -> Interval`: percentile
+bootstrap of the mean. With `clusters` (one label per value) whole clusters are resampled
+with replacement and the mean is taken over all values of the drawn clusters (a cluster drawn
+twice counts twice); with `clusters=None` every value is its own cluster. Why clusters: the
+English, Spanish and code-switched versions of one question are not independent, so a pooled
+number must resample question groups. `mean` is the plain mean of `values`. `low` and `high`
+are the `(1 - confidence) / 2` and `1 - (1 - confidence) / 2` quantiles of the resampled
+means (`numpy.quantile`, default linear method).
+`paired_difference(a: Mapping[str, float], b: Mapping[str, float], *,
+clusters: Mapping[str, str] | None = None, resamples=10000, seed=0, confidence=0.95) -> Interval`:
+the interval of the mean of `b[key] - a[key]`. The key sets must be equal or `ValueError`.
+Values are taken in sorted key order, so the result does not depend on dict order.
+`excludes_zero(interval: Interval) -> bool`: `low > 0 or high < 0`.
+Errors (`ValueError`): no values; clusters of a different length; resamples < 1; confidence
+outside (0, 1).
+
+## D25. Dense retrieval (phase 3)
+
+`src/atr/retrieval/dense.py`:
+`Encoder` Protocol: `name: str`; `encode_queries(texts: list[str]) -> NDArray[np.float32]`;
+`encode_passages(texts: list[str]) -> NDArray[np.float32]`; rows are L2-normalized.
+`EncoderSpec` (frozen pydantic): `key`, `model_name`, `query_prefix`, `passage_prefix`.
+`ENCODERS: dict[str, EncoderSpec]` with exactly:
+`"bge-small-en"` -> `BAAI/bge-small-en-v1.5`, query prefix
+`"Represent this sentence for searching relevant passages: "`, passage prefix `""`;
+`"me5-small"` -> `intfloat/multilingual-e5-small`, query prefix `"query: "`, passage prefix
+`"passage: "`.
+`SentenceTransformerEncoder(spec: EncoderSpec, *, device: str | None = None)`: loads the model
+lazily on first use (import `sentence_transformers` inside the method, so importing this
+module stays fast and tests need no model); `normalize_embeddings=True`; `name` is `spec.key`.
+`CachedEncoder(inner: Encoder, cache_dir: Path)`: same Protocol; each text's vector is stored
+as `cache_dir/<key[:2]>/<key>.npy` with `key = cache_key(inner.name, kind, text)`, kind being
+"query" or "passage"; only texts missing from the cache are sent to `inner`, in one call, and
+the output keeps the input order.
+`DenseRetriever(docs: list[Doc], encoder: Encoder, *, name: str)`: encodes all doc texts once
+in `__init__`; `search` encodes the query, takes dot products with the doc matrix, and
+returns `top_hits`. Empty docs raise `ValueError`.
+Tests use a small fake encoder defined in the test file. No test loads a real model or
+touches the network.
+
+## D26. Query translation (phase 3)
+
+`src/atr/retrieval/translate.py`:
+`QueryRewriter` Protocol: `name: str`; `rewrite(text: str, language: QuestionLanguage) -> str`.
+`Identity` rewriter: returns the text, `name = "none"`.
+`OllamaTranslator(*, model: str = "qwen2.5:14b", host: str = "http://localhost:11434",
+cache: JsonCache, timeout: float = 120.0)`: `name = f"translate:{model}"`. `rewrite` returns
+English text unchanged (language "en"); otherwise it returns the cached translation or asks
+Ollama: POST `{host}/api/generate` with JSON `{"model", "prompt", "stream": false,
+"options": {"temperature": 0, "seed": 0}}` using `urllib.request` (no new dependency), reads
+the `"response"` field, strips it, and caches it under
+`cache_key("translate", model, PROMPT_TEMPLATE, text)`. `PROMPT_TEMPLATE` is one module
+constant containing `{text}`; it asks for an English translation of a soccer question and
+nothing else. An HTTP failure, a missing `"response"` or an empty translation raises
+`RuntimeError` naming the model; nothing is cached on failure. The single network call sits in
+one function `_post(url: str, payload: dict[str, object], timeout: float) -> dict[str, object]`
+so tests can monkeypatch it. No test touches the network.
