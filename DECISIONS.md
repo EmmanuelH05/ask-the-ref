@@ -229,3 +229,9 @@ CLI `python -m atr.evalset.freeze --reviewed-by NAME [--draft-dir evalset/draft]
 validates (any error aborts with exit code 1 and prints the problems), refuses unless every
 group has `spanish_reviewed` true, writes the questions file and the manifest, prints the hash.
 `--reviewed-by` is required: the set is only frozen after a named human reviewed it.
+
+## D16. Overlap tokenizer amendments (phase 2, main session, 2026-10-05)
+
+Amends D12 before any question is frozen: single-character tokens are dropped (a possessive
+left a stray "s" that matched across texts), and "cannot", "antes", "después" and "durante"
+join `STOPWORDS`. Found from false leak flags on the first review sheet.

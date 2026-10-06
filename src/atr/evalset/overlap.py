@@ -16,7 +16,7 @@ STOPWORDS: frozenset[str] = frozenset(
     own same than too very can will just should now is are was were be been being am do does did
     doing have has had having i me my we our you your he him his she her it its they them their
     what which who whom this that these those would could may might must shall also as until
-    while many much per whose whether either neither because since
+    while many much per whose whether either neither because since cannot
     el la los las un una unos unas y e o u pero ni que de del al ante bajo con contra desde en
     entre hacia hasta para por segun sin sobre tras yo tu ella nosotros vosotros ellos
     ellas mi mis tus su sus te se lo le les nos
@@ -25,6 +25,7 @@ STOPWORDS: frozenset[str] = frozenset(
     hay habia hemos has tener tiene tienen tengo puede pueden poder podria debe deben deber como
     cuando donde cual cuales quien quienes cuanto cuanta cuantos cuantas porque si mas muy
     tambien ya otro otra otros otras todo toda todos todas algun alguna ningun cada
+    antes despues durante
     """.split()  # noqa: SIM905 (a word list reads better than a quoted list)
 )
 
@@ -56,7 +57,8 @@ def _stem(token: str) -> str:
 
 
 def content_tokens(text: str) -> list[str]:
-    tokens = [token for token in _NON_TOKEN.split(_fold(text)) if token]
+    # Single letters are debris (the "s" of a possessive), never a content word.
+    tokens = [token for token in _NON_TOKEN.split(_fold(text)) if len(token) > 1]
     return [_stem(token) for token in tokens if token not in STOPWORDS]
 
 

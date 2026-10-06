@@ -1,0 +1,112 @@
+{"group_id": "A-01", "picked": ["L1.6"], "why": "penalty mark 11 m from goal"}
+{"group_id": "A-02", "picked": ["L2.1"], "why": "ball weighs 410 to 450 g"}
+{"group_id": "A-03", "picked": ["L7.2"], "why": "half-time interval not exceeding 15 minutes"}
+{"group_id": "A-04", "picked": ["L4.4.1"], "why": "Black or main shirt colour"}
+{"group_id": "A-05", "picked": ["G.football-bodies.confederation"], "why": "Lists the six confederations"}
+{"group_id": "A-06", "picked": ["G.football-terms.outside-agent"], "why": "Glossary definition of outside agent"}
+{"group_id": "A-07", "picked": ["L1.2"], "why": "Lines belong to the areas they bound"}
+{"group_id": "A-08", "picked": ["L7.3"], "why": "Referee adds allowance for time lost"}
+{"group_id": "A-09", "picked": ["L4.1"], "why": "Covered accessories allowed; dangerous items not taped"}
+{"group_id": "A-10", "picked": ["L1.12"], "why": "No advertising on field during play"}
+{"group_id": "A-11", "picked": ["L5.4.0"], "why": "lists the VAR reviewable categories"}
+{"group_id": "A-12", "picked": ["G.football-terms.away-goals-rule", "L10.2"], "why": "Away goals rule decides level tie"}
+{"group_id": "A-13", "picked": ["L2.2"], "why": "Defective ball during penalty, kick retaken"}
+{"group_id": "A-14", "picked": ["L4.2"], "why": "Goal awarded after accidentally lost footwear"}
+{"group_id": "A-15", "picked": ["L4.6"], "why": "equipment re-entry without permission: indirect free kick"}
+{"group_id": "A-16", "picked": ["L1.14.1"], "why": "Entering VOR means sending-off"}
+{"group_id": "A-17", "picked": ["L7.4"], "why": "half extended until penalty kick is completed"}
+{"group_id": "A-18", "picked": ["L1.10.0", "L7.5"], "why": "Abandoned if unrepairable; abandoned match replayed"}
+{"group_id": "A-19", "picked": ["L7.1", "G.football-terms.extra-time"], "why": "Two 45s plus two 15s"}
+{"group_id": "A-20", "picked": ["L6.2", "L4.1"], "why": "Fourth official checks; refusal means caution"}
+{"group_id": "B-01", "picked": ["L8.1.1"], "why": "toss winner picks goal to attack or kick-off"}
+{"group_id": "B-02", "picked": ["L11.3"], "why": "no offside directly from a throw-in"}
+{"group_id": "B-03", "picked": ["L10.3.0"], "why": "sent-off player cannot take part in shoot-out"}
+{"group_id": "B-04", "picked": ["L15.1"], "why": "Opponents at least 2 m away"}
+{"group_id": "B-05", "picked": ["L17.1"], "why": "In play when kicked, need not leave area"}
+{"group_id": "B-06", "picked": ["L13.2"], "why": "opponents 9.15 m from ball at free kicks"}
+{"group_id": "B-07", "picked": ["L14.1"], "why": "keeper stays on goal line until kick"}
+{"group_id": "B-08", "picked": ["L11.1"], "why": "Hands and arms not considered for offside"}
+{"group_id": "B-09", "picked": ["L9.2"], "why": "Rebound off post or crossbar stays in play"}
+{"group_id": "B-10", "picked": ["L10.1"], "why": "keeper throw into opponents goal: goal kick"}
+{"group_id": "B-11", "picked": ["L8.2.1", "L5.3.3"], "why": "Injury stoppage dropped ball; who receives it"}
+{"group_id": "B-12", "picked": ["L13.1.1"], "why": "raised arm signal and when it ends"}
+{"group_id": "B-13", "picked": ["L14.2"], "why": "feinting after run-up: indirect free kick, caution"}
+{"group_id": "B-14", "picked": ["L15.2"], "why": "five-second countdown, throw-in goes to opponents"}
+{"group_id": "B-15", "picked": ["L9.1", "L8.2.1"], "why": "ball off official, possession changes: dropped ball"}
+{"group_id": "B-16", "picked": ["L11.2"], "why": "Deliberate play by defender, no offside advantage"}
+{"group_id": "B-17", "picked": ["L11.4", "L11.1"], "why": "Off-field defender counts as on goal line"}
+{"group_id": "B-18", "picked": ["L8.2.2"], "why": "Dropped ball needs two touches; goal kick"}
+{"group_id": "B-19", "picked": ["L10.3.1"], "why": "larger team must reduce to equal numbers"}
+{"group_id": "B-20", "picked": ["L13.3"], "why": "Quick free kick intercepted, play continues"}
+{"group_id": "B-21", "picked": ["L17.2"], "why": "kicker touching again gives indirect free kick"}
+{"group_id": "B-22", "picked": ["L15.0", "L17.0"], "why": "Not from throw-in; yes from corner"}
+{"group_id": "B-23", "picked": ["L8.1.1", "L13.1.2"], "why": "own goal direct gives corner in both cases"}
+{"group_id": "B-24", "picked": ["L9.1", "L8.2.1"], "why": "dropped ball to defending keeper inside area"}
+{"group_id": "B-25", "picked": ["L10.3.1", "L14.1"], "why": "kicker keeper position; defending keeper on goal line"}
+{"group_id": "B-26", "picked": ["L12.3", "L17.1"], "why": "Corner kick, corner nearest goalkeeper position"}
+{"group_id": "C-01", "picked": ["L12.4.6"], "why": "Shirt removal cautioned even if goal disallowed"}
+{"group_id": "C-02", "picked": ["L12.1.1"], "why": "Arm upper boundary is bottom of armpit"}
+{"group_id": "C-03", "picked": ["L12.2.1"], "why": "bicycle kick allowed unless dangerous to an opponent"}
+{"group_id": "C-04", "picked": ["L5.3.2"], "why": "card power lasts until after match, including shoot-out"}
+{"group_id": "C-05", "picked": ["L12.4.10", "G.football-terms.serious-foul-play"], "why": "Defines serious foul play"}
+{"group_id": "C-06", "picked": ["L12.4.14"], "why": "sarcastic clapping listed as team official caution"}
+{"group_id": "C-07", "picked": ["L12.4.12"], "why": "unidentified offender: senior coach takes the sanction"}
+{"group_id": "C-08", "picked": ["L12.4.11"], "why": "Violent conduct regardless of contact"}
+{"group_id": "C-09", "picked": ["L12.0", "L12.5"], "why": "Free kicks only for ball-in-play offences"}
+{"group_id": "C-10", "picked": ["L12.2.2"], "why": "Impeding without contact beyond playing distance"}
+{"group_id": "C-11", "picked": ["L12.4.16"], "why": "thrown object: reckless caution, excessive force red"}
+{"group_id": "C-12", "picked": ["L12.4.7"], "why": "kicking ball away after whistle is cautionable delay"}
+{"group_id": "C-13", "picked": ["L12.4.9"], "why": "holding with no play on ball: sent off"}
+{"group_id": "C-14", "picked": ["L12.4.3"], "why": "DOGSO advantage then goal: no sanction"}
+{"group_id": "C-15", "picked": ["L12.4.2"], "why": "quick free kick: promising-attack caution is dropped"}
+{"group_id": "C-16", "picked": ["L12.4.4"], "why": "two separate cautionable offences give two cautions"}
+{"group_id": "C-17", "picked": ["L12.4.5"], "why": "handling to try to score is a caution"}
+{"group_id": "C-18", "picked": ["L12.4.8"], "why": "non-deliberate handball outside area denying goal: sent off"}
+{"group_id": "C-19", "picked": ["L12.4.13"], "why": "Ignoring fourth official usually a warning"}
+{"group_id": "C-20", "picked": ["L12.3", "L17.1"], "why": "five-second countdown, corner kick, nearest corner area"}
+{"group_id": "C-21", "picked": ["L13.1.2", "L12.2.0"], "why": "indirect kick straight in gives goal kick"}
+{"group_id": "C-22", "picked": ["L12.5", "L12.4.15"], "why": "DFK where bottle hit ball; coach sent off"}
+{"group_id": "C-23", "picked": ["L12.1.0", "L14.0"], "why": "Careless trip no card; penalty kick in area"}
+{"group_id": "D-01", "picked": ["L3.1"], "why": "Minimum seven players"}
+{"group_id": "D-02", "picked": ["L5.5.2"], "why": "Body cameras permitted under conditions"}
+{"group_id": "D-03", "picked": ["L16.1"], "why": "Anywhere in goal area; in play when kicked"}
+{"group_id": "D-04", "picked": ["L3.10"], "why": "Captain has no special status or privileges"}
+{"group_id": "D-05", "picked": ["L5.4.0"], "why": "Lists VAR reviewable decision categories"}
+{"group_id": "D-06", "picked": ["L5.3.1"], "why": "Advantage, penalise if it does not ensue"}
+{"group_id": "D-07", "picked": ["L3.4"], "why": "inform referee, change during a stoppage"}
+{"group_id": "D-08", "picked": ["L16.0"], "why": "goal kick when attacker last touched it"}
+{"group_id": "D-09", "picked": ["L5.7"], "why": "Match officials not liable for abandonment decisions"}
+{"group_id": "D-10", "picked": ["L3.6"], "why": "sent off before kick-off may be replaced by substitute"}
+{"group_id": "D-11", "picked": ["L3.7", "L12.4.4"], "why": "direct free kick; substitute cautioned for entering"}
+{"group_id": "D-12", "picked": ["L16.2"], "why": "Goal kick countdown expiry gives corner kick"}
+{"group_id": "D-13", "picked": ["L5.3.3"], "why": "exception when opponent cautioned for the offence"}
+{"group_id": "D-14", "picked": ["L3.9"], "why": "Disallow goal, DFK from extra person position"}
+{"group_id": "D-15", "picked": ["L3.5"], "why": "Ten-second rule consequences for substitution"}
+{"group_id": "D-16", "picked": ["L5.2", "L5.4.1"], "why": "Sanction after restart conditions; VAR violent conduct"}
+{"group_id": "D-17", "picked": ["L16.0", "L17.0"], "why": "Corner to opponents; corner can score directly"}
+{"group_id": "D-18", "picked": ["L5.3.4", "L8.2.1"], "why": "Whistle interference dropped ball; recipient and 4 m"}
+{"group_id": "D-19", "picked": ["L3.8"], "why": "caution, direct free kick at the interference"}
+{"group_id": "E-01", "picked": [], "why": "No timeouts in the Laws"}
+{"group_id": "E-02", "picked": ["L12.4.4"], "why": "persistent offences caution, no specific number"}
+{"group_id": "E-03", "picked": [], "why": "no double-value goal rule exists"}
+{"group_id": "E-04", "picked": [], "why": "no shot clock exists in the Laws"}
+{"group_id": "E-05", "picked": [], "why": "no pass limit exists in the Laws"}
+{"group_id": "E-06", "picked": ["L12.4.9"], "why": "penalty-area DOGSO attempting the ball is a caution"}
+{"group_id": "E-07", "picked": ["L11.3"], "why": "No offside offence directly from throw-in"}
+{"group_id": "E-08", "picked": ["L15.0"], "why": "no goal direct from throw-in; goal kick"}
+{"group_id": "E-09", "picked": ["L12.3"], "why": "Actually eight seconds and a corner kick"}
+{"group_id": "E-10", "picked": ["L5.3.0", "L7.3"], "why": "Clock not stopped; referee keeps time, adds allowance"}
+{"group_id": "E-11", "picked": ["L7.1"], "why": "match is two halves of 45 minutes"}
+{"group_id": "E-12", "picked": ["L12.2.1"], "why": "bicycle kick allowed unless dangerous to an opponent"}
+{"group_id": "E-13", "picked": [], "why": "League points not in the Laws"}
+{"group_id": "E-14", "picked": [], "why": "League tie-breakers not in the Laws"}
+{"group_id": "E-15", "picked": [], "why": "out of scope"}
+{"group_id": "E-16", "picked": [], "why": "season suspension thresholds are not in the Laws"}
+{"group_id": "E-17", "picked": [], "why": "out of scope"}
+{"group_id": "E-18", "picked": [], "why": "Salary cap not in the Laws"}
+{"group_id": "E-19", "picked": [], "why": "out of scope"}
+{"group_id": "E-20", "picked": [], "why": "Tactics, not in the Laws"}
+{"group_id": "E-21", "picked": [], "why": "out of scope"}
+{"group_id": "E-22", "picked": [], "why": "Basketball, out of scope"}
+{"group_id": "E-23", "picked": [], "why": "out of scope"}
+{"group_id": "E-24", "picked": [], "why": "out of scope"}

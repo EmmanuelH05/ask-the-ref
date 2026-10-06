@@ -24,7 +24,7 @@ def _group(**changes: object) -> QuestionGroup:
 
 
 def test_stopwords_size_and_normal_form() -> None:
-    assert 150 <= len(STOPWORDS) <= 250
+    assert 150 <= len(STOPWORDS) <= 300
     assert all(word == word.lower() and word.isascii() and word.isalnum() for word in STOPWORDS)
     assert {"is", "was", "los", "las", "the", "el", "what", "que"} <= STOPWORDS
     assert not {"ball", "goal", "player", "referee", "balon", "gol", "jugador", "arbitro"} & (
@@ -130,3 +130,12 @@ def test_group_overlap_none_when_any_gold_is_missing() -> None:
     result = group_overlap(group, EN, ES)
     assert result.en_vs_en is None
     assert result.es_vs_es is None
+
+
+def test_single_letter_tokens_are_dropped() -> None:
+    # A possessive leaves a stray "s" ("keeper's" -> "keeper", "s") that would match any other.
+    assert content_tokens("the zorb's wobble") == ["zorb", "wobble"]
+
+
+def test_cannot_antes_despues_and_durante_are_stopwords() -> None:
+    assert content_tokens("cannot antes después durante zorb") == ["zorb"]
