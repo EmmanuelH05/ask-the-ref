@@ -396,3 +396,87 @@ The `test` split is refused while the manifest counts any unreviewed group (D18)
 - A run checks every indexed passage's text hash against `corpus/manifest.json`.
 - BM25 sums query terms in sorted order, so scores do not depend on the hash seed.
 - All seven dev runs were regenerated with the committed code.
+
+## D29. Phase 4 rule and order, fixed before any phase 4 run (2026-10-05)
+
+Primary metric: recall@5, dev, slice "all". Keep a candidate only if the paired difference
+(candidate minus current best; question groups resampled; 10000 resamples; seed 0) has a 95%
+interval with `low > 0`. Two tracks, each with its own current best: T starts at
+dense-en + translate on the English index, M starts at dense-multi on the English index.
+Steps in order: (0, M only) index both editions; (1) hybrid RRF of BM25 and the track's dense
+retriever; (2) title prefix on dense docs; (3) reranker over the top 20, variants `minilm`
+(T only) and `bge-m3`; (4) chunking, variants `blocks` and `items`; (5) rulebook rewrite;
+(6) decomposition. Where a step has variants, each is compared with the current best; among
+those that pass, the highest recall@5 is kept, ties going to the lower total p50 latency.
+Fixed and not tuned: RRF constant 60, first-stage depth 50, rerank depth 20, chunk limit 120
+words. A reranker that passes but multiplies latency is still reported both ways for mannie
+to choose.
+
+## D30. Reciprocal rank fusion (phase 4)
+
+`src/atr/retrieval/fusion.py`: `rrf(rankings: list[list[Hit]], *, c: int = 60) -> list[Hit]`.
+The fused score of a passage id is the sum, over the rankings that contain it, of
+`1 / (c + rank)` with rank 1-based. Input scores are ignored. Output holds every id that
+appears, sorted by fused score descending then id. A ranking with a repeated id raises
+`ValueError`; `c < 1` raises; an empty list of rankings or all-empty rankings give `[]`.
+
+## D31. Chunking (phase 4)
+
+`src/atr/retrieval/chunking.py`, pure. Passage text has the shape D3 and D9 produce:
+paragraphs separated by one blank line; a list is a run of lines that start with `- ` (nested
+lines start with spaces), and the paragraph immediately before a list is its lead-in.
+`ChunkStrategy = Literal["passage", "blocks", "items"]`, `MAX_WORDS = 120`
+(`atr.corpus.models.count_words`).
+`chunk_text(text: str, strategy: ChunkStrategy) -> list[str]`:
+- `passage`: `[text]`.
+- `blocks`: the text is cut into units: a paragraph, or a lead-in paragraph together with
+  its list. Units are packed greedily, in order, into chunks of at most MAX_WORDS words,
+  joined by a blank line. A single unit over the limit is split if it is a list unit: its
+  top-level items (each with its nested lines) are packed greedily into pieces of at most
+  MAX_WORDS words including the lead-in, and the lead-in is repeated at the top of every
+  piece. A plain paragraph over the limit stays whole.
+- `items`: like `blocks`, except every top-level item of every list becomes its own chunk,
+  `lead-in + "\n" + item lines`.
+Guarantees, each with a test: no empty chunk; every non-blank line of the text appears in
+at least one chunk; a text of at most MAX_WORDS words with no list gives `[text]` under
+every strategy; chunks keep document order.
+
+## D32. Docs from passages (phase 4)
+
+`src/atr/retrieval/docs.py`:
+`load_passages(corpus_dir: Path, languages: tuple[Language, ...]) -> list[Passage]`.
+`title_line(passage: Passage) -> str`: for a law passage
+`"Law {law_number}: {law_title} > {section_title}"` plus `" > {subheading}"` when there is
+one; for a glossary passage `"{law_title} > {section_title}"`.
+`build_docs(passages: list[Passage], *, title_prefix: bool, chunking: ChunkStrategy) -> list[Doc]`:
+one Doc per chunk of each passage, in order, carrying the passage's id and language; with
+`title_prefix` the Doc text is `title_line + "\n" + chunk`.
+`verify_passages(passages, pins)`: the D28 hash check, on passages (docs are derived text).
+
+## D33. Reranker (phase 4)
+
+`src/atr/retrieval/rerank.py`:
+`Reranker` Protocol: `name: str`; `score(query: str, texts: list[str]) -> list[float]`.
+`RERANKERS: dict[str, str]` = `{"minilm": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+"bge-m3": "BAAI/bge-reranker-v2-m3"}`.
+`CrossEncoderReranker(key: str, *, device: str | None = None, max_length: int = 512,
+batch_size: int = 32)`: `name = key`; the `sentence_transformers.CrossEncoder` is imported
+and loaded lazily on first `score`; an empty `texts` returns `[]` without loading.
+`rerank(query: str, candidates: list[tuple[str, str]], reranker: Reranker, k: int) -> list[Hit]`:
+candidates are (passage id, text); every candidate is scored in ONE `score` call; the best
+score per passage id is kept; result through `top_hits`. No candidates gives `[]`.
+Tests use a fake reranker; no test loads a model.
+
+## D34. Local LLM calls (phase 4)
+
+`src/atr/llm.py`:
+`Completion(NamedTuple)`: `text: str`, `ms: float`.
+`OllamaLLM(*, cache: JsonCache, host: str = "http://localhost:11434", timeout: float = 300.0)`:
+`complete(model: str, prompt: str, *, think: str | None = None) -> Completion`. POSTs
+`{host}/api/generate` with `{"model", "prompt", "stream": false, "options": {"temperature": 0,
+"seed": 0}}` plus `"think"` when given; takes the stripped `"response"`. The text and the
+wall-clock ms are cached under `cache_key("llm", model, think or "", prompt)`, and a cache hit
+returns the STORED ms, so a rerun reports what the call really cost. HTTP failure, bad JSON,
+a missing or empty response raise `RuntimeError` naming the model, and nothing is cached. The
+network call is one module function `_post(url, payload, timeout) -> dict[str, object]`
+(urllib only) that tests monkeypatch. No test touches the network.

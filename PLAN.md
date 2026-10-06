@@ -1,47 +1,55 @@
-# Phase 3 plan: harness and baselines
+# Phase 4 plan: improve retrieval, one change at a time
 
-Goal: an eval harness with intervals and a paired test, and baselines scored on dev.
+Goal: test six changes in a fixed order on dev, keep a change only when the paired
+difference says to, log every experiment, and regenerate the whole ablation table (accuracy
+and latency) from saved records with one command.
 
-This phase is high-stakes in its metrics and bootstrap code: a wrong score still looks fine.
+High-stakes: the keep/drop logic decides the final system.
 
-## Setup being measured
+## Two tracks
 
-The index is the English edition unless a run says otherwise. English is IFAB's authoritative
-text, and it makes Spanish and code-switched questions a real cross-language test. A second
-index option holds both editions, which gives keyword search a fair chance on Spanish
-questions. Gold labels are passage ids shared by both editions, so scoring is the same.
+The best phase 3 baseline translates the question to English first, which costs about a
+second per question. The multilingual model answers without that cost. Which one mannie
+wants is a latency trade-off that is his to choose, so every change is tested on both:
 
-Every run retrieves the top 10 passages per question. Questions with no gold passage (all
-out_of_scope, and false_premise without gold) are not scored for retrieval; their count is
-printed. They come back in phase 6.
+- Track T (translate first): starts from `dense-en`, English index, translated questions.
+- Track M (multilingual, no translation): starts from `dense-multi`, English index.
 
-## Baselines (dev only; test is barred by D18 until the set is reviewed)
+## The rule, fixed before any phase 4 run (D29)
 
-| name | what |
-|---|---|
-| `bm25` | Okapi BM25 over stemmed tokens |
-| `dense-en` | `BAAI/bge-small-en-v1.5`, English-only, 33M parameters |
-| `dense-multi` | `intfloat/multilingual-e5-small`, 118M parameters |
-| `bm25+translate`, `dense-en+translate` | Spanish and code-switched questions are translated to English by a local Ollama model first |
+Primary metric: recall@5 on dev, all scored questions. A candidate (current best plus one
+change) is kept only when the 95% interval of the paired difference against the current best
+is entirely above zero. Other metrics, slices and latency are reported and do not decide.
+Hyperparameters are fixed in advance and not tuned: dev has 37 scored groups, too few to
+tune on.
+
+## Order
+
+0. (track M only) index both editions
+1. hybrid: reciprocal rank fusion of BM25 and dense
+2. law title and section name in front of each passage before embedding
+3. cross-encoder reranker over the top 20 (variants: a small English one on track T, a
+   multilingual one on both)
+4. chunking (variants: word-limited blocks, one chunk per list item)
+5. query rewrite into rulebook vocabulary (one method)
+6. splitting a question into sub-questions
 
 ## Files
 
 ```
-src/atr/text.py              fold, stem, tokens (done)
-src/atr/cache.py             hash-keyed disk cache (done)
-src/atr/retrieval/base.py    Hit, Doc, Retriever, top_hits, load_docs (done)
-src/atr/retrieval/bm25.py    D21
-src/atr/retrieval/dense.py   D25
-src/atr/retrieval/translate.py  D26
-src/atr/eval/metrics.py      D22
-src/atr/eval/bootstrap.py    D23
-src/atr/eval/run.py          CLI: score one configuration on one split (wave 2)
-src/atr/eval/compare.py      CLI: paired difference between two runs (wave 2)
-runs/<name>/                 run.json and records.jsonl, committed; runs/cache/ is not
+src/atr/retrieval/fusion.py     D30  reciprocal rank fusion
+src/atr/retrieval/chunking.py   D31  chunk strategies
+src/atr/retrieval/docs.py       D32  passages -> docs (title prefix, chunks)
+src/atr/retrieval/rerank.py     D33  cross-encoder reranker
+src/atr/llm.py                  D34  cached local LLM calls with replayed latency
+src/atr/retrieval/rewrite.py    D35  rulebook-vocabulary rewrite
+src/atr/retrieval/decompose.py  D36  sub-questions
+src/atr/pipeline.py             PipelineConfig and Pipeline (stages and per-stage timings)
+src/atr/eval/ablation.py        the experiment chain, the log and the table
+src/atr/eval/plot.py            accuracy against latency
 ```
 
 ## Check
 
-`uv run python -m atr.eval.run --retriever <name>` writes a results file and prints the
-table for each baseline; `uv run python -m atr.eval.compare <a> <b>` prints the paired
-difference with its interval.
+`uv run python -m atr.eval.ablation` regenerates the full table from cached results;
+`uv run python -m atr.eval.plot` draws accuracy against latency with the best trade-offs marked.
