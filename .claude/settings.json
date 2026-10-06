@@ -1,7 +1,7 @@
 {
   "enabledPlugins": {
     "python-development@claude-code-workflows": true,
-    "tdd-guard@tdd-guard": true,
+    "tdd-guard@tdd-guard": false,
     "javascript-typescript@claude-code-workflows": false,
     "ecc@ecc": false,
     "claude-mem@thedotmack": false
