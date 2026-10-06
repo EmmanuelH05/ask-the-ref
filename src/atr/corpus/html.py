@@ -33,16 +33,22 @@ class _Cleaner(HTMLParser):
         self._list_depth = 0
         self._prefix = ""
         self._buffer = ""
+        # One entry per open <li>: the indent for its lines after the bulleted one.
+        self._continuations: list[str] = []
 
     def _flush_line(self) -> None:
         text = _SPACE_RUN.sub(" ", self._buffer).strip()
+        # The CMS wraps list item text in <p>, so a flush with nothing buffered must not
+        # spend the bullet that the <li> just set.
         if text:
             self.lines.append(self._prefix + text)
-        self._prefix = ""
+            self._prefix = self._continuations[-1] if self._continuations else ""
         self._buffer = ""
 
     def _paragraph_break(self) -> None:
         self._flush_line()
+        if self._list_depth:
+            return
         if self.lines and self.lines[-1] != "":
             self.lines.append("")
 
@@ -65,13 +71,12 @@ class _Cleaner(HTMLParser):
             self._open_list()
         elif tag == "li":
             self._flush_line()
-            self._prefix = _INDENT * max(self._list_depth - 1, 0) + "- "
+            indent = _INDENT * max(self._list_depth - 1, 0)
+            self._prefix = indent + "- "
+            self._continuations.append(indent + _INDENT)
 
     def _open_list(self) -> None:
-        if self._list_depth == 0:
-            self._paragraph_break()
-        else:
-            self._flush_line()
+        self._paragraph_break()
         self._list_depth += 1
 
     def handle_endtag(self, tag: str) -> None:
@@ -84,11 +89,13 @@ class _Cleaner(HTMLParser):
             self._paragraph_break()
         elif tag == "li":
             self._flush_line()
+            if self._continuations:
+                self._continuations.pop()
+            self._prefix = self._continuations[-1] if self._continuations else ""
         elif tag == "ul":
             self._flush_line()
             self._list_depth = max(self._list_depth - 1, 0)
-            if self._list_depth == 0:
-                self._paragraph_break()
+            self._paragraph_break()
 
     def handle_data(self, data: str) -> None:
         if not self._deleted_depth:

@@ -142,3 +142,23 @@ def test_empty_inputs() -> None:
     assert result.unaligned_en == []
     assert result.unaligned_es == []
     assert result.mismatches == []
+
+
+def test_section_with_a_missing_subsection_is_unpaired_as_a_whole() -> None:
+    en = [make("L4.2.1", "en"), make("L4.2.2", "en"), make("L4.2.3", "en"), make("L4.3", "en")]
+    es = [make("L4.2.1", "es"), make("L4.2.2", "es"), make("L4.3", "es")]
+    result = align(en, es)
+    assert result.pairs == [("L4.3", "L4.3")]
+    assert result.unaligned_en == ["L4.2.1", "L4.2.2", "L4.2.3"]
+    assert result.unaligned_es == ["L4.2.1", "L4.2.2"]
+    assert result.mismatches == [
+        "L4.2: subsection ids differ between editions, so no pair in this section is trusted"
+    ]
+
+
+def test_unsplit_sections_and_glossary_entries_are_not_grouped() -> None:
+    en = [make("L4.1", "en"), make("L4.2", "en"), make("G.x.a", "en", law=None, section=None)]
+    es = [make("L4.1", "es"), make("G.x.b", "es", law=None, section=None)]
+    result = align(en, es)
+    assert result.pairs == [("L4.1", "L4.1")]
+    assert result.mismatches == []

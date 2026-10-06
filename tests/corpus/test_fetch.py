@@ -137,3 +137,13 @@ def test_sixteen_law_chain_raises(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
 
     with pytest.raises(RuntimeError, match="17"):
         fetch.fetch_all(tmp_path)
+
+
+def test_a_body_that_is_not_json_is_never_written_to_the_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(fetch, "_get", lambda url: b"<html>maintenance</html>")
+    monkeypatch.setattr(fetch.time, "sleep", lambda seconds: None)
+    with pytest.raises(ValueError, match="invalid JSON"):
+        fetch.fetch_all(tmp_path)
+    assert not list(tmp_path.rglob("*.page-data.json"))

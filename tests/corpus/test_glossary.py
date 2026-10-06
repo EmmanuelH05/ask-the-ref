@@ -131,10 +131,74 @@ def test_report_sums_drop_counts() -> None:
 
 @pytest.mark.parametrize(
     "bad",
-    [{}, {"result": {}}, {"result": {"pageContext": {"title": "t"}}},
-     {"result": {"pageContext": {"title": "t", "contentBlocks": "no"}}},
-     {"result": {"pageContext": {"title": "t", "contentBlocks": [{"htmlContent": 3}]}}}],
+    [
+        {},
+        {"result": {}},
+        {"result": {"pageContext": {"title": "t"}}},
+        {"result": {"pageContext": {"title": "t", "contentBlocks": "no"}}},
+        {"result": {"pageContext": {"title": "t", "contentBlocks": [{"htmlContent": 3}]}}},
+    ],
 )
 def test_malformed_input_raises_naming_page(bad: dict[str, object]) -> None:
     with pytest.raises(ValueError, match=PAGE):
         parse_glossary(bad, "en", PAGE)
+
+
+def test_cross_reference_stubs_are_dropped_and_listed() -> None:
+    page = {
+        "result": {
+            "pageContext": {
+                "title": "Términos",
+                "contentBlocks": [
+                    {
+                        "htmlContent": "<h4>Zorbo (&rarr; zorb)</h4><p>Una cosa redonda.</p>"
+                        "<h4>Zorbito (&rarr; zorb)</h4><p>V. zorbo.</p>"
+                    }
+                ],
+            }
+        }
+    }
+    passages, report = parse_glossary(page, "es", "football-terms")
+    assert [p.section_title for p in passages] == ["Zorbo"]
+    assert report.cross_references_dropped == ["G.football-terms.zorb (Zorbito)"]
+
+
+def test_english_see_stub_is_dropped_but_a_long_definition_starting_with_see_is_kept() -> None:
+    page = {
+        "result": {
+            "pageContext": {
+                "title": "Terms",
+                "contentBlocks": [
+                    {
+                        "htmlContent": "<h4>Spin-off</h4><p>See &lsquo;Zorb (spin-off)&rsquo;</p>"
+                        "<h4>Watch</h4><p>See the zorb and track it until it stops.</p>"
+                    }
+                ],
+            }
+        }
+    }
+    passages, report = parse_glossary(page, "en", "football-terms")
+    assert [p.section_title for p in passages] == ["Watch"]
+    assert report.cross_references_dropped == ["G.football-terms.spin-off (Spin-off)"]
+
+
+def test_bold_line_with_break_is_an_entry_boundary_when_the_cms_forgot_the_h4() -> None:
+    page = {
+        "result": {
+            "pageContext": {
+                "title": "Terms",
+                "contentBlocks": [
+                    {
+                        "htmlContent": "<h4>Zorb</h4><p>A round thing.</p>"
+                        "<p><code><em><strong>Quib (QB)</strong></em></code><br>"
+                        "<code><em>A square thing.</em></code></p>"
+                    }
+                ],
+            }
+        }
+    }
+    passages, _ = parse_glossary(page, "en", "football-terms")
+    assert [(p.passage_id, p.text) for p in passages] == [
+        ("G.football-terms.zorb", "A round thing."),
+        ("G.football-terms.quib-qb", "A square thing."),
+    ]

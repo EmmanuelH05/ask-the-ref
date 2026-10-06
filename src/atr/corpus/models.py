@@ -58,6 +58,8 @@ class BuildReport(_Frozen):
     faq_entries_skipped: int = 0
     pages_skipped: list[str] = []
     empty_passages: list[str] = []
+    cross_references_dropped: list[str] = []
+    group_headings: list[str] = []
 
     def __add__(self, other: "BuildReport") -> "BuildReport":
         return BuildReport(
@@ -67,4 +69,9 @@ class BuildReport(_Frozen):
             faq_entries_skipped=self.faq_entries_skipped + other.faq_entries_skipped,
             pages_skipped=[*self.pages_skipped, *other.pages_skipped],
             empty_passages=[*self.empty_passages, *other.empty_passages],
+            cross_references_dropped=[
+                *self.cross_references_dropped,
+                *other.cross_references_dropped,
+            ],
+            group_headings=[*self.group_headings, *other.group_headings],
         )

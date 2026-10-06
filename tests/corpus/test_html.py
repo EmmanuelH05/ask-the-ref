@@ -139,3 +139,27 @@ def test_split_whitespace_only_lead_is_skipped() -> None:
 def test_split_heading_text_is_cleaned() -> None:
     expected_title = "The gleb" + chr(0x2019) + "s"
     assert split_subsections("<h3>The&nbsp;gleb&rsquo;s</h3>x") == [(expected_title, "x")]
+
+
+def test_paragraph_inside_list_item_keeps_the_bullet() -> None:
+    html = "<ul>\n <li> <p>red zorbs</p> </li>\n <li> <p>blue zorbs</p> </li>\n</ul>"
+    assert clean_html(html).text == "- red zorbs\n- blue zorbs"
+
+
+def test_list_with_paragraph_items_sits_between_paragraphs() -> None:
+    html = "<p>Counts if:</p><ul><li><p>it spins</p></li><li><p>it hums</p></li></ul><p>End.</p>"
+    assert clean_html(html).text == "Counts if:\n\n- it spins\n- it hums\n\nEnd."
+
+
+def test_nested_list_with_paragraph_items_is_indented() -> None:
+    html = "<ul><li><p>outer</p><ul><li><p>inner</p></li></ul></li></ul>"
+    assert clean_html(html).text == "- outer\n  - inner"
+
+
+def test_second_paragraph_in_a_list_item_is_indented_under_its_bullet() -> None:
+    assert clean_html("<ul><li><p>one</p><p>two</p></li></ul>").text == "- one\n  two"
+
+
+def test_text_after_a_nested_list_returns_to_the_outer_item() -> None:
+    html = "<ul><li><p>a</p><ul><li><p>b</p></li></ul><p>c</p></li><li><p>d</p></li></ul>"
+    assert clean_html(html).text == "- a\n  - b\n  c\n- d"

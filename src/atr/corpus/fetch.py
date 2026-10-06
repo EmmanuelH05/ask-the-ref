@@ -102,6 +102,8 @@ class _Fetcher:
                 time.sleep(REQUEST_DELAY_SECONDS)
             self._requested = True
             body = _get(url)
+            # Validate before caching: a cached error page would fail every later run.
+            _parse_json(body, url)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(body)
             status = "fetched"

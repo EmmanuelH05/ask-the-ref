@@ -156,3 +156,36 @@ def test_duplicate_passage_id_raises() -> None:
 
     with pytest.raises(ValueError, match=r"L4\.1"):
         parse_law(page(sections), "en")
+
+
+def test_all_caps_h3_is_a_group_heading_carried_onto_the_blocks_under_it() -> None:
+    content = (
+        "<h3>PILOTS</h3><h3>Warning</h3><p>Pilots get one.</p>"
+        "<h3>GROUND CREW</h3><p>Crew rules follow.</p><h3>Warning</h3><p>Crew get two.</p>"
+    )
+    page: dict[str, object] = {
+        "result": {
+            "pageContext": {
+                "chapterIndex": 12,
+                "chapter": {
+                    "title": "Zorb Conduct",
+                    "sections": [
+                        {
+                            "sectionIndex": "4",
+                            "lawSectionCategoryName": "Discipline",
+                            "slug": "discipline",
+                            "content": content,
+                        }
+                    ],
+                },
+            }
+        }
+    }
+    passages, report = parse_law(page, "en")
+    assert [(p.passage_id, p.subheading) for p in passages] == [
+        ("L12.4.2", "PILOTS / Warning"),
+        ("L12.4.3", "GROUND CREW"),
+        ("L12.4.4", "GROUND CREW / Warning"),
+    ]
+    assert report.empty_passages == []
+    assert report.group_headings == ["L12.4.1 (PILOTS)"]

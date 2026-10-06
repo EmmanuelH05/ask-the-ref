@@ -17,16 +17,16 @@ Defined in `src/atr/corpus/models.py`, frozen, `extra="forbid"`:
 
 ```python
 class Passage(BaseModel):
-    passage_id: str          # D1
+    passage_id: str  # D1
     language: Literal["en", "es"]
-    law_number: int | None   # 1..17, None for glossary
-    law_title: str           # chapter.title, or the glossary page title
+    law_number: int | None  # 1..17, None for glossary
+    law_title: str  # chapter.title, or the glossary page title
     section_index: int | None
-    section_title: str       # lawSectionCategoryName, or the glossary term
-    subheading: str | None   # the <h3> text, when the passage is an h3 block
-    source_slug: str         # section slug, or the glossary English-term slug
-    text: str                # cleaned text, see D3
-    word_count: int          # len(re.findall(r"\w+", text))
+    section_title: str  # lawSectionCategoryName, or the glossary term
+    subheading: str | None  # the <h3> text, when the passage is an h3 block
+    source_slug: str  # section slug, or the glossary English-term slug
+    text: str  # cleaned text, see D3
+    word_count: int  # len(re.findall(r"\w+", text))
 ```
 
 `Alignment` holds `pairs: list[tuple[str, str]]` of (en passage_id, es passage_id) that are
@@ -128,3 +128,36 @@ law_title = `pageContext.title`, section_index None, section_title = the display
 subheading None, source_slug = slug, text = `clean_html(definition).text`. Empty definitions
 are not emitted and go in `empty_passages`. Duplicate ids are NOT an error here (two Spanish
 synonyms can point at one English term); `align` reports them.
+
+## D8. Glossary cross-reference stubs are dropped (phase 1, main session, 2026-10-05)
+
+A glossary entry whose cleaned definition starts with "V. " (Spanish) or "See " (English) and
+has at most 6 words only points at another entry. It is not emitted as a passage and is
+listed in `BuildReport.cross_references_dropped` as `"{passage_id} ({term})"`.
+Why: the Spanish edition lists synonyms twice, once with the definition and once as a stub,
+and both carry the same English term, which made four duplicate ids. A stub has nothing to
+retrieve or cite.
+
+## D9. List items keep their bullet when the CMS wraps them in a paragraph (phase 1)
+
+The real markup is `<li> <p>text</p> </li>`. Inside a list, `<p>` ends a line but adds no blank
+line; the list as a whole is separated from surrounding paragraphs by one blank line. This
+corrects the first build of `html.py`, whose tests only used `<li>text</li>`.
+
+## D10. Fixes from the phase 1 review (main session, 2026-10-05)
+
+- Group headings: an `<h3>` in capitals is a group heading. The plain `<h3>` blocks after it,
+  up to the next group heading, get `subheading = "{GROUP} / {heading}"`. An empty group
+  block is listed in `BuildReport.group_headings`, not in `empty_passages`. Ids do not change.
+  Why: Law 12 section 4 repeats "Warning", "Caution" and "Sending-off" once for players and
+  once for team officials, and without the group a citation could not tell them apart.
+- Alignment: if any `L{law}.{section}.{k}` id of a section fails to pair, every pair in that
+  section is unpaired and one mismatch line is added. Subsection ids are positional, so one
+  missing block shifts the rest.
+- Glossary: a paragraph opening with a bold-only line and a `<br>` is an entry boundary. The
+  English edition has one entry typed that way instead of with an `<h4>`.
+- Fetch: a response body is parsed as JSON before it is written to the cache.
+- Lists: later paragraphs of one `<li>`, and text after a nested list, are indented two
+  spaces under the item's bullet.
+- Known and left: a lead block holding only an image (no text) is not counted in `images`.
+  The real data has none.

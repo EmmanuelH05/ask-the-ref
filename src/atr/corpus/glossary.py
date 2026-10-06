@@ -5,7 +5,20 @@ from atr.corpus.models import BuildReport, Language, Passage, count_words
 
 _NON_SLUG = re.compile(r"[^a-z0-9]+")
 _H4 = re.compile(r"<h4\b[^>]*>(.*?)</h4\s*>", re.IGNORECASE | re.DOTALL)
+# The CMS sometimes types a new entry as a bold line and a <br> inside a paragraph
+# instead of giving it an <h4>; without this it is swallowed by the entry above it.
+_BOLD_TERM = re.compile(
+    r"<p>\s*(?:<(?:code|em)>\s*)*<strong>(.*?)</strong>\s*(?:</(?:code|em)>\s*)*<br\s*/?>",
+    re.IGNORECASE | re.DOTALL,
+)
 _ARROW = re.compile(r"\(\s*→\s*(.+?)\s*\)\s*$")
+# "V." is the Spanish edition's "see"; a stub this short only points at another entry.
+_CROSS_REFERENCE = re.compile(r"^(V\.|See)\s")
+CROSS_REFERENCE_MAX_WORDS = 6
+
+
+def _is_cross_reference(text: str) -> bool:
+    return bool(_CROSS_REFERENCE.match(text)) and count_words(text) <= CROSS_REFERENCE_MAX_WORDS
 
 
 def slugify(term: str) -> str:
@@ -38,7 +51,7 @@ def _html_contents(context: dict[str, object]) -> list[str]:
 
 
 def glossary_entries(page_data: dict[str, object]) -> list[tuple[str, str]]:
-    html = "".join(_html_contents(_page_context(page_data)))
+    html = _BOLD_TERM.sub(r"<h4>\1</h4><p>", "".join(_html_contents(_page_context(page_data))))
     headings = list(_H4.finditer(html))
     entries: list[tuple[str, str]] = []
     for index, match in enumerate(headings):
@@ -100,6 +113,7 @@ def parse_glossary(
     named = _slugs([term for term, _ in entries], language, page, english_terms)
     passages: list[Passage] = []
     empty: list[str] = []
+    stubs: list[str] = []
     totals = [0, 0, 0]
     for (_, definition), (term, slug) in zip(entries, named, strict=True):
         cleaned = clean_html(definition)
@@ -110,11 +124,15 @@ def parse_glossary(
         if not cleaned.text:
             empty.append(passage_id)
             continue
+        if _is_cross_reference(cleaned.text):
+            stubs.append(f"{passage_id} ({term})")
+            continue
         passages.append(_passage(passage_id, language, title, term, slug, cleaned.text))
     report = BuildReport(
         deleted_fragments=totals[0],
         images=totals[1],
         explanation_attrs=totals[2],
         empty_passages=empty,
+        cross_references_dropped=stubs,
     )
     return passages, report

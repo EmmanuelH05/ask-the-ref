@@ -1,8 +1,10 @@
+import re
 from collections import Counter
 
 from atr.corpus.models import Alignment, Language, Passage
 
 _KEY_FIELDS = ("source_slug", "law_number", "section_index")
+_SUBSECTION_ID = re.compile(r"^(L\d+\.\d+)\.\d+$")
 
 
 def _unique_ids(passages: list[Passage]) -> list[str]:
@@ -23,6 +25,29 @@ def _check_language(passages: list[Passage], language: Language) -> None:
             raise ValueError(
                 f"{passage.passage_id}: expected language {language!r}, got {passage.language!r}"
             )
+
+
+def _distrust_shifted_sections(all_ids: list[str], paired: set[str]) -> list[str]:
+    """Unpair every subsection of a section where any subsection failed to pair.
+
+    Subsection ids are positional, so one missing block in an edition shifts every id
+    after it and the surviving pairs would join different text.
+    """
+    by_section: dict[str, list[str]] = {}
+    for passage_id in dict.fromkeys(all_ids):
+        match = _SUBSECTION_ID.match(passage_id)
+        if match:
+            by_section.setdefault(match.group(1), []).append(passage_id)
+    reasons: list[str] = []
+    for section, ids in by_section.items():
+        if all(passage_id in paired for passage_id in ids):
+            continue
+        paired.difference_update(ids)
+        reasons.append(
+            f"{section}: subsection ids differ between editions, "
+            "so no pair in this section is trusted"
+        )
+    return reasons
 
 
 def align(en: list[Passage], es: list[Passage]) -> Alignment:
@@ -49,6 +74,8 @@ def align(en: list[Passage], es: list[Passage]) -> Alignment:
             paired.add(pid)
         else:
             mismatches.append(problem)
+
+    mismatches.extend(_distrust_shifted_sections([*en_ids, *es_ids], paired))
 
     return Alignment(
         pairs=[(pid, pid) for pid in en_ids if pid in paired],

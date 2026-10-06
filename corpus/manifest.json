@@ -1,0 +1,2401 @@
+{
+  "edition": "2026/27",
+  "source": "theifab.com page-data, laws/latest",
+  "fetched_at": "2026-10-06T04:30:32.659612+00:00",
+  "passages": [
+    {
+      "passage_id": "G.football-bodies.confederation",
+      "language": "en",
+      "sha256": "d11212f572adc4268ea41d98ea2a826deaa56c2a8bec04e324423523cde0551d",
+      "word_count": 29
+    },
+    {
+      "passage_id": "G.football-bodies.fifa-f-d-ration-internationale-de-football-association",
+      "language": "en",
+      "sha256": "b3aab94c0cf78ecdb54f81f62b478b05811cd45e4717755585d53e2f80016194",
+      "word_count": 9
+    },
+    {
+      "passage_id": "G.football-bodies.national-football-association",
+      "language": "en",
+      "sha256": "06eb4982ff3576e7137d4cf37b15aae2a5a3e2e07146929637040b7969e2519b",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-bodies.the-ifab-the-international-football-association-board",
+      "language": "en",
+      "sha256": "75e6e5ed85e216d851af795c4c87860867af291fd1a31d5f7301e7a19f15ef91",
+      "word_count": 40
+    },
+    {
+      "passage_id": "G.football-terms.abandon",
+      "language": "en",
+      "sha256": "9a5f0d51f211469a0bec18acbdee0cda8a25c59c15203e021d270e87ca064ae3",
+      "word_count": 9
+    },
+    {
+      "passage_id": "G.football-terms.additional-time",
+      "language": "en",
+      "sha256": "528126ab23172f6829fd926adee8fa5f965922467771e68e8de4c66f539b416a",
+      "word_count": 20
+    },
+    {
+      "passage_id": "G.football-terms.advantage",
+      "language": "en",
+      "sha256": "cbdc2fa6dfba80dea254d230a0d951011e22a956799c9559a3bd0a46b948b517",
+      "word_count": 30
+    },
+    {
+      "passage_id": "G.football-terms.assessment-of-injured-player",
+      "language": "en",
+      "sha256": "c8de84a534fd14d716e1e0329a3465f7b55e3b65b39cea02410d5ee9cbb4c83b",
+      "word_count": 17
+    },
+    {
+      "passage_id": "G.football-terms.away-goals-rule",
+      "language": "en",
+      "sha256": "a683056b912a90f5f443baf7f122fa458d1996c54f864f2c1b060cf1574628a0",
+      "word_count": 23
+    },
+    {
+      "passage_id": "G.football-terms.brutality",
+      "language": "en",
+      "sha256": "37729d1acaaca092e88204f4b99573e37681a9d098e8f74cd4239c53bdc44ef4",
+      "word_count": 9
+    },
+    {
+      "passage_id": "G.football-terms.careless",
+      "language": "en",
+      "sha256": "9f57c282cbb9da0446fb6233bf43d7bbeaaac263fcd3a86d921348384987420b",
+      "word_count": 21
+    },
+    {
+      "passage_id": "G.football-terms.caution",
+      "language": "en",
+      "sha256": "c1dd363423f34c0ac65108e6e99ae0363f86da477daff1bcb770846c9dfe0ac0",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.challenge",
+      "language": "en",
+      "sha256": "a0b2717ae8c418c159ec965b36d2cb268d67e120114d0da86018e3232b0388a3",
+      "word_count": 13
+    },
+    {
+      "passage_id": "G.football-terms.charge-an-opponent",
+      "language": "en",
+      "sha256": "b480f45dcfa1fd070f71eb89fcac889d6584aa5c6d996f70fb164444ac819fdf",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.concussion-substitution",
+      "language": "en",
+      "sha256": "eb358bb1057f15f24e4262abe5943a8c44ad7aec64a2decfae2c777731176a97",
+      "word_count": 38
+    },
+    {
+      "passage_id": "G.football-terms.cooling-break",
+      "language": "en",
+      "sha256": "ef8d74982486e8228117e3ccab173182f1f939b430022afe300ef5f8a6dea598",
+      "word_count": 42
+    },
+    {
+      "passage_id": "G.football-terms.deceive",
+      "language": "en",
+      "sha256": "d7979ee97973d7a16516cc93c518de11af8bb41a7c84a172b188d3f54342aba2",
+      "word_count": 21
+    },
+    {
+      "passage_id": "G.football-terms.deliberate",
+      "language": "en",
+      "sha256": "19bd78f78767b3955fb3084daf9a6010996cd3ab60b8bd65877cfd81763a77e2",
+      "word_count": 17
+    },
+    {
+      "passage_id": "G.football-terms.direct-free-kick",
+      "language": "en",
+      "sha256": "d4bb8d75a65f4583f6b5f8792000b643a776b9c77c8a0e411c79ee9ae9ddad07",
+      "word_count": 25
+    },
+    {
+      "passage_id": "G.football-terms.discretion",
+      "language": "en",
+      "sha256": "ce7b5f429da685f9baca77f5598a04b91e9c3007488ccb96ab3da32c8e217191",
+      "word_count": 13
+    },
+    {
+      "passage_id": "G.football-terms.dissent",
+      "language": "en",
+      "sha256": "4da9df15a2a25bc83425c810336f46ed3f6b68bb0949de7ff3f212395e27be4b",
+      "word_count": 20
+    },
+    {
+      "passage_id": "G.football-terms.distract",
+      "language": "en",
+      "sha256": "6feedac2ddcf6f3db42527c1bc76cce2f57a17ff6afcc57a0201d8f48839e871",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-terms.drinks-break",
+      "language": "en",
+      "sha256": "22c9664c17fe544b255142fac3ef59cade14a327952df9ff884c46de20b077b8",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.dropped-ball",
+      "language": "en",
+      "sha256": "06b05d0eb5b7821b18bc923a51284471773665bcd2d7f531985ff24178115c70",
+      "word_count": 28
+    },
+    {
+      "passage_id": "G.football-terms.electronic-performance-and-tracking-system-epts",
+      "language": "en",
+      "sha256": "59612bcca6147c6850db048b0e0e3a143a4a48c0ff91f8a502644ba795c83475",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.endanger-the-safety-of-an-opponent",
+      "language": "en",
+      "sha256": "873f3aec21b7abb138380c04c11fff4d59cacee15058a827b6bc27d164f08a46",
+      "word_count": 9
+    },
+    {
+      "passage_id": "G.football-terms.excessive-force",
+      "language": "en",
+      "sha256": "2a9a61c5bf731f05df0c49ef0650eba9eda2c05bdbcab2c07ca22f877a922803",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-terms.extra-time",
+      "language": "en",
+      "sha256": "8c8a9faca65de4a76e9b3d50fbe0cf9031d1213c5020d7d31b4b5192700519c5",
+      "word_count": 23
+    },
+    {
+      "passage_id": "G.football-terms.feinting",
+      "language": "en",
+      "sha256": "215161a821974807bca6a87d643b7b324df5c18d7cd860a8d67e976174e2720d",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.field-of-play-pitch",
+      "language": "en",
+      "sha256": "d0093967836266c24ef1e831ea51094a295688c3f2f72420d4b0d5855e14bef2",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.goal-line-technology-glt",
+      "language": "en",
+      "sha256": "4e187a27672eefa86c67349a4fcb466633a903b8a0105c6971039fddc7089c64",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.holding-offence",
+      "language": "en",
+      "sha256": "4c95dd9ae60eca1e8c9aa5758ef8cffb4d4e90304f662c3013a1107985f365f8",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.hybrid-system",
+      "language": "en",
+      "sha256": "d48d13946435c9f4ec52335a65f5f05759c6d42ab4914b7bcfc08aa38d6252c6",
+      "word_count": 20
+    },
+    {
+      "passage_id": "G.football-terms.impede",
+      "language": "en",
+      "sha256": "38c698340558897b7869139413d9dcca0bc8c351ce5666942cd1883f20e7cc75",
+      "word_count": 11
+    },
+    {
+      "passage_id": "G.football-terms.indirect-free-kick",
+      "language": "en",
+      "sha256": "0ec2fdeb9cd9bc6655aa447854485a863b4b3faaa4c6306893c7b8e8e2919c27",
+      "word_count": 25
+    },
+    {
+      "passage_id": "G.football-terms.intercept",
+      "language": "en",
+      "sha256": "cdba4f3f3f368ed20f7b651558cd55e59dc915de984875f3f46e2090bd28aeb3",
+      "word_count": 8
+    },
+    {
+      "passage_id": "G.football-terms.kick",
+      "language": "en",
+      "sha256": "2113a89dab0018fcf1a34e49d256d97a8ea21718d7026b4311a35a0a9eeae0c9",
+      "word_count": 18
+    },
+    {
+      "passage_id": "G.football-terms.negligible",
+      "language": "en",
+      "sha256": "461a3cfc99539fa86522ed98d589cf12427ce7e107afa1cc0f8084284cafdd12",
+      "word_count": 2
+    },
+    {
+      "passage_id": "G.football-terms.offence",
+      "language": "en",
+      "sha256": "0ba6ed1fc873e7dd142fa0700e12d5654c2370bd8909b2d136db6f27bb169072",
+      "word_count": 10
+    },
+    {
+      "passage_id": "G.football-terms.offensive-insulting-or-abusive-language-action-s",
+      "language": "en",
+      "sha256": "8ed406c40102e883e3881e8074287598911eca767d74b51985aabcfc9abf6cd5",
+      "word_count": 16
+    },
+    {
+      "passage_id": "G.football-terms.outside-agent",
+      "language": "en",
+      "sha256": "8aa0213f81b9e3db3069cc376b8087587d6b889c2a7bbe00d1476cbe1ba9a03e",
+      "word_count": 27
+    },
+    {
+      "passage_id": "G.football-terms.penalise",
+      "language": "en",
+      "sha256": "43562e33794be5f633d298d4def82f3a248e4a756ba5014edd47818cde3e8bd3",
+      "word_count": 21
+    },
+    {
+      "passage_id": "G.football-terms.penalties-penalty-shoot-out",
+      "language": "en",
+      "sha256": "7f4e95de39c3fbd9cdf67efd329bca0e3d850b39ed9117b051fffece3ff5c036",
+      "word_count": 66
+    },
+    {
+      "passage_id": "G.football-terms.play",
+      "language": "en",
+      "sha256": "f626fdc81182b7870d6e3e8cf9becd21cb021420d39f2a3f696ccb97097b4364",
+      "word_count": 10
+    },
+    {
+      "passage_id": "G.football-terms.playing-distance",
+      "language": "en",
+      "sha256": "a38b593483855243bc0a5c1441a1455455173ea695853291c3de7787107e7247",
+      "word_count": 35
+    },
+    {
+      "passage_id": "G.football-terms.quick-free-kick",
+      "language": "en",
+      "sha256": "53f18b6e0d4f88cfa057aa9ec5caa55d5c78aaaf7e830e91393c80ff3b4128ea",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.reckless",
+      "language": "en",
+      "sha256": "f783512b231ecd6ff50c68b6744ebb694f192fd26f7ad684637f340615f01244",
+      "word_count": 21
+    },
+    {
+      "passage_id": "G.football-terms.restart",
+      "language": "en",
+      "sha256": "e739eb73714be7669ba6462b860019a7fcd2610794a9e0f5c88044acf0461daa",
+      "word_count": 10
+    },
+    {
+      "passage_id": "G.football-terms.restart-position",
+      "language": "en",
+      "sha256": "653dd71c81451699c742ee79c218a81822a1b262971e46b731e2bca9dc34d2fb",
+      "word_count": 55
+    },
+    {
+      "passage_id": "G.football-terms.sanction",
+      "language": "en",
+      "sha256": "e756f21e38c400b55b1b07769921e7821f2227baad65394fe0da55c8cea9e1d7",
+      "word_count": 6
+    },
+    {
+      "passage_id": "G.football-terms.save",
+      "language": "en",
+      "sha256": "6eb32efc82048e1c8e1a6af194d78f9a657ea629d14fba613057ab2d9caf0e18",
+      "word_count": 42
+    },
+    {
+      "passage_id": "G.football-terms.semi-automated-offside-technology-saot",
+      "language": "en",
+      "sha256": "64d5e074992fbdc15bc5fdcedb76d0e709e551f8f09dfd89357dbb2efe63bb60",
+      "word_count": 27
+    },
+    {
+      "passage_id": "G.football-terms.sending-off",
+      "language": "en",
+      "sha256": "95b90fb310dd6664ce982057c767db62558a41c70c25272f73315b3f5f69b077",
+      "word_count": 46
+    },
+    {
+      "passage_id": "G.football-terms.serious-foul-play",
+      "language": "en",
+      "sha256": "c5e41e6fcea22529a7c1fc86bccf350a3fe18a9a11645239d6e9f2985e3a29c3",
+      "word_count": 27
+    },
+    {
+      "passage_id": "G.football-terms.shinguard",
+      "language": "en",
+      "sha256": "d3ef64a987762677a1e3c65403d61c5f4525cf62dc7347fe0374fe4fd0690a72",
+      "word_count": 42
+    },
+    {
+      "passage_id": "G.football-terms.shirt",
+      "language": "en",
+      "sha256": "f8deea4c8c2336d263293ac79eab297f69832e0ba65793c9c99444bda025b485",
+      "word_count": 50
+    },
+    {
+      "passage_id": "G.football-terms.signal",
+      "language": "en",
+      "sha256": "161e24934fea0ee21f31494112763eb0dcde20ecf1cb224ed4a9449e9115ac6c",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.simulation",
+      "language": "en",
+      "sha256": "3686328067ebe33a1d3e9a67204e10eabb76375cd9227478648f9e7ad1fa96e1",
+      "word_count": 28
+    },
+    {
+      "passage_id": "G.football-terms.spirit-of-the-game",
+      "language": "en",
+      "sha256": "86868b9f0fb41da953032673f0fd75b3e9ecd9a91b352d967872cc804deac8e8",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.suspend",
+      "language": "en",
+      "sha256": "bc9d28223a78518523e816f8579ba3712725fdd5d8b2b993f10e48693f378e52",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.tackle",
+      "language": "en",
+      "sha256": "7a5073bd301505c1ca397aac74ab90d5ecfaf2c62d9e229f47266ba725b58211",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.team-list",
+      "language": "en",
+      "sha256": "6a42720b4fb693cf4e07cf15f6222084d40804c3b9aefa443e315b70997c20c0",
+      "word_count": 11
+    },
+    {
+      "passage_id": "G.football-terms.team-official",
+      "language": "en",
+      "sha256": "eff6765be2bcf3ed3f8d8e316353f70fdebc284ca0a1708f0c7a08646f9f4c7e",
+      "word_count": 17
+    },
+    {
+      "passage_id": "G.football-terms.technical-area",
+      "language": "en",
+      "sha256": "48facda2d96a336542fab794864ea2272e834b1ffb6db527bd0f03d4ff34b478",
+      "word_count": 16
+    },
+    {
+      "passage_id": "G.football-terms.technical-staff",
+      "language": "en",
+      "sha256": "6419cc38ea1babe7a73d47d906eb57a983d4bedfd16cefe43c3a308ea998ea5a",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.temporary-dismissal",
+      "language": "en",
+      "sha256": "2fe39a68556176ba6ad6f1c121adcaba5ae89639332a6edf591a7cbedee81244",
+      "word_count": 23
+    },
+    {
+      "passage_id": "G.football-terms.undue-interference",
+      "language": "en",
+      "sha256": "e2bdf0cad9330303c1c836825e0b3bd4dd657f3cfb1dd5393fca71ce8bf63f9c",
+      "word_count": 5
+    },
+    {
+      "passage_id": "G.football-terms.unsporting-behaviour",
+      "language": "en",
+      "sha256": "748538b997b05ab838e1033ccab0943b8c92d309e6c3771ac9da0381f6a96fe3",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-terms.violent-conduct",
+      "language": "en",
+      "sha256": "50d744577b96fc11ee85882a5592f60c6db0f706f6ee9bacf7c500b613f2f663",
+      "word_count": 41
+    },
+    {
+      "passage_id": "G.referee-terms.match-official-s",
+      "language": "en",
+      "sha256": "fa3dec7d18d53896a81a8747b7d47e56c2853060b86824f766f536dac0ebc169",
+      "word_count": 28
+    },
+    {
+      "passage_id": "G.referee-terms.on-field-match-officials",
+      "language": "en",
+      "sha256": "c9a7986eec5899669c369cc2f6b1a5e128f3f629f47a94502b00e95d0d208f68",
+      "word_count": 148
+    },
+    {
+      "passage_id": "G.referee-terms.referee",
+      "language": "en",
+      "sha256": "887d80cdb81d1ae24c9bf55bb7dac1debfc76d37284f60cee6e2ed82a053a13d",
+      "word_count": 33
+    },
+    {
+      "passage_id": "G.referee-terms.video-match-officials-vmos",
+      "language": "en",
+      "sha256": "56c3d738dd34be6893e57a0ad830b4cd675dab1391d0db2deb4dddd83213321c",
+      "word_count": 81
+    },
+    {
+      "passage_id": "L1.1",
+      "language": "en",
+      "sha256": "0964951d7adb694e1b82b03bff83c16a86640222eb92f716b5ac1ac6c95e2084",
+      "word_count": 87
+    },
+    {
+      "passage_id": "L1.10.0",
+      "language": "en",
+      "sha256": "546acbd8cd66f9437a076ca236979f1822e4b7fe2e06fbdbbf5c37ab21388283",
+      "word_count": 251
+    },
+    {
+      "passage_id": "L1.10.1",
+      "language": "en",
+      "sha256": "5677b030df853ff3105c5b72f864ffc73746a1980cb9c95006f2aacb39140e1d",
+      "word_count": 11
+    },
+    {
+      "passage_id": "L1.11.0",
+      "language": "en",
+      "sha256": "896857c22d422ac195fd52ff7540d2eea217ef57e9f959b8ef680ad28d6928db",
+      "word_count": 30
+    },
+    {
+      "passage_id": "L1.11.1",
+      "language": "en",
+      "sha256": "a7f51ab76c0f5674bbabc3f1823bb724386b00892efc9a21e653d38f7a4919fb",
+      "word_count": 75
+    },
+    {
+      "passage_id": "L1.11.2",
+      "language": "en",
+      "sha256": "e66940718dfba4a2b714c9f74e4e8aafa9543090f070acc4dab0bad17c781217",
+      "word_count": 89
+    },
+    {
+      "passage_id": "L1.12",
+      "language": "en",
+      "sha256": "855cb09db5620995855c3c49664e533ee08d4afa66706ea133dd5f38f8dbc6b6",
+      "word_count": 146
+    },
+    {
+      "passage_id": "L1.13",
+      "language": "en",
+      "sha256": "fe4b6a00d9141e8e4ccdcef4f57764c959aad13a1212254530455d57a63d7be9",
+      "word_count": 54
+    },
+    {
+      "passage_id": "L1.14.0",
+      "language": "en",
+      "sha256": "8bce4ff1091db9de0b2d9a273cfa49404f247d13ddf1771dd69af43d6d7ee249",
+      "word_count": 20
+    },
+    {
+      "passage_id": "L1.14.1",
+      "language": "en",
+      "sha256": "620e04a29c8398fb3004bbdef2fe03ff38bac1cfb68bd76af8a29d0fcbd4f875",
+      "word_count": 67
+    },
+    {
+      "passage_id": "L1.14.2",
+      "language": "en",
+      "sha256": "ff9609e0428e71390168a8aa30814681ab37eb2340e63b33f34559a3f2e7d853",
+      "word_count": 50
+    },
+    {
+      "passage_id": "L1.2",
+      "language": "en",
+      "sha256": "96b03527a826f85a0702800f1a1584da004b470b3aa1d0325f7c57027f26f99a",
+      "word_count": 283
+    },
+    {
+      "passage_id": "L1.3",
+      "language": "en",
+      "sha256": "10259bfd9093dd8518d56740cf61fa1e0b8bc9b814d333d21739c7a3fde2bec4",
+      "word_count": 49
+    },
+    {
+      "passage_id": "L1.4",
+      "language": "en",
+      "sha256": "846aca3b56d13a2256732184f686f0ec27e6623b09b2bc4134da37e301761f2a",
+      "word_count": 40
+    },
+    {
+      "passage_id": "L1.5",
+      "language": "en",
+      "sha256": "757ef963c4e21feb6f0a29e498007c3cfc11f5d5f194044e743458f8c0059078",
+      "word_count": 62
+    },
+    {
+      "passage_id": "L1.6",
+      "language": "en",
+      "sha256": "6aa836f8ba95ab72ce07e2fad9ee7c47d22e8eb8a226ad7151e6938098c248d0",
+      "word_count": 108
+    },
+    {
+      "passage_id": "L1.7",
+      "language": "en",
+      "sha256": "ef5b05e2c4d42f632bee03795957920d44f5ec6165fc532a6278582e5be0bffc",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L1.8",
+      "language": "en",
+      "sha256": "c7c7bf2c75a0753c2b383c79a13251060c2a3079e838b86adad032a1239c00c0",
+      "word_count": 44
+    },
+    {
+      "passage_id": "L1.9",
+      "language": "en",
+      "sha256": "cef2867546875ad975331fa887691a8641e5ec2c08ba81f61afe02e2d96308c6",
+      "word_count": 150
+    },
+    {
+      "passage_id": "L10.1",
+      "language": "en",
+      "sha256": "d4ce579212e4566ded0ebec08c350f2466d9f63952c58daa23ddb0215a8825aa",
+      "word_count": 74
+    },
+    {
+      "passage_id": "L10.2",
+      "language": "en",
+      "sha256": "5f8327af66ecd6e5242d75bfe45e701e9e9407478f351a97fdc0f7c39d6374cc",
+      "word_count": 80
+    },
+    {
+      "passage_id": "L10.3.0",
+      "language": "en",
+      "sha256": "0f55ce1be7d66304cea6e8f19a446961252c8f82f2a6aed4ef4a4e51f3bbc2cf",
+      "word_count": 59
+    },
+    {
+      "passage_id": "L10.3.1",
+      "language": "en",
+      "sha256": "fa4755960064e540c258afd7b919dccf51c2219ee6f8a1f94bb0085f515110c1",
+      "word_count": 750
+    },
+    {
+      "passage_id": "L11.1",
+      "language": "en",
+      "sha256": "4cc5d8c29488f8033db6374b17dff26fb62b1505bf1fd092031f84ee97361146",
+      "word_count": 114
+    },
+    {
+      "passage_id": "L11.2",
+      "language": "en",
+      "sha256": "408bfc463ebe9239f2043d8cee53f61d6929174c8918fffe8f3d808e1cacb3c4",
+      "word_count": 610
+    },
+    {
+      "passage_id": "L11.3",
+      "language": "en",
+      "sha256": "15e86113e7e2a534dcec18d976fecba94791fe1269c3677dccc03e0ddb1bb8d1",
+      "word_count": 22
+    },
+    {
+      "passage_id": "L11.4",
+      "language": "en",
+      "sha256": "25ea695fe5815cf3f9a84c3e08dc804be90fed488d26a2215c832a64a2954bcc",
+      "word_count": 263
+    },
+    {
+      "passage_id": "L12.0",
+      "language": "en",
+      "sha256": "ba0e459598d713e748e586bf9ac4fe154e04020612f4913fd495804f3f5330e3",
+      "word_count": 21
+    },
+    {
+      "passage_id": "L12.1.0",
+      "language": "en",
+      "sha256": "87fab3f7a16a9f500d84bbb2127f80d06f090aafb45f7a627bd254e788e476b7",
+      "word_count": 218
+    },
+    {
+      "passage_id": "L12.1.1",
+      "language": "en",
+      "sha256": "2695cc9337defbd16894bc4cc2688ad5d070c927f4ff1a924532fda9ccec6c89",
+      "word_count": 265
+    },
+    {
+      "passage_id": "L12.2.0",
+      "language": "en",
+      "sha256": "628a0030c06ec2fbedd32e8817be3ea7d574b189cee4d24fee17b99cec43e154",
+      "word_count": 230
+    },
+    {
+      "passage_id": "L12.2.1",
+      "language": "en",
+      "sha256": "42a3e97e9a8634ec5539d30bf81b9f0b2769f2aa8dc9aae0bb3abe884a6fedfa",
+      "word_count": 53
+    },
+    {
+      "passage_id": "L12.2.2",
+      "language": "en",
+      "sha256": "ac5bb407c4d187f98caa52682a8160d532acd622f1a26696e5f8f59a60cffb8d",
+      "word_count": 118
+    },
+    {
+      "passage_id": "L12.3",
+      "language": "en",
+      "sha256": "3c6116a93d90ff167b3cdae482df714f116360f2b969817e754cd14e382c347e",
+      "word_count": 139
+    },
+    {
+      "passage_id": "L12.4.0",
+      "language": "en",
+      "sha256": "bbfb03ed1f67276e82fb517d04fac0c8bb21442902ee96e67c6dd76396dd78bd",
+      "word_count": 144
+    },
+    {
+      "passage_id": "L12.4.10",
+      "language": "en",
+      "sha256": "4fb139263a4374f6d887f8e0f6d8a7296099fc7d8e969acc194b9b10807c58c4",
+      "word_count": 66
+    },
+    {
+      "passage_id": "L12.4.11",
+      "language": "en",
+      "sha256": "136e215e6844cc07fc20f7112ce5d9abde7c7a5afdd432b5b196b62b14c00500",
+      "word_count": 84
+    },
+    {
+      "passage_id": "L12.4.12",
+      "language": "en",
+      "sha256": "53a1e75c633f4313cad1f0513f885bb2162e780203a6fb4774d66d778a41643b",
+      "word_count": 39
+    },
+    {
+      "passage_id": "L12.4.13",
+      "language": "en",
+      "sha256": "aa7f88a3b4b53f5d5cf3fd948016d738ce40723ca9267f834a6c301f608be666",
+      "word_count": 76
+    },
+    {
+      "passage_id": "L12.4.14",
+      "language": "en",
+      "sha256": "b86d50a141804c13531a91bdae617efbbb19a473efbb14dc24e143e210e731e5",
+      "word_count": 117
+    },
+    {
+      "passage_id": "L12.4.15",
+      "language": "en",
+      "sha256": "46cea2bb87caf3c5d171a5774d37e265ea62d79507d2e2ba944177b81a779e62",
+      "word_count": 224
+    },
+    {
+      "passage_id": "L12.4.16",
+      "language": "en",
+      "sha256": "bf3a30e7d68375ef9ed9542d82ba39014df560bcb4bdee7496a28c1794e5c26d",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L12.4.2",
+      "language": "en",
+      "sha256": "e050286307c774e39be8a95407aaaf6790dea51c7297a0309a61cf3b1bad3f00",
+      "word_count": 89
+    },
+    {
+      "passage_id": "L12.4.3",
+      "language": "en",
+      "sha256": "5c5328e599b954330411e6f2e2610213b1a864821f8e87b4eca434b69409dabd",
+      "word_count": 208
+    },
+    {
+      "passage_id": "L12.4.4",
+      "language": "en",
+      "sha256": "7e60e934d8c9327649fd51716ffce4f8ff71a7aa4ef3c7b170287cc00f82303e",
+      "word_count": 182
+    },
+    {
+      "passage_id": "L12.4.5",
+      "language": "en",
+      "sha256": "1f691f87e8a9564f6af41ab03f312fdbec8af4d3e70ca32551f7e6d078e1b0a9",
+      "word_count": 291
+    },
+    {
+      "passage_id": "L12.4.6",
+      "language": "en",
+      "sha256": "5074719a88b1ea1a17e30f748b08d86062c825d70d4204c5a888418800c6df5f",
+      "word_count": 111
+    },
+    {
+      "passage_id": "L12.4.7",
+      "language": "en",
+      "sha256": "7798a6c628b511f98059f8f575a9f0b10cdf015f6e2ab386058f4c37384c7a05",
+      "word_count": 58
+    },
+    {
+      "passage_id": "L12.4.8",
+      "language": "en",
+      "sha256": "1629479cbaf05f30d790069a04c542b4c4012c3eb0262b543a4855c2da0c2e13",
+      "word_count": 229
+    },
+    {
+      "passage_id": "L12.4.9",
+      "language": "en",
+      "sha256": "0bd2ede6c1ff28ca57e99be5f25f15525952bab5443981f44111bceb15dc69ea",
+      "word_count": 224
+    },
+    {
+      "passage_id": "L12.5",
+      "language": "en",
+      "sha256": "4204a110b73a8662184fa45573e4da6b2e4d13612b0d166515c5fb608d5e28fe",
+      "word_count": 502
+    },
+    {
+      "passage_id": "L13.1.0",
+      "language": "en",
+      "sha256": "cb2c8286ee22cf25486dd6ac53772ceed95b622dd26835cfba553cfd2fc6697c",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L13.1.1",
+      "language": "en",
+      "sha256": "a9d5c16456539a0169fe24f2d344d66bf569fe343ff65f7fd2df1e4f307a4092",
+      "word_count": 72
+    },
+    {
+      "passage_id": "L13.1.2",
+      "language": "en",
+      "sha256": "8153bcbb84c306a12f98968ccc78d01d15d3114a6f202a960607acb8db95aee6",
+      "word_count": 54
+    },
+    {
+      "passage_id": "L13.2",
+      "language": "en",
+      "sha256": "e7cc2b5d2b8b998f85aa7d6c5ca00a31fe827c4ce5ca640f39960de79f000094",
+      "word_count": 331
+    },
+    {
+      "passage_id": "L13.3",
+      "language": "en",
+      "sha256": "afff664db3da2648aac8f5e484da2948ddd8308325ff8a2185e86cf872122246",
+      "word_count": 262
+    },
+    {
+      "passage_id": "L14.0",
+      "language": "en",
+      "sha256": "6b5c3336066689695ac7290fe9423f72f0f0952c47f41516d49be7b5f1cbf713",
+      "word_count": 43
+    },
+    {
+      "passage_id": "L14.1",
+      "language": "en",
+      "sha256": "e55caaaee8bfab72817a8409471da52d16ef40c183deea15190bdc86585ba2ed",
+      "word_count": 336
+    },
+    {
+      "passage_id": "L14.2",
+      "language": "en",
+      "sha256": "de9b833374a168059c7c4762783ee7fa3832829d698306df03d3d8716cfde111",
+      "word_count": 619
+    },
+    {
+      "passage_id": "L15.0",
+      "language": "en",
+      "sha256": "538b428dca9f9a6af331ac264a27bba6c8e53a98aa2983777547739103f7411e",
+      "word_count": 86
+    },
+    {
+      "passage_id": "L15.1",
+      "language": "en",
+      "sha256": "5b1ac1fc3dd0eaf834d1cee176622e208a2fb07bf8a94b8bee99db507c35be3e",
+      "word_count": 181
+    },
+    {
+      "passage_id": "L15.2",
+      "language": "en",
+      "sha256": "9991842da053d93018a2a846cc83c81cb0f5b14ec3ccee283abc2fc5345ebe14",
+      "word_count": 235
+    },
+    {
+      "passage_id": "L16.0",
+      "language": "en",
+      "sha256": "6eb1167dd058dcdae225e669cd33183b0bd4cfa15fb8653fef186c54579c187a",
+      "word_count": 79
+    },
+    {
+      "passage_id": "L16.1",
+      "language": "en",
+      "sha256": "9f5b3dc214ec56de95751bff1cdfefb05ee67cc69ccbb131ea5e7233bf7448d9",
+      "word_count": 47
+    },
+    {
+      "passage_id": "L16.2",
+      "language": "en",
+      "sha256": "191ade068476a858078382fbe61a53def73366591047b9c8d38100e50ea9cb88",
+      "word_count": 286
+    },
+    {
+      "passage_id": "L17.0",
+      "language": "en",
+      "sha256": "0aa9c7068a40e3cc615d4e45f9b06bbd0fb5c5e1089d00048d278e36fe79ea80",
+      "word_count": 113
+    },
+    {
+      "passage_id": "L17.1",
+      "language": "en",
+      "sha256": "b6709b80180166b6c95c6c18ccf54b3d670f78da8049245f3a2d7da4e8c8d559",
+      "word_count": 91
+    },
+    {
+      "passage_id": "L17.2",
+      "language": "en",
+      "sha256": "8325b21452682af74daffe0d2da10a6c9ed977abf5bbe2c1770f6ced2d37facc",
+      "word_count": 117
+    },
+    {
+      "passage_id": "L2.1",
+      "language": "en",
+      "sha256": "d28ee7d066555fd96aa26c241b07a993c853262d9f21a629dae07257f514c8da",
+      "word_count": 210
+    },
+    {
+      "passage_id": "L2.2",
+      "language": "en",
+      "sha256": "fe31b0a0f07f4ef712c38517be045bfb41f09c94e595f76deffa83082fd48651",
+      "word_count": 84
+    },
+    {
+      "passage_id": "L2.3",
+      "language": "en",
+      "sha256": "bd4ddabf3f7beba8bc6aa86f3537a8b2bfc77aa79e43d9aaf56ee87456b01858",
+      "word_count": 26
+    },
+    {
+      "passage_id": "L3.1",
+      "language": "en",
+      "sha256": "984729110ae7a86c94dfcefa79c9e80b48ec6f0a3190c6d1f10b59e02d7a8678",
+      "word_count": 206
+    },
+    {
+      "passage_id": "L3.10",
+      "language": "en",
+      "sha256": "9f18dc6403229739fc85c618a63b7666130796ff90ce0b9a0d6500b350ec6947",
+      "word_count": 50
+    },
+    {
+      "passage_id": "L3.2.1",
+      "language": "en",
+      "sha256": "f46541d53e0a104c6b6d27c0371d41877a00314a17c5e514e1a944b8804f36d9",
+      "word_count": 124
+    },
+    {
+      "passage_id": "L3.2.2",
+      "language": "en",
+      "sha256": "3aeba7ded707f2c90765f5392e04c624c87af0eaaffad9a494bc39899e733d6c",
+      "word_count": 126
+    },
+    {
+      "passage_id": "L3.2.3",
+      "language": "en",
+      "sha256": "5e15433cc884312da95e6a2bc4abf88b590ab940e0ba0c66c02e8f0ee5bd7b99",
+      "word_count": 119
+    },
+    {
+      "passage_id": "L3.2.4",
+      "language": "en",
+      "sha256": "3b4039ea93164dab76dfc1aca92586690d2ac7546ba9fe9096a2d72962631edd",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L3.2.5",
+      "language": "en",
+      "sha256": "b3a9422e471f5a283bea7690bdd9609d2ca69d8165b59fa16b73012974dd1892",
+      "word_count": 17
+    },
+    {
+      "passage_id": "L3.3",
+      "language": "en",
+      "sha256": "d8675e70fa17722997b63ea9c102dd033ccd4ce741d6adc5867c5d5e12c6110c",
+      "word_count": 307
+    },
+    {
+      "passage_id": "L3.4",
+      "language": "en",
+      "sha256": "bce0a2c0d4ac7c1b674e03b0365a33230a3d520b1439b5e46a555ff90f2cc1fc",
+      "word_count": 29
+    },
+    {
+      "passage_id": "L3.5",
+      "language": "en",
+      "sha256": "97ac865aba9e4115ede4e120c558218f9ed1dbbbeb73193b871e6eece80df934",
+      "word_count": 315
+    },
+    {
+      "passage_id": "L3.6",
+      "language": "en",
+      "sha256": "ab1564e49f3660b75d7fd1c3fb1310e60d309e16344685bc0c4769d5bbe3a580",
+      "word_count": 79
+    },
+    {
+      "passage_id": "L3.7",
+      "language": "en",
+      "sha256": "7f6f062c9a95b3f5996ea486c0296b33ef8604bd9135140ce6565fc6edfab375",
+      "word_count": 162
+    },
+    {
+      "passage_id": "L3.8",
+      "language": "en",
+      "sha256": "dcaf0b99f6e94edfe60b59463a6ebfff68c335f028a5e18e140223416ded8295",
+      "word_count": 118
+    },
+    {
+      "passage_id": "L3.9",
+      "language": "en",
+      "sha256": "32194ec88711ef6039f7c683493f1792716bdeae6566df81e9336209b853d10f",
+      "word_count": 231
+    },
+    {
+      "passage_id": "L4.1",
+      "language": "en",
+      "sha256": "f1276626e60b25370ea00480c97a84cdb6b0fb50e0ea0e77143ee78fb034dcf9",
+      "word_count": 112
+    },
+    {
+      "passage_id": "L4.2",
+      "language": "en",
+      "sha256": "33ee99ce8ccee913577244304eb049b65a53bc4407271a77fd384be5f229aefd",
+      "word_count": 171
+    },
+    {
+      "passage_id": "L4.3",
+      "language": "en",
+      "sha256": "e4fc41a540e0701c4d43d180d8fc9ba7f1ee99c4e448933c73548673bf44acaf",
+      "word_count": 115
+    },
+    {
+      "passage_id": "L4.4.0",
+      "language": "en",
+      "sha256": "db9a8033fda6e3357860caa3376caafe1b5116c8ed3e1f0426651227207bff17",
+      "word_count": 34
+    },
+    {
+      "passage_id": "L4.4.1",
+      "language": "en",
+      "sha256": "c7900f2c3f885da00fd65e47df5660ac8ffe941c097f18e5c8432fb70c7fd80f",
+      "word_count": 81
+    },
+    {
+      "passage_id": "L4.4.2",
+      "language": "en",
+      "sha256": "c964f5e4767dbf2946f840e36c5c9fff22d782848c028ad40f6f356f36742eb6",
+      "word_count": 103
+    },
+    {
+      "passage_id": "L4.4.3",
+      "language": "en",
+      "sha256": "8fadd41e3bd46de7ca9bb4fe639cf092fbfbb435daf01e451a9d47bb49d9d978",
+      "word_count": 130
+    },
+    {
+      "passage_id": "L4.5.0",
+      "language": "en",
+      "sha256": "9fd5ef41b9b915c2bf038da6df7635585312f918bfff2f4d94c6542b317c8813",
+      "word_count": 57
+    },
+    {
+      "passage_id": "L4.5.1",
+      "language": "en",
+      "sha256": "e838b731002f9575b9f3c1fdab58d0bd89f07f0ab44630b3d913591dd5505446",
+      "word_count": 108
+    },
+    {
+      "passage_id": "L4.5.2",
+      "language": "en",
+      "sha256": "e059600b324cbab144d9bf55b5c1dce0226aa86170aae622561b410bcc836759",
+      "word_count": 220
+    },
+    {
+      "passage_id": "L4.6",
+      "language": "en",
+      "sha256": "ae53f9aa1ae6dc6c48dbf61cae7d130a6088060792b34b228f62f527dd97d2df",
+      "word_count": 135
+    },
+    {
+      "passage_id": "L5.1",
+      "language": "en",
+      "sha256": "10cb61cad350d4e326c0510e3331b44532db0852003656cc406fe33a5291db1a",
+      "word_count": 23
+    },
+    {
+      "passage_id": "L5.2",
+      "language": "en",
+      "sha256": "c6d1ce7a2d4708c226c7d5ff1ab780ec6e72e86e456672e22bfc9301225b7f92",
+      "word_count": 315
+    },
+    {
+      "passage_id": "L5.3.0",
+      "language": "en",
+      "sha256": "fcc0ea1504abaed4a4213bf0a3647e6de6fc34abe813c0c55b6eef473ac358d4",
+      "word_count": 61
+    },
+    {
+      "passage_id": "L5.3.1",
+      "language": "en",
+      "sha256": "d48cfe903dc7a8f2e388a14335a92a147f0b7bdcb4eb6ede5ecbbfac73cfb04c",
+      "word_count": 51
+    },
+    {
+      "passage_id": "L5.3.2",
+      "language": "en",
+      "sha256": "64d7425665c9ef356979a02882f97ffd8581fa85669f0fb994dad02f77e3505e",
+      "word_count": 271
+    },
+    {
+      "passage_id": "L5.3.3",
+      "language": "en",
+      "sha256": "1f0953071076c42e50764c5d373f3bc4a5ee7cfa6d2576356af5ced39062bf7c",
+      "word_count": 360
+    },
+    {
+      "passage_id": "L5.3.4",
+      "language": "en",
+      "sha256": "b47c05dd8a7e92cf823c0e7e95efe539b5fc35e81c80a8e1436c78d3596f5314",
+      "word_count": 183
+    },
+    {
+      "passage_id": "L5.4.0",
+      "language": "en",
+      "sha256": "2eb04bdee2d7841747f957449b7878df89f19f390eb0c727e4b6c623070987c6",
+      "word_count": 198
+    },
+    {
+      "passage_id": "L5.4.1",
+      "language": "en",
+      "sha256": "33f553e3bd8d520443a6c0a810fe4dff1d314ed367349d0e96d8724898e6c94d",
+      "word_count": 44
+    },
+    {
+      "passage_id": "L5.5.1",
+      "language": "en",
+      "sha256": "d7e0abb1a759fd60e0020a394ac593550863fa3a4a8aa7b8085679f316df6d88",
+      "word_count": 25
+    },
+    {
+      "passage_id": "L5.5.2",
+      "language": "en",
+      "sha256": "e6550d1639bb6d305fc939cbf648440d10135bea0b3c56cc5d59b10382e06047",
+      "word_count": 110
+    },
+    {
+      "passage_id": "L5.6",
+      "language": "en",
+      "sha256": "eb2ce292c8d3af49f59c9aedf260943a8907ffaa99384d2e440566635211da70",
+      "word_count": 7
+    },
+    {
+      "passage_id": "L5.7",
+      "language": "en",
+      "sha256": "5b6cd4589007d1d491e66bb7635801da771325ec4d93d086643a25fbc969293f",
+      "word_count": 279
+    },
+    {
+      "passage_id": "L6.0",
+      "language": "en",
+      "sha256": "3a3db25b1b5c7bb74af28d338c9ee91aef6ca322c059d118a478d4a4ab60eb54",
+      "word_count": 292
+    },
+    {
+      "passage_id": "L6.1",
+      "language": "en",
+      "sha256": "62cf5f4fb327f2b651b7d092eb6169d07f54dfb3f842271d85a47af7025f9030",
+      "word_count": 110
+    },
+    {
+      "passage_id": "L6.2",
+      "language": "en",
+      "sha256": "cb15df31cdfa302edb3776fe6397764a44ce03745a01978b05887406b1f94f1a",
+      "word_count": 67
+    },
+    {
+      "passage_id": "L6.3",
+      "language": "en",
+      "sha256": "893bf7cfa796d878f3287ae896b10695606197fb29ab4de77c0ca6ccd45cf90f",
+      "word_count": 57
+    },
+    {
+      "passage_id": "L6.4",
+      "language": "en",
+      "sha256": "99786b3ff7c319a0101108214c66c734e2795c54d06db62c57a8a38caea2ee75",
+      "word_count": 37
+    },
+    {
+      "passage_id": "L6.5",
+      "language": "en",
+      "sha256": "0d629601f3d41de29adc1ed6942dff583f37deb1c8bf87f3eeef38f24c24aca1",
+      "word_count": 168
+    },
+    {
+      "passage_id": "L6.6",
+      "language": "en",
+      "sha256": "abfac1a2678cb2cfb5dbf49df5e0fa10ce8f1171c1527b4285eabf85e9202ae5",
+      "word_count": 8
+    },
+    {
+      "passage_id": "L6.7",
+      "language": "en",
+      "sha256": "d3608d39bbf4edf87df665870c978b39180f1e19a24501c9dd97f23cc175026a",
+      "word_count": 12
+    },
+    {
+      "passage_id": "L7.1",
+      "language": "en",
+      "sha256": "6bd93654cf661f41de2f520cee4310b32b18b930e052ad49745d9bce9fcc891b",
+      "word_count": 37
+    },
+    {
+      "passage_id": "L7.2",
+      "language": "en",
+      "sha256": "f8467211a81c9cad437e63bb5ef13f46f17e3342445796d2bf8bcd4fd8de65a3",
+      "word_count": 56
+    },
+    {
+      "passage_id": "L7.3",
+      "language": "en",
+      "sha256": "ef7cf0ee54c0068d07d15b9beac6b9444ae834397f074856c4f04b4fbb846c36",
+      "word_count": 137
+    },
+    {
+      "passage_id": "L7.4",
+      "language": "en",
+      "sha256": "2ed7a25a41104c8af3c481532115f7c399d9453ae4a74b2a0bed7d5510ec0818",
+      "word_count": 20
+    },
+    {
+      "passage_id": "L7.5",
+      "language": "en",
+      "sha256": "c45342ac22aa15d0dae138440a0deec467438c29d796516c78ff0ae42e880c5b",
+      "word_count": 40
+    },
+    {
+      "passage_id": "L8.0",
+      "language": "en",
+      "sha256": "805c29f5f24ed3a65cc492f66a896268064d4f764c39985d43ec06591204e48c",
+      "word_count": 85
+    },
+    {
+      "passage_id": "L8.1.1",
+      "language": "en",
+      "sha256": "b4e63fce192927d5fa407accee80298959fa90eb71b57fc5c176adf17ae4cde3",
+      "word_count": 201
+    },
+    {
+      "passage_id": "L8.1.2",
+      "language": "en",
+      "sha256": "a566d301f5cc39f7069cab9981a8921f1851c36d27a5b2c9fdc78b26b522c388",
+      "word_count": 47
+    },
+    {
+      "passage_id": "L8.2.1",
+      "language": "en",
+      "sha256": "5304a964bc0204b6cf7e1c621dfc0f2552a52e34071351659c372276aa974463",
+      "word_count": 150
+    },
+    {
+      "passage_id": "L8.2.2",
+      "language": "en",
+      "sha256": "3d3d2bd901ecd74a11502c8ff5c97f00b6125245a4e2caddd2bd45debcfa6ff6",
+      "word_count": 65
+    },
+    {
+      "passage_id": "L9.1",
+      "language": "en",
+      "sha256": "a0e2c2c5886e25576902d8e5cbe8be6bd8ccb388f4e0226089f7886a61ea7bc0",
+      "word_count": 77
+    },
+    {
+      "passage_id": "L9.2",
+      "language": "en",
+      "sha256": "41dd9dadda39a0e6b41ef1b0e93be7303a2544816345a3a90a28dd3d219834fb",
+      "word_count": 95
+    },
+    {
+      "passage_id": "G.football-bodies.confederation",
+      "language": "es",
+      "sha256": "c22c28ceb6103daf017a9a89b760c1f05ed2aeb4296318aa1a742e3e87fed214",
+      "word_count": 33
+    },
+    {
+      "passage_id": "G.football-bodies.fifa-f-d-ration-internationale-de-football-association",
+      "language": "es",
+      "sha256": "5b9d8f9ecafba6ca39c714db5068c00b3c09c9d650c058f97dd65838758d3c0f",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-bodies.national-football-association",
+      "language": "es",
+      "sha256": "9991278c35e1231d4ee81b02be212b55b0f3a1d767c12d47f8a995636d828467",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-bodies.the-ifab-the-international-football-association-board",
+      "language": "es",
+      "sha256": "b9981e2fd0376494421ce412c99b95a1552d03d0833c03a6869c66bdaa1ed8a7",
+      "word_count": 48
+    },
+    {
+      "passage_id": "G.football-terms.abandon",
+      "language": "es",
+      "sha256": "78e9a8ceb9dedc831f42b14bf378c5ca57e3482edab301e11b2d6dff6ab49325",
+      "word_count": 13
+    },
+    {
+      "passage_id": "G.football-terms.additional-time",
+      "language": "es",
+      "sha256": "02456db78d48d7a1a984cef4c203f7bcab550b9adf5fb53e6c783cc1716d127a",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.advantage",
+      "language": "es",
+      "sha256": "6b295beae20751aa0b92fdf75b0c9d6dd2aefce0fda39dfdd9f9a3f850b1f640",
+      "word_count": 37
+    },
+    {
+      "passage_id": "G.football-terms.assessment-of-injured-player",
+      "language": "es",
+      "sha256": "a158d7f67ae6f04ca771071caea0560a7932d369b22c1f8f3e4fa83695f67799",
+      "word_count": 23
+    },
+    {
+      "passage_id": "G.football-terms.away-goals-rule",
+      "language": "es",
+      "sha256": "b92d8219e73c38cd0193023e5a6b93604c0137f01e5b14dc07ffc8937fb5846f",
+      "word_count": 40
+    },
+    {
+      "passage_id": "G.football-terms.brutality",
+      "language": "es",
+      "sha256": "0638c7d835264be52338c8781eb428cb16f7b5e5da33cf21b19df94c45a881ad",
+      "word_count": 7
+    },
+    {
+      "passage_id": "G.football-terms.careless",
+      "language": "es",
+      "sha256": "463d89eb3a20520ece5b804e97d164b9a0118cc2466caa5bc799228cd8c814c5",
+      "word_count": 25
+    },
+    {
+      "passage_id": "G.football-terms.caution",
+      "language": "es",
+      "sha256": "5f692590f94dc61d61674fa0298db9b1e17fcca81df11143d44d9f19f36cd5c7",
+      "word_count": 39
+    },
+    {
+      "passage_id": "G.football-terms.challenge",
+      "language": "es",
+      "sha256": "3a9642126913298579c4409f2136fb7f8499f0e99bfb32de3fe7b54918edb9da",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.charge-an-opponent",
+      "language": "es",
+      "sha256": "e694c663d54c53dcb35531d7412e1b7410a98d84ee9b82f3f092247e03166dd3",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.check",
+      "language": "es",
+      "sha256": "073a1e334ea02a038343f9c5522dbe3dd8712bc686ed18564794d259bdade1f5",
+      "word_count": 37
+    },
+    {
+      "passage_id": "G.football-terms.concussion-substitution",
+      "language": "es",
+      "sha256": "83b505d0b8de5daca4228689ab89df4912695f89438c8435bf12e497cc217238",
+      "word_count": 47
+    },
+    {
+      "passage_id": "G.football-terms.cooling-break",
+      "language": "es",
+      "sha256": "7539a97ccab01a6f812118ccf914294441c36a0de8f73d4fc7b6d85e39e09a91",
+      "word_count": 54
+    },
+    {
+      "passage_id": "G.football-terms.deliberate",
+      "language": "es",
+      "sha256": "a63ab5e7de96ad263594d437abfda1ba552783e0b5353d9a51d53a7d644a4648",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.direct-free-kick",
+      "language": "es",
+      "sha256": "52c747ee727c666371c36e4f3a3f7d12dd56bfc373be9d07f0596b280028182c",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.disciplinary-sanction",
+      "language": "es",
+      "sha256": "5bfe5568528b0c3cc7c2e41347eb04f9010ac84fa917853163b20655d316f30a",
+      "word_count": 20
+    },
+    {
+      "passage_id": "G.football-terms.dissent",
+      "language": "es",
+      "sha256": "d711004983c65d23be18626363ee0ee36c24a46f4f42e18f375ba1d82e0082ea",
+      "word_count": 24
+    },
+    {
+      "passage_id": "G.football-terms.drinks-break",
+      "language": "es",
+      "sha256": "0e973db6d491bded3ef3cf6bf7862370068f43783ad3840c8190d44ef708e2fc",
+      "word_count": 34
+    },
+    {
+      "passage_id": "G.football-terms.dropped-ball",
+      "language": "es",
+      "sha256": "96634ce429272473650f1f0ad8705317cb8d219eed50e9700b42af1cdb0a1ff4",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.electronic-performance-and-tracking-system-epts",
+      "language": "es",
+      "sha256": "b67df3d404bc5a1c43d843c3ea892713d30e6b655e3556d12a3197bb49400b58",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.extra-time",
+      "language": "es",
+      "sha256": "f9ab63fc8941173be925f353db161b10fc7725b4ee07e7d3ad2f564585fd4070",
+      "word_count": 37
+    },
+    {
+      "passage_id": "G.football-terms.feinting",
+      "language": "es",
+      "sha256": "2bb07d5d3047ec15433ad3fc3c075897163b9bcb581d35a7dd1422ec1a185075",
+      "word_count": 16
+    },
+    {
+      "passage_id": "G.football-terms.field-of-play-pitch",
+      "language": "es",
+      "sha256": "a2d99b11633ba35c36152d6369a0808c63ea4c4921caa0b70a9368df54357cda",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.goal-line-technology-glt",
+      "language": "es",
+      "sha256": "8c905f270e1a97057b3625e78e9a3044874e68f38e4fa6828fcd756a6b508f94",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.holding-offence",
+      "language": "es",
+      "sha256": "61c412ab235df4912b0e0824181770f81a73eb4d343e5bd22d180c8937d399bc",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.hybrid-system",
+      "language": "es",
+      "sha256": "8203a97059136a10812a802b63a6af58852d2d1890a4224af5e55fb52adf45a4",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.indirect-free-kick",
+      "language": "es",
+      "sha256": "f1682988825da78c8e87b966e38627f65e8f2ad81a39204d110b091498a43544",
+      "word_count": 35
+    },
+    {
+      "passage_id": "G.football-terms.intercept",
+      "language": "es",
+      "sha256": "817b71a0b154222fbba5b338c8829902876141f7ffde888b3c953979991b5517",
+      "word_count": 14
+    },
+    {
+      "passage_id": "G.football-terms.kick",
+      "language": "es",
+      "sha256": "4c402474d0855c8ac9d641a97588c389d8d741a9716f1f91fce117e108ffe38c",
+      "word_count": 17
+    },
+    {
+      "passage_id": "G.football-terms.offence",
+      "language": "es",
+      "sha256": "8e5c9bb914f2761d7bcaa73ed67ce66ce66e6b9d7bf41309efa268b80dd6349c",
+      "word_count": 12
+    },
+    {
+      "passage_id": "G.football-terms.offensive-insulting-or-abusive-language-action-s",
+      "language": "es",
+      "sha256": "f01d46419dc1656f89210b8862599c0fbd6f9ef80235e5894d041272115eace7",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.outside-agent",
+      "language": "es",
+      "sha256": "e6947a8bbc46b3f2ee6501d69f3f7e4e434a0de64311b0f04fb9e15172000b3e",
+      "word_count": 29
+    },
+    {
+      "passage_id": "G.football-terms.penalise",
+      "language": "es",
+      "sha256": "c17c4010867483013877f665fe82b1786897417b21a3923ce745272011b103dd",
+      "word_count": 19
+    },
+    {
+      "passage_id": "G.football-terms.penalties-penalty-shoot-out",
+      "language": "es",
+      "sha256": "b3774a1b6ff41c441e6f8abf7de8a7fbff756f0e510f9a556a35e7009c06a29a",
+      "word_count": 66
+    },
+    {
+      "passage_id": "G.football-terms.play",
+      "language": "es",
+      "sha256": "cfd5d39d7e5914874a35231228398e9ef9dc8052f610f59dadaab58fe29dc5a8",
+      "word_count": 11
+    },
+    {
+      "passage_id": "G.football-terms.playing-distance",
+      "language": "es",
+      "sha256": "0e05fc59b9799baa8e9d98d2f0f4691eec8920912b0e0ac86ffa1abc043c0253",
+      "word_count": 42
+    },
+    {
+      "passage_id": "G.football-terms.promising-attack",
+      "language": "es",
+      "sha256": "9de5ace8bab9ed1072f7bf1dce7ed8d89cfa6529eac7ea438f9b4f50f5349bf9",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.quick-free-kick",
+      "language": "es",
+      "sha256": "c815d0b237d2b43c269da9df5a9c4d56c706432e7e7d05df4998aec01b310bd2",
+      "word_count": 13
+    },
+    {
+      "passage_id": "G.football-terms.reckless",
+      "language": "es",
+      "sha256": "51c71c2901bfb5e98f975a9453c6ae78857c90d7044548778e2c6529431598ae",
+      "word_count": 28
+    },
+    {
+      "passage_id": "G.football-terms.referee-report",
+      "language": "es",
+      "sha256": "05bae7f1779a2f442670c5b96019c7fd2f6747957e38fee309939b565a648dd8",
+      "word_count": 45
+    },
+    {
+      "passage_id": "G.football-terms.restart",
+      "language": "es",
+      "sha256": "127e974a11e8383c82fac9016c4cf70faac3ce4aa01f482472919da249947f6b",
+      "word_count": 12
+    },
+    {
+      "passage_id": "G.football-terms.restart-position",
+      "language": "es",
+      "sha256": "5c3f2c3aa2a41bebabbfa833558710c3b989ac758422198a629ad0129d6defd5",
+      "word_count": 69
+    },
+    {
+      "passage_id": "G.football-terms.review",
+      "language": "es",
+      "sha256": "ef525d6ca3ff48c8d5237e9c8d1c650a229be9545cdda9c376d87114cdb5c9b8",
+      "word_count": 47
+    },
+    {
+      "passage_id": "G.football-terms.save",
+      "language": "es",
+      "sha256": "d43a32565d89c54f0aa57140bfb2d8311f9678246d237a9836caec201a42c601",
+      "word_count": 52
+    },
+    {
+      "passage_id": "G.football-terms.sending-off",
+      "language": "es",
+      "sha256": "47b5f6f58445e8fc8cf4621d64723341aa6c3fd06cd4e989a6ed48f815713af4",
+      "word_count": 59
+    },
+    {
+      "passage_id": "G.football-terms.serious-foul-play",
+      "language": "es",
+      "sha256": "88e1095fe51a1f3b665d8dd4a3b1c3da1f69472fe15adfeddcec309284d70276",
+      "word_count": 34
+    },
+    {
+      "passage_id": "G.football-terms.shinguard",
+      "language": "es",
+      "sha256": "d90333a30e8116d61a2cdcaf7d24f9046e4100a2d174ac9b32db8ced17ac5115",
+      "word_count": 38
+    },
+    {
+      "passage_id": "G.football-terms.shirt",
+      "language": "es",
+      "sha256": "54beba05d0a038a3fd5c4553bb6793868410971ec2f83157b51b031fe12fe3c4",
+      "word_count": 50
+    },
+    {
+      "passage_id": "G.football-terms.signal",
+      "language": "es",
+      "sha256": "38889b4a9a27ca8100b7c00f6ff93397b7f4dcd67808e0bab9241ae5c2665cf6",
+      "word_count": 33
+    },
+    {
+      "passage_id": "G.football-terms.simulation",
+      "language": "es",
+      "sha256": "26e452a6adf3502a647606180c83abcbd9673d230788211dbc4ee93895b14e4c",
+      "word_count": 30
+    },
+    {
+      "passage_id": "G.football-terms.spirit-of-the-game",
+      "language": "es",
+      "sha256": "041694ae61e24f0ed87b6916110dcdd877228fff368020f32ff7d3e52aaa911a",
+      "word_count": 22
+    },
+    {
+      "passage_id": "G.football-terms.suspend",
+      "language": "es",
+      "sha256": "5788e28db4260f0105e9dbb8ef172b1824c165af7eedcdad390dfd8e8a1d87ca",
+      "word_count": 25
+    },
+    {
+      "passage_id": "G.football-terms.tackle",
+      "language": "es",
+      "sha256": "18ca70e5d2a9083d2eaa194f1e806812875fa2a4f974e8af9b5d796f7f390ff6",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.team-list",
+      "language": "es",
+      "sha256": "886e84934a4aaa1a27d5a090d5f25f00453001bd88d61f5ca9621eaea85b8e5c",
+      "word_count": 16
+    },
+    {
+      "passage_id": "G.football-terms.technical-staff",
+      "language": "es",
+      "sha256": "da508ce3c9ceffb858ea558b9324d9232e0e760009eb15f18df9bec32d3cfc51",
+      "word_count": 26
+    },
+    {
+      "passage_id": "G.football-terms.tecnolog-a-semiautomatizada-para-la-detecci-n-del-fuera-de-juego",
+      "language": "es",
+      "sha256": "8605a029ef78cd1fff1a291b50569a69ed1cf8384e955c736a132fb07e26f23e",
+      "word_count": 32
+    },
+    {
+      "passage_id": "G.football-terms.temporary-dismissal",
+      "language": "es",
+      "sha256": "57bd0f8adc14c07751498495fbfeeecf5e2932989d436eaa26934e813816206d",
+      "word_count": 29
+    },
+    {
+      "passage_id": "G.football-terms.unsporting-behaviour",
+      "language": "es",
+      "sha256": "3c983e8a57c43a96ed81af55d6b84fa8f85dd464d80a8cb429b02261b78b628a",
+      "word_count": 15
+    },
+    {
+      "passage_id": "G.football-terms.violent-conduct",
+      "language": "es",
+      "sha256": "3e35800a45d09bb22f5886df9a2a1d4c1db22a9195347746a162c2106158086c",
+      "word_count": 45
+    },
+    {
+      "passage_id": "G.football-terms.warning",
+      "language": "es",
+      "sha256": "3d4bdc02d26008e1054faa0b9ec581bb3b6ce0460ce4229c0eccb1af5d1de63b",
+      "word_count": 27
+    },
+    {
+      "passage_id": "G.referee-terms.match-official-s",
+      "language": "es",
+      "sha256": "2884b75800ade6e392038729ab0946054aa9f1d5ff52eade5edb7b36c872e6a8",
+      "word_count": 30
+    },
+    {
+      "passage_id": "G.referee-terms.on-field-match-officials",
+      "language": "es",
+      "sha256": "bcac34c515457bfd44c1b188e7a4c888097b21c31610031f59b933c4e8fc886f",
+      "word_count": 231
+    },
+    {
+      "passage_id": "G.referee-terms.referee",
+      "language": "es",
+      "sha256": "b26eab344f755d5356ef077efb603c4dd8f58c4ef84d5fd7ce8f6a56ae135d45",
+      "word_count": 47
+    },
+    {
+      "passage_id": "G.referee-terms.video-match-officials-vmos",
+      "language": "es",
+      "sha256": "9e26cc4ea428315d00af67826469609967302276ff217bdc9def0fbfa3694e64",
+      "word_count": 91
+    },
+    {
+      "passage_id": "L1.1",
+      "language": "es",
+      "sha256": "36556518e4bd894e45485d66932b173ce136ba76d071cddc5657403fd0b9a16b",
+      "word_count": 102
+    },
+    {
+      "passage_id": "L1.10.0",
+      "language": "es",
+      "sha256": "1b4556c6f502ba1f37f0e2f9945978c308af635d0c0e5b44b1fc92bfbc60edec",
+      "word_count": 287
+    },
+    {
+      "passage_id": "L1.10.1",
+      "language": "es",
+      "sha256": "f9ff9390ca9185c973067cb05ae4a3f2eab499e719da23e6b9e4dec5e1f572d4",
+      "word_count": 12
+    },
+    {
+      "passage_id": "L1.11.0",
+      "language": "es",
+      "sha256": "59ba9d0edefce5262ceb2e725d345e8fd577f8521d12d0eda5ee2f543366107a",
+      "word_count": 34
+    },
+    {
+      "passage_id": "L1.11.1",
+      "language": "es",
+      "sha256": "8bc841c6e90d36acf61bdc7e9744a927cd7c43504841c992a858bd746e15e339",
+      "word_count": 77
+    },
+    {
+      "passage_id": "L1.11.2",
+      "language": "es",
+      "sha256": "c5fd4c41a5e4f446a4ded9892dec49ba2bb57cf091b0fdc263814625429c61e6",
+      "word_count": 104
+    },
+    {
+      "passage_id": "L1.12",
+      "language": "es",
+      "sha256": "1c7a167906bda846e7843d735121baae64cb814299469d1f1edf6b684f8d050d",
+      "word_count": 177
+    },
+    {
+      "passage_id": "L1.13",
+      "language": "es",
+      "sha256": "f02ff1d35e2d37f0aedee3d187b0b0eeea138c9aa03fdf5817a3cf5ee005528c",
+      "word_count": 68
+    },
+    {
+      "passage_id": "L1.14.0",
+      "language": "es",
+      "sha256": "3852bce79b97f7c034e53f307d0be1f052a433c489786914271d08b379451fbc",
+      "word_count": 24
+    },
+    {
+      "passage_id": "L1.14.1",
+      "language": "es",
+      "sha256": "fdfc547a90c985ce19c47949f5380efe1c0a1374ff2f51196533edec033879a0",
+      "word_count": 90
+    },
+    {
+      "passage_id": "L1.14.2",
+      "language": "es",
+      "sha256": "dfd353350e98dec51e01926eb914ea7f15d001ddeb2f2a576648f3a4d951cb62",
+      "word_count": 69
+    },
+    {
+      "passage_id": "L1.2",
+      "language": "es",
+      "sha256": "e4ebcc986734396eb8e75806d014bbdcb3fe10cd3f4877a5676f031900f8e27b",
+      "word_count": 312
+    },
+    {
+      "passage_id": "L1.3",
+      "language": "es",
+      "sha256": "029f9dc9df6712729b369a0a96756459028f136f37bdde76b77e1f72d7753063",
+      "word_count": 66
+    },
+    {
+      "passage_id": "L1.4",
+      "language": "es",
+      "sha256": "81d66e823386be22252f74398f607973ef27e21a502fb4f4518fbd1ca615136f",
+      "word_count": 48
+    },
+    {
+      "passage_id": "L1.5",
+      "language": "es",
+      "sha256": "2299b204b1a6b9fbfc2d46175339bb9ae27b2b59f085ca0388875fa8eb3ba78f",
+      "word_count": 71
+    },
+    {
+      "passage_id": "L1.6",
+      "language": "es",
+      "sha256": "37599ced5f0664dddaab714d85974e7ebe4db3b1caf9e174c3d4a7d34af3dcbd",
+      "word_count": 129
+    },
+    {
+      "passage_id": "L1.7",
+      "language": "es",
+      "sha256": "1a0be4bd5d5dc30c54113c7790fbc91b92c3104c274360dc43e81482c46f11e6",
+      "word_count": 29
+    },
+    {
+      "passage_id": "L1.8",
+      "language": "es",
+      "sha256": "716ea37926b90c00032fc6392d32945d21706b43c51e13962423173c52033709",
+      "word_count": 59
+    },
+    {
+      "passage_id": "L1.9",
+      "language": "es",
+      "sha256": "8545799a159da77eddc57bd7f4d3e8057c4d3bbc6b99ff71160c45491cc90e13",
+      "word_count": 167
+    },
+    {
+      "passage_id": "L10.1",
+      "language": "es",
+      "sha256": "eb141ba4b4a7854847a5a82551e36ac377d0223359fba797b5604f3ad2cf10d6",
+      "word_count": 93
+    },
+    {
+      "passage_id": "L10.2",
+      "language": "es",
+      "sha256": "cd367b72c72292d7db51337229c3e058fac76c3f238f39c27b75e330466179c2",
+      "word_count": 100
+    },
+    {
+      "passage_id": "L10.3.0",
+      "language": "es",
+      "sha256": "b8f32a35117bfc3a540b8169fdcb05487c24b1b8f6d618ad1f2f4752aff32913",
+      "word_count": 70
+    },
+    {
+      "passage_id": "L10.3.1",
+      "language": "es",
+      "sha256": "b9a226b7f593df1418ba83a812b6bc2b0e0172d89881edfb3272baa2bb04b97b",
+      "word_count": 851
+    },
+    {
+      "passage_id": "L11.1",
+      "language": "es",
+      "sha256": "94224605318af5be2c821fe6f756a87c627ac7e951118ba62baf3889f5d71ad5",
+      "word_count": 164
+    },
+    {
+      "passage_id": "L11.2",
+      "language": "es",
+      "sha256": "682848652c7c00e6e90441e75c5b4587e72d91a2874357acfb0107f83b3a659c",
+      "word_count": 683
+    },
+    {
+      "passage_id": "L11.3",
+      "language": "es",
+      "sha256": "d142dd782a5f461c644db80a180b4599ca61fcc575c134b54182180fa373636e",
+      "word_count": 29
+    },
+    {
+      "passage_id": "L11.4",
+      "language": "es",
+      "sha256": "4d3f3220d9623ad3442f1df7b793ada17e190fdd43de462ae9e2d0a84a7f48f7",
+      "word_count": 306
+    },
+    {
+      "passage_id": "L12.0",
+      "language": "es",
+      "sha256": "8d04d1fa1012f2cff18e937649c621cd418974306a2acf255fda4506fa57a3a3",
+      "word_count": 24
+    },
+    {
+      "passage_id": "L12.1.0",
+      "language": "es",
+      "sha256": "d32fd44c71459b0ab32f3b442c6577df7a108c803ea585e9e5609a75d929dd3e",
+      "word_count": 269
+    },
+    {
+      "passage_id": "L12.1.1",
+      "language": "es",
+      "sha256": "c5569e457cfc01abf8da7b44de549a6164aad37d40b0f08ccf3324c8d68bf344",
+      "word_count": 335
+    },
+    {
+      "passage_id": "L12.2.0",
+      "language": "es",
+      "sha256": "2b9a9745d719bdcbe30c283e5e3850d65bc725e50219633c8f95e6a07a57eb5f",
+      "word_count": 257
+    },
+    {
+      "passage_id": "L12.2.1",
+      "language": "es",
+      "sha256": "739c7b4cdf332f0ecba18a43367541951e173f7278e080c77059e4f0cd6030ba",
+      "word_count": 62
+    },
+    {
+      "passage_id": "L12.2.2",
+      "language": "es",
+      "sha256": "b4b97dcde9daa5f3de14bb046f40436da782361e666c6af46473545c050a42b7",
+      "word_count": 130
+    },
+    {
+      "passage_id": "L12.3",
+      "language": "es",
+      "sha256": "16dd2a949c6aa6ebe37eba052f4cfadbffb39b0764060471894fe6bec287d244",
+      "word_count": 139
+    },
+    {
+      "passage_id": "L12.4.0",
+      "language": "es",
+      "sha256": "86912872e1a2e57652009ec8924e1ee7d18b2962c55ee9d8a7a45addad03fc73",
+      "word_count": 174
+    },
+    {
+      "passage_id": "L12.4.10",
+      "language": "es",
+      "sha256": "94ef2bd3eb1a997fc169d422645d6333346947e5d32704af7c4bf1d016317dcd",
+      "word_count": 82
+    },
+    {
+      "passage_id": "L12.4.11",
+      "language": "es",
+      "sha256": "dbec6e2e083d11d648a103bbcfbbf9ae08fc4c81613651cb9383b3e689831aab",
+      "word_count": 109
+    },
+    {
+      "passage_id": "L12.4.12",
+      "language": "es",
+      "sha256": "afc272b5c52ebe256d55823619ebe4712cd1e42f5ecf3650ea4d3dd42ab466f9",
+      "word_count": 38
+    },
+    {
+      "passage_id": "L12.4.13",
+      "language": "es",
+      "sha256": "01ff0b6bd15020d562be2b34a22132cf7426d80efaa36242f3b24ee4b51b34da",
+      "word_count": 88
+    },
+    {
+      "passage_id": "L12.4.14",
+      "language": "es",
+      "sha256": "7f27a45e01eaa3b24de14e5bef2a0991e28884113f5379f31173dc98ad852f0b",
+      "word_count": 145
+    },
+    {
+      "passage_id": "L12.4.15",
+      "language": "es",
+      "sha256": "e8a52b3acf489eb6ac30799c1f5f3f627dc7873c952febe49dd0a8dbd5ecfbc0",
+      "word_count": 271
+    },
+    {
+      "passage_id": "L12.4.16",
+      "language": "es",
+      "sha256": "92e90409f84a1d61aae3fabdf6e691b9d4a8ba2318992da720f84f83349fdaae",
+      "word_count": 29
+    },
+    {
+      "passage_id": "L12.4.2",
+      "language": "es",
+      "sha256": "bc286a138180336f514cf119804b90a5927a07166bf3db6898b7215a2c5ff30d",
+      "word_count": 105
+    },
+    {
+      "passage_id": "L12.4.3",
+      "language": "es",
+      "sha256": "d2321c096dfeaf2d110a77c1b909008fd4657e467791815e0aa51643cf7af040",
+      "word_count": 224
+    },
+    {
+      "passage_id": "L12.4.4",
+      "language": "es",
+      "sha256": "7faafbaa12a3685ee61f5e06e205c1efe860cb48ad2dfc3b98edc9cf09381602",
+      "word_count": 243
+    },
+    {
+      "passage_id": "L12.4.5",
+      "language": "es",
+      "sha256": "6fc73406945d0de45cd6edd2ec2a777cddbb6f02677f801d5f8208069b39b6a9",
+      "word_count": 320
+    },
+    {
+      "passage_id": "L12.4.6",
+      "language": "es",
+      "sha256": "d213ed885658b44df9330f6dc3418314af09f4b3a2c10de86322a1251dde80e3",
+      "word_count": 120
+    },
+    {
+      "passage_id": "L12.4.7",
+      "language": "es",
+      "sha256": "6b574f5aed46c5e7cc6f715c3f62b9da0ab427daee7468cdd200d33eef79dde3",
+      "word_count": 67
+    },
+    {
+      "passage_id": "L12.4.8",
+      "language": "es",
+      "sha256": "786fe85bdfb0af30af50cabe73307c0c4722768ac720a66e81bd92d69d2592e4",
+      "word_count": 245
+    },
+    {
+      "passage_id": "L12.4.9",
+      "language": "es",
+      "sha256": "ce31cf0d3e6d833afc41027bd4885a7bdc977b6f709457a877030d4c43b1de10",
+      "word_count": 236
+    },
+    {
+      "passage_id": "L12.5",
+      "language": "es",
+      "sha256": "105cb93afa081b4dd3778f6bf49406f9f12d771f7604496509b171096aae7be5",
+      "word_count": 611
+    },
+    {
+      "passage_id": "L13.1.0",
+      "language": "es",
+      "sha256": "4d62291cb62293f0d81f0ceb0b6ee4bb1e3d7d9bc6a8f0687569d67281e77e96",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L13.1.1",
+      "language": "es",
+      "sha256": "d6ecd7cab1a2dfbaf083d3c7984fa41c1c3ada6f3373314c5a45c43721e472b6",
+      "word_count": 76
+    },
+    {
+      "passage_id": "L13.1.2",
+      "language": "es",
+      "sha256": "63c38d0ba17229f79078dcb224e6d3f0cf3dc518829d27b02e40bb243209c1fd",
+      "word_count": 48
+    },
+    {
+      "passage_id": "L13.2",
+      "language": "es",
+      "sha256": "d9c6ba977b8ac6a0ec0883d038b17f2deb5657563d8b897d8314b820a74d9541",
+      "word_count": 404
+    },
+    {
+      "passage_id": "L13.3",
+      "language": "es",
+      "sha256": "7439de48275da126bf0249cfee552fb3164225aa95af9ce9c0685700a566cfa2",
+      "word_count": 283
+    },
+    {
+      "passage_id": "L14.0",
+      "language": "es",
+      "sha256": "93eb11fce904346f8f9158232f325f07e3317859c4934e974a6d7650edc16780",
+      "word_count": 48
+    },
+    {
+      "passage_id": "L14.1",
+      "language": "es",
+      "sha256": "da072427d26eebd72cc12c43391582cfea15f8b2b538b0ef5a2da6a7d5afc62c",
+      "word_count": 400
+    },
+    {
+      "passage_id": "L14.2",
+      "language": "es",
+      "sha256": "f7931bf8f3704e254a9f9666904ecdf772c31b86b51acfba74f59e45bee46d9d",
+      "word_count": 695
+    },
+    {
+      "passage_id": "L15.0",
+      "language": "es",
+      "sha256": "81ec3d8bdfdab7e7e23b7fc78c433cf8997853b0db40dd69fa134c446849df78",
+      "word_count": 97
+    },
+    {
+      "passage_id": "L15.1",
+      "language": "es",
+      "sha256": "bd6837b5423421f031f5434b56278a7c56b1398b503c1a6296be24aeca20af38",
+      "word_count": 206
+    },
+    {
+      "passage_id": "L15.2",
+      "language": "es",
+      "sha256": "2db2e176a88a9ad3586022a0bd5168f3da85105d1f863ba00ebdd5e07454dd07",
+      "word_count": 269
+    },
+    {
+      "passage_id": "L16.0",
+      "language": "es",
+      "sha256": "49d5890e9c151344b72a1e87f5ae97050e302820307c5909279b5cd71c37434c",
+      "word_count": 86
+    },
+    {
+      "passage_id": "L16.1",
+      "language": "es",
+      "sha256": "2877a3dfc208e852d0636136bda6ba9afe07797394fa16bf7ea8708522a7e6bc",
+      "word_count": 56
+    },
+    {
+      "passage_id": "L16.2",
+      "language": "es",
+      "sha256": "4c1e69d3d3645051fb4fdab6ebba41acf184e455c566eea21d1566c6f4240de2",
+      "word_count": 347
+    },
+    {
+      "passage_id": "L17.0",
+      "language": "es",
+      "sha256": "1191537408cbb4cc987057f2717bccfbdb4579a04a190f3d2055413873e28517",
+      "word_count": 123
+    },
+    {
+      "passage_id": "L17.1",
+      "language": "es",
+      "sha256": "70ed179a1aa7d9fd39df722a819089691519d7fab7a42badcfc22e25a92614e5",
+      "word_count": 104
+    },
+    {
+      "passage_id": "L17.2",
+      "language": "es",
+      "sha256": "9ef6dbee2c93811e8719345f33045d1689902fb949feea0e067550aa4bcf1fa2",
+      "word_count": 133
+    },
+    {
+      "passage_id": "L2.1",
+      "language": "es",
+      "sha256": "55f476d10574f49dd62429e86ed0821247fb8d3cc110953bc0ae5d4f6dcea73c",
+      "word_count": 230
+    },
+    {
+      "passage_id": "L2.2",
+      "language": "es",
+      "sha256": "9884cee43e8730ee87cc89de68546b7ce937a0179140535af7ae04f4f3bf3471",
+      "word_count": 117
+    },
+    {
+      "passage_id": "L2.3",
+      "language": "es",
+      "sha256": "8363c230732b993d95347086805d1c415d78c1f4772cf735b2d6edbc0bdedb6c",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L3.1",
+      "language": "es",
+      "sha256": "186773587a9a702e4dda67a9112f55a289abbb44697e6bf0f82e698f76a5fa95",
+      "word_count": 249
+    },
+    {
+      "passage_id": "L3.10",
+      "language": "es",
+      "sha256": "0c7f4d277fee0de75a56b83f820b91d5455837126a38a98510d3aeff709ae0ce",
+      "word_count": 66
+    },
+    {
+      "passage_id": "L3.2.1",
+      "language": "es",
+      "sha256": "d9044520e421e9375bc8404cf818eed13a169ffcca72b1f22b16b157edf89bd4",
+      "word_count": 149
+    },
+    {
+      "passage_id": "L3.2.2",
+      "language": "es",
+      "sha256": "43cbf36e6f71fe7e2682ca2d13ed70d237b7e39cbd25a961dfd9dfc0fbb47104",
+      "word_count": 157
+    },
+    {
+      "passage_id": "L3.2.3",
+      "language": "es",
+      "sha256": "908edebaf6fb3e3e1c434432e550cf3569a21635e7e333892c0bf6bc6937a40c",
+      "word_count": 136
+    },
+    {
+      "passage_id": "L3.2.4",
+      "language": "es",
+      "sha256": "5a5962cfbf3783dd10d3ed0412bb71f1675c9fe2ed16499712fd7bff6f182113",
+      "word_count": 36
+    },
+    {
+      "passage_id": "L3.2.5",
+      "language": "es",
+      "sha256": "c9680c0cacc6b3e4d6233aeb413f9e57891be9724a31e5765d63146f5a0079f8",
+      "word_count": 20
+    },
+    {
+      "passage_id": "L3.3",
+      "language": "es",
+      "sha256": "9ba6f7908815991f9acbed1060c37dc9d8ab63db90aab4d049868488d3e093c8",
+      "word_count": 385
+    },
+    {
+      "passage_id": "L3.4",
+      "language": "es",
+      "sha256": "6293ed40d9db5486723501037df099dca7857f4805c1a83bc47e28a3e35ff68f",
+      "word_count": 34
+    },
+    {
+      "passage_id": "L3.5",
+      "language": "es",
+      "sha256": "765e91a85c3996bdff7e499c824e7be4377b8ec1ca1a4cfc958878b5a7e1ca92",
+      "word_count": 369
+    },
+    {
+      "passage_id": "L3.6",
+      "language": "es",
+      "sha256": "02c5542cfc5c80b1b147462adc4f05aae35a5b6c83c4824556efd9d2e4d7eee4",
+      "word_count": 87
+    },
+    {
+      "passage_id": "L3.7",
+      "language": "es",
+      "sha256": "a335b75ea794336557e477eb72bd853719ae68fbe1ab0329ca5099fd59495764",
+      "word_count": 203
+    },
+    {
+      "passage_id": "L3.8",
+      "language": "es",
+      "sha256": "5e9823df82624bb5c5dfe18638f33fac89fdad0dae49a361fb854841bd2b963c",
+      "word_count": 127
+    },
+    {
+      "passage_id": "L3.9",
+      "language": "es",
+      "sha256": "001f66b4f4b70ed01374f757d5b0af17dc5cc56e6033a5575d5e90d91d21a3f8",
+      "word_count": 274
+    },
+    {
+      "passage_id": "L4.1",
+      "language": "es",
+      "sha256": "39d53b1c442f47dfeedd95ecfca73c844e434e2bd33adf83abfb60b92a251b95",
+      "word_count": 136
+    },
+    {
+      "passage_id": "L4.2",
+      "language": "es",
+      "sha256": "783ecb00dada45de0b1cb2f4e723497706732eaf9c5c1f577d52b7ed05292372",
+      "word_count": 201
+    },
+    {
+      "passage_id": "L4.3",
+      "language": "es",
+      "sha256": "40f4790aff9ba50051c669ae41ad021061f2d8c30d6892b491ffb6df08838ae7",
+      "word_count": 133
+    },
+    {
+      "passage_id": "L4.4.0",
+      "language": "es",
+      "sha256": "b5d458e3f6723b7e4688cf37c02dfa217d29f94eedb611afc86a726be7f90b63",
+      "word_count": 43
+    },
+    {
+      "passage_id": "L4.4.1",
+      "language": "es",
+      "sha256": "ccb05c8d2c2f9b01d0a0cebf1c3289f06d46328fd53ca1f2931ba9d21edc7899",
+      "word_count": 83
+    },
+    {
+      "passage_id": "L4.4.2",
+      "language": "es",
+      "sha256": "a3963b3c89ba6845a3692228ae73d5ed942a0f9fc8b4834b353dcb712194b05d",
+      "word_count": 125
+    },
+    {
+      "passage_id": "L4.4.3",
+      "language": "es",
+      "sha256": "a4e96023b506d22c8eabde96fd30c4b07c830ea334c5d6977fb983ad4391495f",
+      "word_count": 142
+    },
+    {
+      "passage_id": "L4.5.0",
+      "language": "es",
+      "sha256": "13449c6b50c515d9243d7ae4abe411f8bfca022ae26b9d218f1d9b330f1d3093",
+      "word_count": 66
+    },
+    {
+      "passage_id": "L4.5.1",
+      "language": "es",
+      "sha256": "f144ec99e267a677e7f83e6036fbe2344a07fe7c30814e6eed9d348c87013557",
+      "word_count": 142
+    },
+    {
+      "passage_id": "L4.5.2",
+      "language": "es",
+      "sha256": "0bf44c6ac0fcc668c0f97a0a8b36a20909411bf3f0bdb836a9fbf51bfdff7277",
+      "word_count": 249
+    },
+    {
+      "passage_id": "L4.6",
+      "language": "es",
+      "sha256": "6b91a454eed4a08126d32659ad5365fd5c67820bd55db4bb096b9e42234fe68f",
+      "word_count": 178
+    },
+    {
+      "passage_id": "L5.1",
+      "language": "es",
+      "sha256": "e801ea84cdd8177427e79543127e914bb8b2ae47308eb83b4a773a48f5e7940a",
+      "word_count": 25
+    },
+    {
+      "passage_id": "L5.2",
+      "language": "es",
+      "sha256": "0e46bd7e632ad5fe28a68d3af33060e6dd9f3671c46da0227f0b8a490889b500",
+      "word_count": 362
+    },
+    {
+      "passage_id": "L5.3.0",
+      "language": "es",
+      "sha256": "52a1d501109d1fef855a1c95c6376d82ce48ea02ffcb8fb184bae2a7765bb931",
+      "word_count": 72
+    },
+    {
+      "passage_id": "L5.3.1",
+      "language": "es",
+      "sha256": "ce5ffcf1a2c762353557c7a254e59e1d1f4a98fa6caed0d338530e1d654bbe89",
+      "word_count": 61
+    },
+    {
+      "passage_id": "L5.3.2",
+      "language": "es",
+      "sha256": "1bfb3eff6086bfcab495321c9cef2052875adf8ecaccb2cfb80535fb6484303d",
+      "word_count": 302
+    },
+    {
+      "passage_id": "L5.3.3",
+      "language": "es",
+      "sha256": "d46cd4e926b62ef156dbee6744a54d5bef0b720bd97a12b77818796f17c6f808",
+      "word_count": 426
+    },
+    {
+      "passage_id": "L5.3.4",
+      "language": "es",
+      "sha256": "a359918179024158f9e1fd5422ae1cde9e3e12532ceb4705cc45cc805a5e3940",
+      "word_count": 243
+    },
+    {
+      "passage_id": "L5.4.0",
+      "language": "es",
+      "sha256": "34d7b8a5fc3835bc11eb4eb39022c1bafd70f34ab6ebc96b5120e21ab281b65d",
+      "word_count": 218
+    },
+    {
+      "passage_id": "L5.4.1",
+      "language": "es",
+      "sha256": "a3197bbcaa9c95355d02629c1e32ad7bdc3f78653f723707e3e18acdcb6e1de5",
+      "word_count": 55
+    },
+    {
+      "passage_id": "L5.5.1",
+      "language": "es",
+      "sha256": "4640bb889d2420e97508f39009d3a42148f32ecd62428566f5f2b4e539d342c8",
+      "word_count": 27
+    },
+    {
+      "passage_id": "L5.5.2",
+      "language": "es",
+      "sha256": "d0591f50a599616387c41b4d5eb83d0da72bfb7301f682a4a5164f6511767fd2",
+      "word_count": 139
+    },
+    {
+      "passage_id": "L5.6",
+      "language": "es",
+      "sha256": "afd390f4a41b54ebe9a43054b40af8537b2fc6afc9369813f129541533c0043a",
+      "word_count": 10
+    },
+    {
+      "passage_id": "L5.7",
+      "language": "es",
+      "sha256": "b81485643d39642d27e627acee84ae1517907a17d0b20dd695573f1de2eb1960",
+      "word_count": 290
+    },
+    {
+      "passage_id": "L6.0",
+      "language": "es",
+      "sha256": "159a560be261a2d2bd8d1d7e0d69bf2402adc45d76b3d82872d551da04719fd5",
+      "word_count": 359
+    },
+    {
+      "passage_id": "L6.1",
+      "language": "es",
+      "sha256": "71eff0e410d7f2fc4a59f7f711fb6ad58bf7eb98d8ff55a607656e2468c57397",
+      "word_count": 131
+    },
+    {
+      "passage_id": "L6.2",
+      "language": "es",
+      "sha256": "2f1bb0f1e1b46bac1014c8052b00df08346837878296ef2e1a6f999eac6b9eea",
+      "word_count": 84
+    },
+    {
+      "passage_id": "L6.3",
+      "language": "es",
+      "sha256": "b7a4acf68558bbd7099d54ee98accfa42a273dd6a382e43b310cea2b8d6a62f4",
+      "word_count": 68
+    },
+    {
+      "passage_id": "L6.4",
+      "language": "es",
+      "sha256": "5fe2391de94f27de5a3022c6e981271906e03926289aa32e4212f4655fe82046",
+      "word_count": 44
+    },
+    {
+      "passage_id": "L6.5",
+      "language": "es",
+      "sha256": "1eff24b1704143a01a6005ea81bed93d0570358dbcd94b7eb3dc56a3f10c837c",
+      "word_count": 194
+    },
+    {
+      "passage_id": "L6.6",
+      "language": "es",
+      "sha256": "fbf50df55af9a57a68addc66ae5592fffac397585f639ed05b52aee3c39f5352",
+      "word_count": 9
+    },
+    {
+      "passage_id": "L6.7",
+      "language": "es",
+      "sha256": "9223f08d2d4643420e9ba6a340b00148e0817150501d539bb096b4e83750f95b",
+      "word_count": 13
+    },
+    {
+      "passage_id": "L7.1",
+      "language": "es",
+      "sha256": "422fde65415d3a62bdf2e65e5ef7edadb86163a1e6e4b70d5d640771a066e807",
+      "word_count": 43
+    },
+    {
+      "passage_id": "L7.2",
+      "language": "es",
+      "sha256": "58439d8f58a35112d731c9e5cd8ed41f3f43fddd5ef5da35b67eeeca22e59aa9",
+      "word_count": 64
+    },
+    {
+      "passage_id": "L7.3",
+      "language": "es",
+      "sha256": "1bd14a2bdd3bc93454633a965ca31673f945b4e4369ba336bcbc1ab42fb7770f",
+      "word_count": 145
+    },
+    {
+      "passage_id": "L7.4",
+      "language": "es",
+      "sha256": "c1a95213125e22a9dab2b1b8a12d0357d421efbbe0b24ddeec93f2e339c1375a",
+      "word_count": 26
+    },
+    {
+      "passage_id": "L7.5",
+      "language": "es",
+      "sha256": "c37a34c369cbc82d30e2bddbf2c68ff73298ca2893c1c8cd8939a8cfba6ff0d2",
+      "word_count": 59
+    },
+    {
+      "passage_id": "L8.0",
+      "language": "es",
+      "sha256": "449f9d1f3606cc419fafa4fac4813eeee9d1d1625101ba5e50181ea27632f5b5",
+      "word_count": 112
+    },
+    {
+      "passage_id": "L8.1.1",
+      "language": "es",
+      "sha256": "a2e6ce701236fa6c19211190ebdc7bba67d3d3c7d0441d06cc4b4f10c0828dc8",
+      "word_count": 246
+    },
+    {
+      "passage_id": "L8.1.2",
+      "language": "es",
+      "sha256": "3d2045b4fdf26b1c7c5e01e78b647b9fe7b859753498a9bbdad9d8b39eb7c494",
+      "word_count": 54
+    },
+    {
+      "passage_id": "L8.2.1",
+      "language": "es",
+      "sha256": "4afe3786e2f271a24b995ed7cac299c8b06f11c0cf954e9869d40e3ca585d284",
+      "word_count": 186
+    },
+    {
+      "passage_id": "L8.2.2",
+      "language": "es",
+      "sha256": "a1e4132959a19519eaf9467b5a61ef117e458eb69e4707ea6571125a940217c0",
+      "word_count": 84
+    },
+    {
+      "passage_id": "L9.1",
+      "language": "es",
+      "sha256": "def499b98606e71f51ccc1a7a5fb63b365911945ab3c04d0438d70d1164d0f7e",
+      "word_count": 87
+    },
+    {
+      "passage_id": "L9.2",
+      "language": "es",
+      "sha256": "07d63e92d0b1434cbc09e7fb6246b6cd4a9c8d05bf69e8cfe8183385394e7f24",
+      "word_count": 102
+    }
+  ]
+}

@@ -60,9 +60,7 @@ def _block_ids(base: str, blocks: list[tuple[str | None, str]]) -> list[str]:
         return [base]
     has_lead = blocks[0][0] is None
     # The lead is .0; h3 blocks always count from 1, with or without a lead.
-    return [
-        f"{base}.{position if has_lead else position + 1}" for position in range(len(blocks))
-    ]
+    return [f"{base}.{position if has_lead else position + 1}" for position in range(len(blocks))]
 
 
 def _parse_section(
@@ -75,15 +73,26 @@ def _parse_section(
     passages: list[Passage] = []
     empty: list[str] = []
     counts = BuildReport()
+    group: str | None = None
     for passage_id, (heading, raw) in zip(ids, blocks, strict=True):
         cleaned = clean_html(raw)
+        # IFAB sets group headings in capitals (players, then team officials); the plain
+        # headings under each repeat, so the group has to travel with them.
+        is_group = heading is not None and heading.isupper()
+        if is_group:
+            group = heading
+        elif heading is not None and group is not None:
+            heading = f"{group} / {heading}"
         counts = counts + BuildReport(
             deleted_fragments=cleaned.deleted_fragments,
             images=cleaned.images,
             explanation_attrs=cleaned.explanation_attrs,
         )
         if not cleaned.text:
-            empty.append(passage_id)
+            if is_group:
+                counts = counts + BuildReport(group_headings=[f"{passage_id} ({heading})"])
+            else:
+                empty.append(passage_id)
             continue
         passages.append(
             Passage(
