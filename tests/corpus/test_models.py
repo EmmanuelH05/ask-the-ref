@@ -70,6 +70,7 @@ def test_build_report_adds_counts_and_keeps_skipped_pages() -> None:
         images=3,
         faq_entries_skipped=4,
         pages_skipped=["a"],
+        empty_passages=["L1.1"],
     )
     second = BuildReport(
         deleted_fragments=10,
@@ -77,6 +78,7 @@ def test_build_report_adds_counts_and_keeps_skipped_pages() -> None:
         images=30,
         faq_entries_skipped=40,
         pages_skipped=["b"],
+        empty_passages=["L2.2"],
     )
     assert first + second == BuildReport(
         deleted_fragments=11,
@@ -84,4 +86,5 @@ def test_build_report_adds_counts_and_keeps_skipped_pages() -> None:
         images=33,
         faq_entries_skipped=44,
         pages_skipped=["a", "b"],
+        empty_passages=["L1.1", "L2.2"],
     )

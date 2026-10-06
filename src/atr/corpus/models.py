@@ -57,6 +57,7 @@ class BuildReport(_Frozen):
     images: int = 0
     faq_entries_skipped: int = 0
     pages_skipped: list[str] = []
+    empty_passages: list[str] = []
 
     def __add__(self, other: "BuildReport") -> "BuildReport":
         return BuildReport(
@@ -65,4 +66,5 @@ class BuildReport(_Frozen):
             images=self.images + other.images,
             faq_entries_skipped=self.faq_entries_skipped + other.faq_entries_skipped,
             pages_skipped=[*self.pages_skipped, *other.pages_skipped],
+            empty_passages=[*self.empty_passages, *other.empty_passages],
         )
