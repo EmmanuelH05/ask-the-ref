@@ -364,3 +364,15 @@ nothing else. An HTTP failure, a missing `"response"` or an empty translation ra
 `RuntimeError` naming the model; nothing is cached on failure. The single network call sits in
 one function `_post(url: str, payload: dict[str, object], timeout: float) -> dict[str, object]`
 so tests can monkeypatch it. No test touches the network.
+
+## D27. Run records and latency (phase 3, main session, 2026-10-05)
+
+`src/atr/eval/run.py` writes `runs/<retriever>[+translate]__<index>__<split>/records.jsonl` and
+`run.json`; both are committed, and every table is rebuilt from the records
+(`src/atr/eval/report.py`). `runs/cache/` (embeddings, translations) is not committed.
+`QueryRewriter` gained `cost_ms(text, language)`: the translator stores how long each
+translation took beside the translation, and a run reports that stored time, so a rerun
+served from the cache does not report a rewrite latency near zero. Passage vectors are
+cached; query vectors never are, for the same reason. One warm-up search runs before timing.
+The rewrite latency rows include English questions, which cost 0.
+The `test` split is refused while the manifest counts any unreviewed group (D18).

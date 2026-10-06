@@ -1,6 +1,7 @@
 """Translate Spanish and code-switched questions to English before retrieval (DECISIONS.md D26)."""
 
 import json
+import time
 import urllib.request
 from typing import Protocol
 from urllib.error import URLError
@@ -20,12 +21,19 @@ class QueryRewriter(Protocol):
 
     def rewrite(self, text: str, language: QuestionLanguage) -> str: ...
 
+    def cost_ms(self, text: str, language: QuestionLanguage) -> float:
+        """What rewriting this text cost when it was computed, so cached reruns stay honest."""
+        ...
+
 
 class Identity:
     name = "none"
 
     def rewrite(self, text: str, language: QuestionLanguage) -> str:
         return text
+
+    def cost_ms(self, text: str, language: QuestionLanguage) -> float:
+        return 0.0
 
 
 def _post(url: str, payload: dict[str, object], timeout: float) -> dict[str, object]:
@@ -58,13 +66,32 @@ class OllamaTranslator:
     def rewrite(self, text: str, language: QuestionLanguage) -> str:
         if language == "en":
             return text
-        key = cache_key("translate", self._model, PROMPT_TEMPLATE, text)
-        cached = self._cache.get(key)
-        if isinstance(cached, str):
-            return cached
+        cached = self._entry(text)
+        if cached is not None:
+            return cached[0]
+        started = time.perf_counter()
         translation = self._ask(text)
-        self._cache.put(key, translation)
+        elapsed_ms = (time.perf_counter() - started) * 1000
+        self._cache.put(self._key(text), {"text": translation, "ms": elapsed_ms})
         return translation
+
+    def cost_ms(self, text: str, language: QuestionLanguage) -> float:
+        if language == "en":
+            return 0.0
+        cached = self._entry(text)
+        return 0.0 if cached is None else cached[1]
+
+    def _key(self, text: str) -> str:
+        return cache_key("translate", self._model, PROMPT_TEMPLATE, text)
+
+    def _entry(self, text: str) -> tuple[str, float] | None:
+        cached = self._cache.get(self._key(text))
+        if not isinstance(cached, dict):
+            return None
+        translation, elapsed_ms = cached.get("text"), cached.get("ms")
+        if not isinstance(translation, str) or not isinstance(elapsed_ms, int | float):
+            return None
+        return translation, float(elapsed_ms)
 
     def _ask(self, text: str) -> str:
         payload: dict[str, object] = {

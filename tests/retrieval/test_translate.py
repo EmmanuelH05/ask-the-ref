@@ -20,9 +20,7 @@ class FakePost:
         self.reply = reply
         self.calls: list[tuple[str, dict[str, object], float]] = []
 
-    def __call__(
-        self, url: str, payload: dict[str, object], timeout: float
-    ) -> dict[str, object]:
+    def __call__(self, url: str, payload: dict[str, object], timeout: float) -> dict[str, object]:
         self.calls.append((url, payload, timeout))
         if isinstance(self.reply, Exception):
             raise self.reply
@@ -150,3 +148,21 @@ def test_prompt_template_has_text_placeholder() -> None:
 def test_post_signature() -> None:
     assert inspect.isfunction(translate._post)
     assert list(inspect.signature(translate._post).parameters) == ["url", "payload", "timeout"]
+
+
+def test_cost_ms_replays_the_original_compute_time_even_from_the_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    ticks = iter([10.0, 10.25])
+    monkeypatch.setattr(translate.time, "perf_counter", lambda: next(ticks))
+    monkeypatch.setattr(translate, "_post", lambda url, payload, timeout: {"response": "Hi?"})
+    first = make(tmp_path)
+    assert first.cost_ms(SPANISH, "es") == 0.0
+    first.rewrite(SPANISH, "es")
+    assert first.cost_ms(SPANISH, "es") == pytest.approx(250.0)
+    assert make(tmp_path).cost_ms(SPANISH, "es") == pytest.approx(250.0)
+    assert make(tmp_path).cost_ms("Already English?", "en") == 0.0
+
+
+def test_identity_costs_nothing() -> None:
+    assert Identity().cost_ms("anything", "es") == 0.0
