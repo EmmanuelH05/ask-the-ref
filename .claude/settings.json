@@ -1,0 +1,10 @@
+{
+  "enabledPlugins": {
+    "python-development@claude-code-workflows": true,
+    "tdd-guard@tdd-guard": true,
+    "javascript-typescript@claude-code-workflows": false,
+    "ecc@ecc": false,
+    "claude-mem@thedotmack": false
+  },
+  "_docs": "REPO PROFILE - Python 3.13 + uv. See ~/fuck/00-Meta/CLAUDE-CODE-SETUP.md"
+}
