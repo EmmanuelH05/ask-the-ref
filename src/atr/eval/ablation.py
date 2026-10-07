@@ -1,6 +1,7 @@
 """Phase 4: the pre-registered chain of experiments (DECISIONS.md D29) and its table."""
 
 import argparse
+import hashlib
 import time
 from collections.abc import Callable
 from datetime import UTC, datetime
@@ -209,10 +210,31 @@ def evaluate_pipeline(
     return records
 
 
+_SRC = Path(__file__).resolve().parents[1]
+# Every module whose code, constants or prompts can change a ranking or a stage time.
+RANKING_SOURCES = [
+    _SRC / "text.py",
+    _SRC / "llm.py",
+    _SRC / "pipeline.py",
+    _SRC / "eval" / "metrics.py",
+    *sorted((_SRC / "retrieval").glob("*.py")),
+]
+
+
+def code_stamp(paths: list[Path]) -> str:
+    """Hash of the given source files, so records are never reused across a code change."""
+    digest = hashlib.sha256()
+    for path in sorted(paths):
+        digest.update(path.name.encode("utf-8"))
+        digest.update(path.read_bytes())
+    return digest.hexdigest()[:16]
+
+
 class RunMeta(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     config: PipelineConfig
+    code_stamp: str
     split: Split
     evalset_hash: str
     corpus_pin: str
@@ -237,6 +259,8 @@ class Workbench:
             (e.language, e.passage_id): e.sha256 for e in corpus.passages
         }
         self._llm = OllamaLLM(cache=JsonCache(CACHE_DIR / "llm"))
+        self._stamp = code_stamp(RANKING_SOURCES)
+        self.machines: set[str] = set()
 
     def run_dir(self, config: PipelineConfig) -> Path:
         return self._out / f"{config.config_id}__{self._split}"
@@ -246,8 +270,9 @@ class Workbench:
         meta_path = run_dir / "meta.json"
         if meta_path.exists():
             meta = RunMeta.model_validate_json(meta_path.read_text(encoding="utf-8"))
-            current = (self._manifest.hash, self._manifest.corpus_pin)
-            if (meta.evalset_hash, meta.corpus_pin) == current:
+            current = (self._manifest.hash, self._manifest.corpus_pin, self._stamp)
+            if (meta.evalset_hash, meta.corpus_pin, meta.code_stamp) == current:
+                self.machines.add(meta.machine)
                 return load_records(run_dir)
         print(f"  running {config.label} ({config.config_id}) ...", flush=True)
         pipeline = self._build(config)
@@ -261,6 +286,7 @@ class Workbench:
         )
         meta = RunMeta(
             config=config,
+            code_stamp=self._stamp,
             split=self._split,
             evalset_hash=self._manifest.hash,
             corpus_pin=self._manifest.corpus_pin,
@@ -268,6 +294,7 @@ class Workbench:
             created_at=datetime.now(UTC).isoformat(timespec="seconds"),
         )
         meta_path.write_text(meta.model_dump_json(indent=2) + "\n", encoding="utf-8")
+        self.machines.add(meta.machine)
         return records
 
     def _encoder(self, key: str) -> Encoder:
@@ -330,30 +357,32 @@ def _stage_lines(records: list[Record]) -> list[str]:
     ]
 
 
-def build_report(workbench: Workbench, resamples: int, seed: int, machine: str) -> str:
+def build_report(workbench: Workbench, resamples: int, seed: int) -> str:
     parts = [
         "Ablation on dev. Primary metric: recall@5, all scored questions (DECISIONS.md D29).",
         "A change is KEPT only when the 95% interval of its paired difference against the "
         "current best is entirely above zero.",
         f"Paired bootstrap over question groups, {resamples} resamples, seed {seed}. "
-        f"Latency is per question, all stages summed, on {machine}.",
+        "Latency is per question, all stages summed.",
     ]
     for track, start in STARTS.items():
         trials, final = run_chain(
             track, start, STEPS, workbench.evaluate, resamples=resamples, seed=seed
         )
-        for title, config in ((f"start: {start.label}", start), (f"final: {final.label}", final)):
+        shown = ((f"start: {start.label}", start, True), (f"final: {final.label}", final, False))
+        for title, config, is_start in shown:
             records = workbench.evaluate(config)
             p50, p95 = _percentiles(records)
             parts.append(f"\n=== Track {track}, {title} ({config.config_id}) ===")
             parts.append(format_rows(summarize(records, resamples, seed)))
             parts.append(f"latency ms: total p50 {p50:.1f}, p95 {p95:.1f}")
             parts.extend(_stage_lines(records))
-            if config is start:
+            if is_start:
                 parts.append(f"\n--- Track {track} experiments, in order ---")
                 parts.append(format_trials(trials))
         settings = final.model_dump(exclude={"label"})
         parts.append(f"final settings: {settings}")
+    parts.append(f"\nLatency measured on: {'; '.join(sorted(workbench.machines))}")
     return "\n".join(parts)
 
 
@@ -370,7 +399,7 @@ def main(argv: list[str] | None = None) -> None:
     questions = [q for g in groups if manifest.splits[g.group_id] == "dev" for q in expand(g)]
     workbench = Workbench(questions, manifest, "dev", args.out)
     started = time.perf_counter()
-    report = build_report(workbench, args.resamples, args.seed, machine_name())
+    report = build_report(workbench, args.resamples, args.seed)
     header = (
         "Generated by `uv run python -m atr.eval.ablation`. Do not edit by hand.\n"
         f"Question set {manifest.hash[:12]}, {manifest.unreviewed_groups} of "

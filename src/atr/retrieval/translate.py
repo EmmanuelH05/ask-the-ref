@@ -24,9 +24,13 @@ LOW_EFFORT_REASONERS = frozenset({"gpt-oss:20b"})
 _LATIN_OR_COMMON = re.compile(r"^[\u0000-\u024F\u2000-\u206F\u20A0-\u20BF]*$")
 
 
+def is_latin_script(text: str) -> bool:
+    return bool(_LATIN_OR_COMMON.match(text))
+
+
 def translation_problem(source: str, translation: str) -> str | None:
     """Why a model reply cannot be trusted as a translation, or None when it looks sound."""
-    if not _LATIN_OR_COMMON.match(translation):
+    if not is_latin_script(translation):
         return "contains non-Latin script"
     if "English:" in translation or "Text:" in translation:
         return "repeats the prompt"

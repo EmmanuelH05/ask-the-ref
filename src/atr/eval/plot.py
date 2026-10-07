@@ -10,7 +10,6 @@ from atr.eval.report import load_records, nearest_rank
 # Categorical slots 1 and 2 of the default palette, checked with the dataviz validator.
 TRACK_COLORS = {"T": "#2a78d6", "M": "#eb6834"}
 TRACK_NAMES = {"T": "translate first (track T)", "M": "multilingual, no translation (track M)"}
-LATENCY_TOLERANCE = 0.05
 SURFACE, INK, MUTED = "#fcfcfb", "#0b0b0b", "#52514e"
 
 
@@ -21,19 +20,18 @@ class Point(NamedTuple):
     recall_at_5: float
 
 
-def pareto_front(points: list[Point]) -> list[Point]:
-    """Points no other point beats on both latency and recall, fastest first.
+def _speed_class(ms: float) -> float:
+    """Latency to two significant figures: a finer gap between two runs is noise."""
+    return float(f"{ms:.2g}")
 
-    Latencies within LATENCY_TOLERANCE of each other count as equal: a half-millisecond gap
-    between two runs is measurement noise, not a trade-off.
-    """
+
+def pareto_front(points: list[Point]) -> list[Point]:
+    """Points no other point beats on both latency and recall, fastest first."""
     front: list[Point] = []
-    for point in sorted(points, key=lambda p: (p.p50_ms, -p.recall_at_5, p.label)):
-        if front and point.recall_at_5 <= front[-1].recall_at_5:
-            continue
-        if front and point.p50_ms <= front[-1].p50_ms * (1 + LATENCY_TOLERANCE):
-            front.pop()
-        front.append(point)
+    ordered = sorted(points, key=lambda p: (_speed_class(p.p50_ms), -p.recall_at_5, p.label))
+    for point in ordered:
+        if not front or point.recall_at_5 > front[-1].recall_at_5:
+            front.append(point)
     return front
 
 

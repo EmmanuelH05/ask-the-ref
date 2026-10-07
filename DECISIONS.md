@@ -507,3 +507,26 @@ on each query, depth 50); RRF when there is more than one ranking; rerank the to
 passages with the translated-or-original question (never the expanded one), scoring every
 indexed chunk of those passages and keeping the best per passage. The title prefix applies to
 dense docs only. Each stage's time is recorded under its own name.
+
+## D38. Fixes from the phase 4 review, and what they do to the pre-registration (2026-10-07)
+
+The review recomputed all 16 paired differences independently and matched the table, and
+confirmed every run directory is the configuration its meta claims. It found defects in two
+stages, which were fixed AFTER the first dev results had been seen. That is disclosed here
+because D29 was written before any run:
+- Decomposition: the reply parser threw away replies that were not valid JSON, 13 of 62
+  attempted splits on track T and 18 of 87 on track M. It now recovers the quoted strings.
+  This repairs a broken stage; the prompt, the model and the two-to-three rule are unchanged.
+- Rewrite: a reply that leaves Latin script is now rejected and falls back to the question,
+  the same check translation already had. The prompt is unchanged.
+Both steps are rerun under the same rule, and the first results stay in git history
+(commit c392276) for anyone who wants to compare.
+Also fixed: records are now stamped with a hash of every source file that can change a
+ranking or a stage time, and a cached run with another stamp is rerun, not reused; the report
+names the machine stored with each run, not the machine it is regenerated on; the trade-off
+front compares latencies to two significant figures.
+Known and left: the first uncached LLM call of a run carries the model load in its stored
+time (one outlier per run); the rewrite prompt says "soccer question" and so turns an
+out-of-scope question into a soccer one, which matters if track M's final is ever used to
+detect out-of-scope questions; `run_chain` would adopt a passing reranker automatically,
+where D29 says mannie chooses (none passed).

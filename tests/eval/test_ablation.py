@@ -1,6 +1,17 @@
+from pathlib import Path
+
 import pytest
 
-from atr.eval.ablation import STARTS, STEPS, Step, Variant, choose, run_chain, total_ms
+from atr.eval.ablation import (
+    STARTS,
+    STEPS,
+    Step,
+    Variant,
+    choose,
+    code_stamp,
+    run_chain,
+    total_ms,
+)
 from atr.eval.metrics import QuestionScores
 from atr.eval.report import Record
 from atr.pipeline import PipelineConfig
@@ -77,8 +88,38 @@ def test_run_chain_applies_kept_changes_and_carries_them_forward() -> None:
     ]
     assert final.bm25 and not final.title_prefix
     assert trials[1].base_config_id == trials[0].config.config_id
+    assert trials[1].config.bm25 and trials[1].config.title_prefix
     assert trials[0].recall_at_5 == pytest.approx(1.0)
     assert trials[0].base_recall_at_5 == pytest.approx(0.0)
+
+
+def test_run_chain_skips_variants_registered_for_another_track() -> None:
+    start = PipelineConfig(label="start", dense="me5-small")
+    steps = [
+        Step(
+            "reranker",
+            ("T", "M"),
+            (
+                Variant("minilm", {"reranker": "minilm"}, ("T",)),
+                Variant("bge-m3", {"reranker": "bge-m3"}),
+            ),
+        )
+    ]
+    trials, _ = run_chain("M", start, steps, lambda config: BASE, resamples=200, seed=0)
+    assert [t.variant for t in trials] == ["bge-m3"]
+
+
+def test_registered_changes_are_the_pre_registered_settings() -> None:
+    changes = {step.name: [v.changes for v in step.variants] for step in STEPS}
+    assert changes == {
+        "both-editions": [{"index": "en+es"}],
+        "hybrid": [{"bm25": True}],
+        "title-prefix": [{"title_prefix": True}],
+        "reranker": [{"reranker": "minilm"}, {"reranker": "bge-m3"}],
+        "chunking": [{"chunking": "blocks"}, {"chunking": "items"}],
+        "rewrite": [{"rewrite": True}],
+        "decompose": [{"decompose": True}],
+    }
 
 
 def test_registered_plan_matches_the_pre_registered_order() -> None:
@@ -98,3 +139,12 @@ def test_registered_plan_matches_the_pre_registered_order() -> None:
         ("minilm", ("T",)),
         ("bge-m3", ("T", "M")),
     ]
+
+
+def test_code_stamp_changes_when_a_ranking_module_changes(tmp_path: Path) -> None:
+    (tmp_path / "a.py").write_text("X = 1\n")
+    (tmp_path / "b.py").write_text("Y = 1\n")
+    first = code_stamp([tmp_path / "a.py", tmp_path / "b.py"])
+    assert code_stamp([tmp_path / "b.py", tmp_path / "a.py"]) == first
+    (tmp_path / "b.py").write_text("Y = 2\n")
+    assert code_stamp([tmp_path / "a.py", tmp_path / "b.py"]) != first

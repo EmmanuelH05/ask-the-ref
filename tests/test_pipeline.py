@@ -126,7 +126,20 @@ def test_reranker_only_sees_the_top_candidates() -> None:
         rerank_texts={i: [i] for i in ids},
     )
     pipeline.search("q?", "en", 10)
-    assert len(reranker.calls[0][1]) == 20
+    assert reranker.calls[0][1] == ids[:20]
+
+
+def test_reranker_gets_the_translated_question() -> None:
+    reranker = ByLength()
+    pipeline = Pipeline(
+        config(translate=True, reranker="minilm"),
+        retrievers=[Fixed("dense", ["L1.1"])],
+        translator=Upper(),
+        reranker=reranker,
+        rerank_texts={"L1.1": ["x"]},
+    )
+    pipeline.search("hola?", "es", 5)
+    assert reranker.calls[0][0] == "HOLA?"
 
 
 def test_prime_runs_only_the_llm_stages() -> None:

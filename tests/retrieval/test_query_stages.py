@@ -46,3 +46,22 @@ def test_decomposer_reads_an_array_wrapped_in_other_text() -> None:
 def test_decomposer_gives_nothing_for_a_simple_question_or_a_bad_reply() -> None:
     for reply in ('["Only one?"]', "not json", "[1, 2]", '["a?", "b?", "c?", "d?"]', "[]"):
         assert Decomposer(FakeLLM(reply)).split("Simple?")[0] == []
+
+
+def test_decomposer_recovers_strings_from_a_malformed_array() -> None:
+    broken = [
+        '["Who restarts after a wobble?")\n("Where is the restart taken?")]',
+        '["Who restarts after a wobble?" "Where is the restart taken?"]',
+        '["Who restarts after a wobble?"]\n["Where is the restart taken?"]',
+    ]
+    for reply in broken:
+        assert Decomposer(FakeLLM(reply)).split("Both?")[0] == [
+            "Who restarts after a wobble?",
+            "Where is the restart taken?",
+        ]
+
+
+def test_rewriter_rejects_a_reply_that_drifts_out_of_latin_script() -> None:
+    question = "Can the guy in the net keep it forever?"
+    reply = "May the zorb keeper hold the orb 虽问题要求 beyond the permitted time?"
+    assert RulebookRewriter(FakeLLM(reply)).expand(question).text == question

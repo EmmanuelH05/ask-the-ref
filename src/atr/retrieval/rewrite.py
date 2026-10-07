@@ -3,6 +3,7 @@
 from typing import Protocol
 
 from atr.llm import Completion
+from atr.retrieval.translate import is_latin_script
 
 REWRITE_PROMPT = (
     "Restate the soccer question below in one sentence, using the formal vocabulary of the "
@@ -32,6 +33,6 @@ class RulebookRewriter:
         """
         reply = self._llm.complete(self._model, REWRITE_PROMPT.format(text=text))
         ratio = len(reply.text.split()) / max(len(text.split()), 1)
-        if not MIN_LENGTH_RATIO <= ratio <= MAX_LENGTH_RATIO:
+        if not MIN_LENGTH_RATIO <= ratio <= MAX_LENGTH_RATIO or not is_latin_script(reply.text):
             return Completion(text, reply.ms)
         return Completion(f"{text}\n{reply.text}", reply.ms)

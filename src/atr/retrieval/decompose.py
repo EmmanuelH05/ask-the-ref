@@ -15,6 +15,7 @@ DECOMPOSE_PROMPT = (
 MIN_PARTS = 2
 MAX_PARTS = 3
 _ARRAY = re.compile(r"\[.*\]", re.DOTALL)
+_STRING = re.compile(r'"((?:[^"\\\\]|\\\\.)*)"')
 
 
 class Decomposer:
@@ -30,16 +31,25 @@ class Decomposer:
         pipeline then searches with the original question only.
         """
         reply = self._llm.complete(self._model, DECOMPOSE_PROMPT.format(text=text))
-        match = _ARRAY.search(reply.text)
-        if match is None:
-            return [], reply.ms
-        try:
-            parsed = json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return [], reply.ms
-        usable = (
-            isinstance(parsed, list)
-            and MIN_PARTS <= len(parsed) <= MAX_PARTS
-            and all(isinstance(part, str) and part.strip() for part in parsed)
-        )
-        return ([part.strip() for part in parsed], reply.ms) if usable else ([], reply.ms)
+        parts = _parse(reply.text)
+        usable = MIN_PARTS <= len(parts) <= MAX_PARTS
+        return (parts, reply.ms) if usable else ([], reply.ms)
+
+
+def _parse(reply: str) -> list[str]:
+    """The strings of the reply's array, tolerating the malformed arrays the model emits.
+
+    About a fifth of multi-part replies are not valid JSON (a missing comma, stray
+    brackets, one array per line), so when strict parsing fails the quoted strings are
+    taken in order.
+    """
+    match = _ARRAY.search(reply)
+    if match is None:
+        return []
+    try:
+        parsed = json.loads(match.group(0))
+    except json.JSONDecodeError:
+        parsed = [json.loads(f'"{found}"') for found in _STRING.findall(match.group(0))]
+    if not isinstance(parsed, list) or not all(isinstance(part, str) for part in parsed):
+        return []
+    return [part.strip() for part in parsed if part.strip()]

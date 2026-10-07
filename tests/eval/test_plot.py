@@ -18,10 +18,13 @@ def test_pareto_front_keeps_one_of_two_identical_points_and_handles_none() -> No
     assert pareto_front([]) == []
 
 
-def test_latencies_within_five_percent_are_one_speed_class() -> None:
+def test_latencies_equal_to_two_significant_figures_are_one_speed_class() -> None:
     points = [
         Point("a", "T", 929.5, 0.67),
         Point("b", "T", 930.0, 0.72),
         Point("c", "T", 2600.0, 0.74),
+        Point("d", "M", 6.0, 0.43),
+        Point("e", "M", 6.4, 0.44),
+        Point("f", "M", 6.5, 0.50),
     ]
-    assert [p.label for p in pareto_front(points)] == ["b", "c"]
+    assert [p.label for p in pareto_front(points)] == ["d", "e", "f", "b", "c"]
