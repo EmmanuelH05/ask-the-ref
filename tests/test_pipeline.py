@@ -127,3 +127,19 @@ def test_reranker_only_sees_the_top_candidates() -> None:
     )
     pipeline.search("q?", "en", 10)
     assert len(reranker.calls[0][1]) == 20
+
+
+def test_prime_runs_only_the_llm_stages() -> None:
+    dense = Fixed("dense", ["L1.1"])
+    reranker = ByLength()
+    pipeline = Pipeline(
+        config(translate=True, rewrite=True, decompose=True, reranker="minilm"),
+        retrievers=[dense],
+        translator=Upper(),
+        rewriter=Expand(),
+        decomposer=Split(),
+        reranker=reranker,
+        rerank_texts={"L1.1": ["x"]},
+    )
+    assert pipeline.prime("hola?", "es") == ["HOLA?\nformal words", "part one?", "part two?"]
+    assert dense.queries == [] and reranker.calls == []

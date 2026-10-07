@@ -251,6 +251,8 @@ class Workbench:
                 return load_records(run_dir)
         print(f"  running {config.label} ({config.config_id}) ...", flush=True)
         pipeline = self._build(config)
+        for question in self._questions:
+            pipeline.prime(question.text, question.language)
         pipeline.search("warm up", "en", TOP_K)
         records = evaluate_pipeline(self._questions, pipeline, split=self._split, k=TOP_K)
         run_dir.mkdir(parents=True, exist_ok=True)

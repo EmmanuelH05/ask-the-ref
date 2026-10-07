@@ -1,0 +1,19 @@
+{
+  "config": {
+    "label": "M0 +both-editions:en+es",
+    "index": "en+es",
+    "translate": false,
+    "dense": "me5-small",
+    "bm25": false,
+    "title_prefix": false,
+    "chunking": "passage",
+    "reranker": null,
+    "rewrite": false,
+    "decompose": false
+  },
+  "split": "dev",
+  "evalset_hash": "1654d35d3dad2aab3bd0bdb0b22df9ea818c9fce83b6882605256e8fbdb325fa",
+  "corpus_pin": "9b8dbad9743fcf348d77795706028e10d783d161d84b58b1be8887d33ba69de9",
+  "machine": "Apple M5 Pro, 24 GB RAM, macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "created_at": "2026-10-06T06:37:59+00:00"
+}

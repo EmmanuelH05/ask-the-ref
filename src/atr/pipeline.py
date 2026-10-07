@@ -88,13 +88,26 @@ class Pipeline:
         self._reranker = reranker
         self._rerank_texts = rerank_texts or {}
 
-    def search(self, text: str, language: QuestionLanguage, k: int) -> PipelineResult:
-        timings: dict[str, float] = {}
+    def prime(self, text: str, language: QuestionLanguage) -> list[str]:
+        """Run only the local-LLM stages, filling their caches, and return the queries.
+
+        A timed run should follow a primed one: while the LLM is generating it shares the
+        GPU with the embedding model, which inflates the search time measured beside it.
+        """
+        return self._plan(text, language, {})[1]
+
+    def _plan(
+        self, text: str, language: QuestionLanguage, timings: dict[str, float]
+    ) -> tuple[str, list[str]]:
         question = text
         if self._translator is not None:
             question = self._translator.rewrite(text, language)
             timings["translate"] = self._translator.cost_ms(text, language)
-        queries = self._queries(question, timings)
+        return question, self._queries(question, timings)
+
+    def search(self, text: str, language: QuestionLanguage, k: int) -> PipelineResult:
+        timings: dict[str, float] = {}
+        question, queries = self._plan(text, language, timings)
         rankings = [
             self._timed_search(retriever, query, timings)
             for query in queries
