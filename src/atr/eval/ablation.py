@@ -234,7 +234,8 @@ class RunMeta(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     config: PipelineConfig
-    code_stamp: str
+    # Runs saved before stamping existed have none, which never matches and forces a rerun.
+    code_stamp: str = ""
     split: Split
     evalset_hash: str
     corpus_pin: str
