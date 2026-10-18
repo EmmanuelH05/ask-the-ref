@@ -703,3 +703,11 @@ Known and left: `AnswerRecord.answer` and its claims are committed under `runs/a
 restatements, at most three sentences each, not the Laws text); hallucinated ids are dropped but
 not counted; "hit" for a multi_rule question means any gold in the top 5 on the refusal curve
 (D40) but all gold for a failure (D42); a judge run that stops midway writes nothing.
+
+## D45. No paid AI, ever (mannie, 2026-10-18)
+
+Asked whether a hosted demo could be backed by a paid model API, mannie said: "dont use paid ai".
+The repo rule is now a standing one, not a question to ask again: every model that touches this
+project runs locally (sentence-transformers, Ollama). A hosted demo, if there is one, runs the
+same local stack on a machine that has it; it does not swap in a hosted generator. The open
+parts of Linear EMM-92 are the remote (public or private) and where the demo runs.

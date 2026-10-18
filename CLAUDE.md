@@ -12,7 +12,8 @@ Rules that get broken otherwise:
 - The test split is frozen and hash-committed before any retrieval tuning. Tune on dev only.
   Looking at test results to make a choice means telling mannie and re-splitting.
 - `data/` is gitignored. Never commit the IFAB Laws text, in full or in bulk.
-- Local models only (sentence-transformers, Ollama). Ask before any paid API or `brew install`.
+- Local models only (sentence-transformers, Ollama). No paid AI API, ever (mannie, 2026-10-18).
+  Ask before any `brew install`.
 - Tests first for every pure function.
 - Pydantic models are frozen with `extra="forbid"`.
 - Commits: conventional format, `git commit --only <paths>`, as 05mannyhernandez@gmail.com.
