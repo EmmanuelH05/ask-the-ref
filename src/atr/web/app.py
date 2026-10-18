@@ -276,82 +276,156 @@ class Service:
         )
 
 
-PAGE = """<!doctype html>
+PAGE = r"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Ask the Ref</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-:root{--ink:#0b0b0b;--muted:#52514e;--line:#e6e5e1;--accent:#2a78d6;--warn:#b4541c;--bg:#fcfcfb}
-body{font:16px/1.5 system-ui,sans-serif;color:var(--ink);background:var(--bg);margin:0;
-  padding:0 16px}
-main{max-width:900px;margin:0 auto;padding:24px 0}
-h1{font-size:1.6rem;margin:0 0 4px} .sub{color:var(--muted);margin:0 0 16px}
+:root{--ink:#14211a;--muted:#5d6b62;--line:#dfe6e1;--accent:#1b7f4c;--accent-ink:#0f5c36;
+  --warn:#9a4b12;--bg:#f6f8f6;--card:#ffffff;--mark:#fff1a8;--chip:#edf3ef;--shadow:0 1px 2px
+  rgba(20,33,26,.06)}
+@media(prefers-color-scheme:dark){:root{--ink:#e8ede9;--muted:#9fb0a6;--line:#2a3630;
+  --accent:#3fb97c;--accent-ink:#8ee0b4;--warn:#f0a35e;--bg:#0f1512;--card:#172019;
+  --mark:#5a4a12;--chip:#1f2b24;--shadow:none}}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--ink);background:var(--bg)}
+main{max-width:760px;margin:0 auto;padding:44px 16px 64px}
+h1{font-size:2rem;letter-spacing:-.02em;margin:0}
+.sub{color:var(--muted);margin:6px 0 24px;font-size:1.05rem}
 form{display:flex;gap:8px}
-input{flex:1;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
-button{font:inherit;padding:10px 14px;border:1px solid var(--accent);background:var(--accent);
-  color:#fff;border-radius:8px;cursor:pointer}
-button.ghost{background:transparent;color:var(--accent)}
-.card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0;
-  background:#fff}
-.answer{font-size:1.1rem} .refused{color:var(--warn)} .meta{color:var(--muted);font-size:.9rem}
-.passage{border-top:1px solid var(--line);padding:10px 0} .passage:first-of-type{border-top:0}
-.pid{font-weight:600} .why{color:var(--muted);font-size:.9rem} mark{background:#fff3b0}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:700px){.cols{grid-template-columns:1fr}}
-.note{color:var(--muted);font-size:.85rem;margin-top:24px} a{color:var(--accent)}
-pre{white-space:pre-wrap;font-size:.8rem}
+input{flex:1;min-width:0;font:inherit;font-size:1.05rem;padding:14px 16px;border:1px solid
+  var(--line);border-radius:12px;background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+button{font:inherit;font-weight:600;padding:14px 20px;border:0;border-radius:12px;
+  background:var(--accent);color:#fff;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.chip{font:inherit;font-size:.9rem;padding:6px 12px;border-radius:999px;border:1px solid
+  var(--line);background:var(--chip);color:var(--ink);cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent)}
+.chip small{color:var(--muted);margin-left:6px;font-size:.78rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+  margin-top:28px;box-shadow:var(--shadow)}
+.answer{font-size:1.35rem;line-height:1.45;margin:0 0 14px;letter-spacing:-.01em}
+.answer.soft{font-size:1.15rem;color:var(--warn)}
+.hint{margin:-6px 0 14px;color:var(--muted)}
+.cite{display:inline-block;font-size:.72rem;font-weight:700;vertical-align:.18em;
+  padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--accent-ink);
+  text-decoration:none;margin-left:2px;font-variant-numeric:tabular-nums}
+.cite:hover{background:var(--accent);color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.85rem}
+.pill{padding:3px 10px;border-radius:999px;background:var(--chip)}
+.loading{display:flex;align-items:center;gap:12px;color:var(--muted)}
+.spin{width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+section{margin-top:28px}
+h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+  margin:0 0 10px;font-weight:600}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+label.toggle{font-size:.85rem;color:var(--muted);cursor:pointer}
+details.p{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:8px 0}
+details.p summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;gap:10px;
+  align-items:baseline;flex-wrap:wrap}
+summary::-webkit-details-marker{display:none}
+details.p summary::before{content:"\203A";color:var(--muted);display:inline-block;
+  transition:transform .15s}
+details.p[open] summary::before{transform:rotate(90deg)}
+.pid{font-weight:700;font-variant-numeric:tabular-nums}
+.ptitle{color:var(--muted);font-size:.9rem}
+.tag{margin-left:auto;font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  text-transform:uppercase;letter-spacing:.06em}
+.body{padding:0 16px 14px;white-space:pre-wrap;line-height:1.5}
+.why{color:var(--muted);font-size:.82rem;padding:0 16px 14px}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
+details.cmp{margin-top:18px;color:var(--muted);font-size:.9rem}
+details.cmp summary{cursor:pointer}
+.cmp li{margin:4px 0}
+.err{color:var(--warn)}
+footer{margin-top:40px;color:var(--muted);font-size:.82rem;line-height:1.5}
+footer a{color:var(--accent-ink)}
 </style></head><body><main>
 <h1>Ask the Ref</h1>
 <p class="sub">Soccer rules questions in English, Spanish, or both at once.
-Every answer cites the Laws of the Game passage it came from.</p>
-<form id="f"><input id="q" placeholder="es offside si the ball comes off a defender?"
-  autocomplete="off" required>
-<button type="submit">Ask</button></form>
-<div class="row"><label><input type="checkbox" id="cmp"> compare keyword-only search</label>
-<label><input type="checkbox" id="other"> show passages in the other language</label>
-<a href="/results">results tables</a></div>
+Every answer cites the passage of the Laws of the Game it came from.</p>
+<form id="f"><input id="q" placeholder="Ask about any rule…" autocomplete="off" required>
+<button id="go" type="submit">Ask</button></form>
+<div class="chips" id="chips"></div>
 <div id="out"></div>
-<p class="note">__DISCLAIMER__</p>
+<footer>__DISCLAIMER__ · <a href="/results">How well this works, measured</a></footer>
 </main>
 <script>
+const EXAMPLES=[
+  ["Can a goal be scored directly from a goal kick?","English"],
+  ["¿Cuánto dura el descanso del medio tiempo?","Español"],
+  ["es offside si the ball comes off a defender?","Spanglish"]];
+const LANG={en:"English",es:"Español",cs:"Spanglish"};
 const f=document.getElementById('f'),q=document.getElementById('q'),
-  out=document.getElementById('out');
-const cmp=document.getElementById('cmp'),other=document.getElementById('other');let last=null;
-const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function passage(p,lang,mark){
-  let text=(other.checked&&lang!=='en'&&p.text_es)?p.text_es:p.text_en;
+  out=document.getElementById('out'),go=document.getElementById('go');
+let last=null,spanish=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const chips=document.getElementById('chips');
+for(const [text,lang] of EXAMPLES){
+  const b=document.createElement('button');b.type='button';b.className='chip';
+  b.innerHTML=esc(text)+'<small>'+esc(lang)+'</small>';
+  b.addEventListener('click',()=>{q.value=text;f.requestSubmit();});chips.appendChild(b);}
+function cites(text,ids){
+  return esc(text).replace(/\s*\[([^\]]+)\]/g,(m,inner)=>inner.split(/,\s*/)
+    .map(id=>ids.includes(id)?'<a class="cite" href="#p-'+esc(id)+'">'+esc(id)+'</a>':'')
+    .join(''));}
+function passage(p){
+  const text=(spanish&&p.text_es)?p.text_es:p.text_en;
   let html=esc(text);
-  if(mark&&p.marked_sentence&&text===p.text_en)
+  if(p.marked_sentence&&text===p.text_en)
     html=html.replace(esc(p.marked_sentence),'<mark>'+esc(p.marked_sentence)+'</mark>');
-  return `<div class="passage"><div><span class="pid">${esc(p.passage_id)}</span> `
-    +`${p.cited?'(cited)':''} <span class="meta">score ${p.score.toFixed(3)}</span></div>`
-    +`<div class="meta">${esc(p.title)}</div><div class="why">${esc(p.why)}</div>`
-    +`<p>${html.replace(/\\n/g,'<br>')}</p></div>`;}
+  return '<details class="p" id="p-'+esc(p.passage_id)+'"'+(p.cited?' open':'')+'>'
+    +'<summary><span class="pid">'+esc(p.passage_id)+'</span>'
+    +'<span class="ptitle">'+esc(p.title)+'</span>'
+    +(p.cited?'<span class="tag">cited</span>':'')+'</summary>'
+    +'<div class="body">'+html+'</div>'
+    +'<div class="why">'+esc(p.why)+' · score '+p.score.toFixed(2)+'</div></details>';}
 function render(r){
-  const ans=r.refused?`<p class="answer refused">${esc(r.answer)}</p>`
-    :`<p class="answer">${esc(r.answer)}</p>`;
-  const lat=Object.entries(r.latency_ms).map(([k,v])=>k+' '+v.toFixed(0)+' ms').join(', ');
-  const top=r.top_score==null?'-':r.top_score.toFixed(3);
-  const meta=`<p class="meta">language detected: ${r.language} · track ${r.track} · `
-    +`top score ${top} (refuses under ${r.threshold.toFixed(3)}) · ${lat}</p>`;
-  const shown=r.passages.length?r.passages.map(p=>passage(p,r.language,true)).join('')
-    :'<p class="meta">No passages shown: the top score was under the threshold.</p>';
-  const full=`<div class="card"><h3>Full pipeline</h3>${ans}${meta}${shown}</div>`;
-  const kwBody=r.keyword_only.map(p=>passage(p,r.language,false)).join('')
-    ||'<p class="meta">no keyword matches</p>';
-  const kw=`<div class="card"><h3>Keyword-only (BM25)</h3><p class="meta">`
-    +`What plain keyword search returns for the same question.</p>${kwBody}</div>`;
-  out.innerHTML=cmp.checked?`<div class="cols">${full}${kw}</div>`:full;}
+  const ids=r.passages.filter(p=>p.cited).map(p=>p.passage_id);
+  let head;
+  if(!r.refused)head='<p class="answer">'+cites(r.answer,ids)+'</p>';
+  else if(r.passages.length)head='<p class="answer soft">I couldn&rsquo;t give a confident '
+    +'answer.</p><p class="hint">The passages below are what the search found; the closest '
+    +'is first.</p>';
+  else head='<p class="answer soft">The Laws I have don&rsquo;t seem to cover that.</p>'
+    +'<p class="hint">Nothing in the rulebook scored above the threshold for this question.</p>';
+  const ms=r.latency_ms,total=Object.values(ms).reduce((a,b)=>a+b,0);
+  const meta='<div class="meta"><span class="pill">'+esc(LANG[r.language]||r.language)+'</span>'
+    +'<span class="pill">'+(total/1000).toFixed(1)+' s</span>'
+    +(r.top_score!=null?'<span class="pill">match '+r.top_score.toFixed(2)
+      +' · needs '+r.threshold.toFixed(2)+'</span>':'')+'</div>';
+  const list=r.passages.map(passage).join('');
+  const toggle=r.passages.some(p=>p.text_es)
+    ?'<label class="toggle"><input type="checkbox" id="es"'+(spanish?' checked':'')
+      +'> show in Spanish</label>':'';
+  const kw=r.keyword_only.length
+    ?'<details class="cmp"><summary>What plain keyword search would have returned</summary>'
+      +'<ul class="cmp">'+r.keyword_only.map(p=>'<li><b>'+esc(p.passage_id)+'</b> '
+      +esc(p.title)+'</li>').join('')+'</ul></details>':'';
+  out.innerHTML='<div class="card">'+head+meta+'</div>'
+    +(list?'<section><div class="row"><h2>From the Laws of the Game</h2>'+toggle+'</div>'
+      +list+'</section>':'')+kw;
+  const es=document.getElementById('es');
+  if(es)es.addEventListener('change',()=>{spanish=es.checked;render(last);});}
 f.addEventListener('submit',async e=>{e.preventDefault();
-  out.innerHTML='<p class="meta">thinking…</p>';
+  go.disabled=true;
+  const text=q.value.trim(),lang=/[áéíóúñ¿¡]|\b(el|la|que|de|es|un|una)\b/i.test(text);
+  out.innerHTML='<div class="card"><div class="loading"><div class="spin"></div>'
+    +(lang?'Translating, searching the Laws, writing an answer…':'Searching the Laws, writing'
+    +' an answer…')+'</div></div>';
   try{
     const res=await fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({question:q.value})});
-    if(!res.ok){out.innerHTML='<p class="refused">'+esc(await res.text())+'</p>';return;}
+      body:JSON.stringify({question:text})});
+    if(!res.ok){out.innerHTML='<div class="card"><p class="err">'+esc(await res.text())
+      +'</p></div>';return;}
     last=await res.json();render(last);
-  }catch(err){out.innerHTML='<p class="refused">'+esc('request failed: '+err)+'</p>';}});
-cmp.addEventListener('change',()=>last&&render(last));
-other.addEventListener('change',()=>last&&render(last));
+  }catch(err){out.innerHTML='<div class="card"><p class="err">'+esc('Request failed: '+err)
+    +'</p></div>';}
+  finally{go.disabled=false;}});
 </script></body></html>
 """
 
