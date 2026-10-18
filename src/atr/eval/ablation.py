@@ -30,7 +30,13 @@ from atr.pipeline import Pipeline, PipelineConfig
 from atr.retrieval.base import Retriever
 from atr.retrieval.bm25 import BM25Retriever
 from atr.retrieval.decompose import Decomposer
-from atr.retrieval.dense import ENCODERS, DenseRetriever, Encoder, SentenceTransformerEncoder
+from atr.retrieval.dense import (
+    ENCODERS,
+    DenseRetriever,
+    Encoder,
+    SentenceTransformerEncoder,
+    weights_stamp,
+)
 from atr.retrieval.docs import build_docs, load_passages, verify_passages
 from atr.retrieval.rerank import CrossEncoderReranker, Reranker
 from atr.retrieval.rewrite import RulebookRewriter
@@ -236,6 +242,8 @@ class RunMeta(BaseModel):
     config: PipelineConfig
     # Runs saved before stamping existed have none, which never matches and forces a rerun.
     code_stamp: str = ""
+    # Hash of a local (fine-tuned) encoder's weight files; "" for a hub model (D39).
+    weights_stamp: str = ""
     split: Split
     evalset_hash: str
     corpus_pin: str
@@ -266,17 +274,26 @@ class Workbench:
     def run_dir(self, config: PipelineConfig) -> Path:
         return self._out / f"{config.config_id}__{self._split}"
 
+    @staticmethod
+    def weights_of(config: PipelineConfig) -> str:
+        """The weights stamp of a local dense encoder, "" for a hub model."""
+        if config.dense is None:
+            return ""
+        local = Path(ENCODERS[config.dense].model_name)
+        return weights_stamp(local) if local.is_dir() else ""
+
     def evaluate(self, config: PipelineConfig) -> list[Record]:
         run_dir = self.run_dir(config)
         meta_path = run_dir / "meta.json"
+        weights = self.weights_of(config)
         if meta_path.exists():
             meta = RunMeta.model_validate_json(meta_path.read_text(encoding="utf-8"))
-            current = (self._manifest.hash, self._manifest.corpus_pin, self._stamp)
-            if (meta.evalset_hash, meta.corpus_pin, meta.code_stamp) == current:
+            current = (self._manifest.hash, self._manifest.corpus_pin, self._stamp, weights)
+            if (meta.evalset_hash, meta.corpus_pin, meta.code_stamp, meta.weights_stamp) == current:
                 self.machines.add(meta.machine)
                 return load_records(run_dir)
         print(f"  running {config.label} ({config.config_id}) ...", flush=True)
-        pipeline = self._build(config)
+        pipeline = self.build(config)
         for question in self._questions:
             pipeline.prime(question.text, question.language)
         pipeline.search("warm up", "en", TOP_K)
@@ -288,6 +305,7 @@ class Workbench:
         meta = RunMeta(
             config=config,
             code_stamp=self._stamp,
+            weights_stamp=weights,
             split=self._split,
             evalset_hash=self._manifest.hash,
             corpus_pin=self._manifest.corpus_pin,
@@ -305,7 +323,7 @@ class Workbench:
             )
         return self._encoders[key]
 
-    def _build(self, config: PipelineConfig) -> Pipeline:
+    def build(self, config: PipelineConfig) -> Pipeline:
         passages = load_passages(Path("data/corpus"), INDEXES[config.index])
         verify_passages(passages, self._pins)
         plain = build_docs(passages, title_prefix=False, chunking=config.chunking)

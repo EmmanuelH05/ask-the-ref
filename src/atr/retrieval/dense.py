@@ -1,5 +1,6 @@
 """Dense retrieval: encode texts to normalized vectors and rank by dot product."""
 
+import hashlib
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
@@ -45,11 +46,50 @@ ENCODERS: dict[str, EncoderSpec] = {
         query_prefix="query: ",
         passage_prefix="passage: ",
     ),
+    # Phase 5: the same model after fine-tuning, saved locally by `atr.finetune.train`.
+    "me5-small-ft": EncoderSpec(
+        key="me5-small-ft",
+        model_name="models/me5-small-ft",
+        query_prefix="query: ",
+        passage_prefix="passage: ",
+    ),
 }
+_WEIGHT_FILES = ("*.safetensors", "pytorch_model.bin")
 
 
 def apply_prefix(prefix: str, texts: list[str]) -> list[str]:
     return [prefix + text for text in texts]
+
+
+def weights_stamp(model_dir: Path) -> str:
+    """Hash of a local model's weight files, so retraining never reuses cached vectors."""
+    files = sorted(path for pattern in _WEIGHT_FILES for path in model_dir.glob(pattern))
+    if not files:
+        raise FileNotFoundError(
+            f"no model weights under {model_dir}; run `uv run python -m atr.finetune.train` first"
+        )
+    digest = hashlib.sha256()
+    for path in files:
+        digest.update(path.name.encode("utf-8"))
+        digest.update(path.read_bytes())
+    return digest.hexdigest()[:16]
+
+
+def fingerprint_of(spec: EncoderSpec) -> str:
+    """Model name and prefixes; a local model also carries its weights stamp.
+
+    A local path that does not exist raises rather than falling through to the Hugging Face
+    hub, which would otherwise be asked for a repo named `models/...`.
+    """
+    base = f"{spec.model_name}|{spec.query_prefix}|{spec.passage_prefix}"
+    local = Path(spec.model_name)
+    if local.is_dir():
+        return f"{base}|{weights_stamp(local)}"
+    if spec.model_name.startswith("models/"):
+        raise FileNotFoundError(
+            f"no local model at {local}; run `uv run python -m atr.finetune.train` first"
+        )
+    return base
 
 
 class SentenceTransformerEncoder:
@@ -59,7 +99,7 @@ class SentenceTransformerEncoder:
         # Any: the model is imported lazily, so its type cannot be named at module level.
         self._model: Any = None
         self.name = spec.key
-        self.fingerprint = f"{spec.model_name}|{spec.query_prefix}|{spec.passage_prefix}"
+        self.fingerprint = fingerprint_of(spec)
 
     @property
     def is_loaded(self) -> bool:

@@ -28,7 +28,7 @@ class PipelineConfig(BaseModel):
     label: str
     index: Literal["en", "en+es"] = "en"
     translate: bool = False
-    dense: Literal["bge-small-en", "me5-small"] | None = None
+    dense: Literal["bge-small-en", "me5-small", "me5-small-ft"] | None = None
     bm25: bool = False
     title_prefix: bool = False
     chunking: ChunkStrategy = "passage"

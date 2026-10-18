@@ -24,11 +24,17 @@ from atr.retrieval.dense import (
     DenseRetriever,
     Encoder,
     SentenceTransformerEncoder,
+    fingerprint_of,
 )
 from atr.retrieval.translate import Identity, OllamaTranslator, QueryRewriter
 
 TOP_K = 10
-RETRIEVERS = {"bm25": None, "dense-en": "bge-small-en", "dense-multi": "me5-small"}
+RETRIEVERS = {
+    "bm25": None,
+    "dense-en": "bge-small-en",
+    "dense-multi": "me5-small",
+    "dense-multi-ft": "me5-small-ft",
+}
 INDEXES: dict[str, tuple[Language, ...]] = {"en": ("en",), "en+es": ("en", "es")}
 CACHE_DIR = Path("runs/cache")
 WARMUP_QUERY = "warm up"
@@ -50,6 +56,8 @@ class RunInfo(BaseModel):
     resamples: int
     machine: str
     created_at: str
+    # Model name, prefixes and, for a local fine-tuned model, its weights stamp (D39).
+    encoder_fingerprint: str = ""
     questions: int
     scored: int
     latency_ms: dict[str, dict[str, float]]
@@ -155,6 +163,12 @@ def build_retriever(key: str, index: str, corpus_dir: Path) -> Retriever:
     return DenseRetriever(docs, encoder, name=key)
 
 
+def encoder_fingerprint(retriever: str) -> str:
+    """The dense encoder's fingerprint (weights stamp included for a local model); "" for BM25."""
+    key = RETRIEVERS[retriever]
+    return fingerprint_of(ENCODERS[key]) if key else ""
+
+
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Score one retrieval configuration on one split.")
     parser.add_argument("--retriever", choices=sorted(RETRIEVERS), required=True)
@@ -220,6 +234,7 @@ def main(argv: list[str] | None = None) -> None:
         resamples=args.resamples,
         machine=machine_name(),
         created_at=datetime.now(UTC).isoformat(timespec="seconds"),
+        encoder_fingerprint=encoder_fingerprint(args.retriever),
         questions=len(records),
         scored=sum(1 for r in records if r.metrics is not None),
         latency_ms=latency_summary(records),

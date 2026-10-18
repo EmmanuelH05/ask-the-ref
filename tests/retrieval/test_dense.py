@@ -161,7 +161,7 @@ def test_cached_encoder_name_matches_inner(tmp_path: Path) -> None:
 
 
 def test_encoders_registry_is_exact() -> None:
-    assert set(ENCODERS) == {"bge-small-en", "me5-small"}
+    assert set(ENCODERS) == {"bge-small-en", "me5-small", "me5-small-ft"}
     bge, me5 = ENCODERS["bge-small-en"], ENCODERS["me5-small"]
     assert bge.key == "bge-small-en"
     assert bge.model_name == "BAAI/bge-small-en-v1.5"
@@ -199,3 +199,41 @@ def test_sentence_transformer_fingerprint_covers_model_and_both_prefixes() -> No
     assert spec.model_name in encoder.fingerprint
     other = SentenceTransformerEncoder(spec.model_copy(update={"passage_prefix": "p: "}))
     assert other.fingerprint != encoder.fingerprint
+
+
+def test_weights_stamp_changes_with_the_weights_and_fails_without_them(tmp_path: Path) -> None:
+    from atr.retrieval.dense import weights_stamp
+
+    with pytest.raises(FileNotFoundError, match=r"finetune\.train"):
+        weights_stamp(tmp_path)
+    (tmp_path / "model.safetensors").write_bytes(b"one")
+    first = weights_stamp(tmp_path)
+    (tmp_path / "model.safetensors").write_bytes(b"two")
+    assert first != weights_stamp(tmp_path)
+    assert len(first) == 16
+
+
+def test_fingerprint_of_a_local_model_includes_its_weights_stamp(tmp_path: Path) -> None:
+    from atr.retrieval.dense import EncoderSpec, fingerprint_of, weights_stamp
+
+    (tmp_path / "model.safetensors").write_bytes(b"w")
+    spec = EncoderSpec(key="ft", model_name=str(tmp_path), query_prefix="q: ", passage_prefix="p: ")
+    assert fingerprint_of(spec) == f"{tmp_path}|q: |p: |{weights_stamp(tmp_path)}"
+    hub = EncoderSpec(key="h", model_name="org/model", query_prefix="", passage_prefix="")
+    assert fingerprint_of(hub) == "org/model||"
+
+
+def test_the_fine_tuned_encoder_shares_the_e5_prefixes() -> None:
+    assert ENCODERS["me5-small-ft"].query_prefix == ENCODERS["me5-small"].query_prefix
+    assert ENCODERS["me5-small-ft"].passage_prefix == ENCODERS["me5-small"].passage_prefix
+    assert ENCODERS["me5-small-ft"].model_name == "models/me5-small-ft"
+
+
+def test_fingerprint_of_a_missing_local_model_raises_instead_of_asking_the_hub() -> None:
+    from atr.retrieval.dense import EncoderSpec, fingerprint_of
+
+    spec = EncoderSpec(
+        key="ft", model_name="models/does-not-exist", query_prefix="", passage_prefix=""
+    )
+    with pytest.raises(FileNotFoundError, match=r"finetune\.train"):
+        fingerprint_of(spec)

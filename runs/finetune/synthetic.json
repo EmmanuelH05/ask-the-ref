@@ -1,0 +1,25 @@
+{
+  "model": "qwen2.5:14b",
+  "prompt_sha256": "971c4a499c9bc597b31434230481d0ee1e98fd3269a52cf5f8218ffd3ddf658a",
+  "passages": 172,
+  "passages_without_usable_reply": [
+    "L12.1.1",
+    "L12.4.14",
+    "L12.4.15"
+  ],
+  "examples": 1013,
+  "by_language": {
+    "en": 338,
+    "es": 338,
+    "cs": 337
+  },
+  "cs_switching_within_a_sentence": 11,
+  "held_out_laws": [
+    3,
+    5,
+    16
+  ],
+  "hash": "7bc5c40ec639fd46d150d8f0fa95059c6229dbd0194aeb85e929bccd844a9551",
+  "machine": "Apple M5 Pro, 24 GB RAM, macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "created_at": "2026-10-18T10:19:49+00:00"
+}
