@@ -21,3 +21,4 @@ runs/cache/
 # produce (judge_agreement.json, errors.txt) are committed.
 docs/grading/
 docs/errors/examples.md
+.claude/
