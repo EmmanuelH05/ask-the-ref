@@ -154,6 +154,14 @@ def train(
     model = SentenceTransformer(base_model)
     device: torch.device = model.device
     model.train()
+    # Recompute activations in the backward pass instead of keeping them: the same loss and
+    # gradients for a fraction of the memory. A batch embeds its anchors, positives and every
+    # mined negative at once (up to 80 passages of up to 512 tokens), which without this
+    # exceeded the 30 GiB the MPS backend allows.
+    transformer: Any = model[0].auto_model  # Any: the module type is only known at run time
+    transformer.gradient_checkpointing_enable(
+        gradient_checkpointing_kwargs={"use_reentrant": False}
+    )
     plan = [
         batches(rows, batch_size=config.batch_size, seed=config.seed + e)
         for e in range(config.epochs)

@@ -1,0 +1,28 @@
+{
+  "base_model": "intfloat/multilingual-e5-small",
+  "out_dir": "models/me5-small-ft",
+  "config": {
+    "epochs": 3,
+    "batch_size": 16,
+    "learning_rate": 0.00002,
+    "scale": 20.0,
+    "warmup_fraction": 0.1,
+    "negatives_per_example": 3,
+    "seed": 0
+  },
+  "synthetic_hash": "7bc5c40ec639fd46d150d8f0fa95059c6229dbd0194aeb85e929bccd844a9551",
+  "examples": 1013,
+  "rows": 1013,
+  "negatives": 3039,
+  "rows_short_of_negatives": 0,
+  "steps": 192,
+  "loss_per_epoch": [
+    2.0055584348738194,
+    0.8705378230661154,
+    0.6154437342192978
+  ],
+  "seconds": 1148.4341390000045,
+  "device": "mps:0",
+  "machine": "Apple M5 Pro, 24 GB RAM, macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "created_at": "2026-10-18T10:47:58+00:00"
+}
