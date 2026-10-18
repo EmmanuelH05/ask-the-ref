@@ -373,12 +373,13 @@ function cites(text,ids){
   return esc(text).replace(/\s*\[([^\]]+)\]/g,(m,inner)=>inner.split(/,\s*/)
     .map(id=>ids.includes(id)?'<a class="cite" href="#p-'+esc(id)+'">'+esc(id)+'</a>':'')
     .join(''));}
-function passage(p){
+function passage(p,i,anyCited){
   const text=(spanish&&p.text_es)?p.text_es:p.text_en;
   let html=esc(text);
   if(p.marked_sentence&&text===p.text_en)
     html=html.replace(esc(p.marked_sentence),'<mark>'+esc(p.marked_sentence)+'</mark>');
-  return '<details class="p" id="p-'+esc(p.passage_id)+'"'+(p.cited?' open':'')+'>'
+  const open=p.cited||(!anyCited&&i===0);
+  return '<details class="p" id="p-'+esc(p.passage_id)+'"'+(open?' open':'')+'>'
     +'<summary><span class="pid">'+esc(p.passage_id)+'</span>'
     +'<span class="ptitle">'+esc(p.title)+'</span>'
     +(p.cited?'<span class="tag">cited</span>':'')+'</summary>'
@@ -398,7 +399,7 @@ function render(r){
     +'<span class="pill">'+(total/1000).toFixed(1)+' s</span>'
     +(r.top_score!=null?'<span class="pill">match '+r.top_score.toFixed(2)
       +' · needs '+r.threshold.toFixed(2)+'</span>':'')+'</div>';
-  const list=r.passages.map(passage).join('');
+  const list=r.passages.map((p,i)=>passage(p,i,ids.length>0)).join('');
   const toggle=r.passages.some(p=>p.text_es)
     ?'<label class="toggle"><input type="checkbox" id="es"'+(spanish?' checked':'')
       +'> show in Spanish</label>':'';
