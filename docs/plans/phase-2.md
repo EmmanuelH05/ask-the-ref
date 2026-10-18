@@ -27,7 +27,7 @@ Held-out laws are 3, 5 and 16 (D11). A group with any gold passage in those laws
 
 ## Steps
 
-1. Tooling (crew): overlap, split, load and validate, freeze, then review sheet and stats.
+1. Tooling (brothas): overlap, split, load and validate, freeze, then review sheet and stats.
 2. Drafting (agents, not builders): English questions with gold from the corpus, then Spanish
    and code-switched drafts. Drafts live in `evalset/draft/*.jsonl`.
 3. Blind check: separate agents see only the English question and the corpus and name the
