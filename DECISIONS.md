@@ -530,3 +530,176 @@ time (one outlier per run); the rewrite prompt says "soccer question" and so tur
 out-of-scope question into a soccer one, which matters if track M's final is ever used to
 detect out-of-scope questions; `run_chain` would adopt a passing reranker automatically,
 where D29 says mannie chooses (none passed).
+
+## D39. Fine-tuning data, mining and loop (phase 5, main session, 2026-10-10)
+
+`src/atr/finetune/`. `synth.py`: `training_passages(passages)` keeps English passages whose law
+is not in `HELD_OUT_LAWS` (glossary entries have no law and stay). One cached `OllamaLLM` call
+per passage (`qwen2.5:14b`, `SYNTH_PROMPT`) asks for two questions in each of en, es and cs as a
+JSON object; `parse_synthetic(reply)` returns the three lists or None, dropping blanks and
+duplicates, and a passage whose reply is unusable is listed in the committed manifest
+`runs/finetune/synthetic.json` (counts, prompt hash, content hash, machine). The questions go to
+`data/finetune/synthetic.jsonl` (gitignored). Dev and test questions are never read.
+`negatives.py`: `mine_hard_negatives(ranked, gold, n)` takes the first n ranked ids outside the
+gold passage's section (`section_key`: `L12.1.3` -> `L12.1`), because sibling subsections often
+answer the same question and would be false negatives. The ranking comes from the untrained
+me5-small over plain English passages (depth 50); the phase 4 LLM stages are not used for
+mining because they cost seconds per query and do not change which passages sit near the gold.
+`train.py`: a plain PyTorch loop (no new packages). `contrastive_loss` is cross-entropy over
+`anchors @ [positives; negatives].T * scale`, the MultipleNegativesRanking loss with hard
+negatives. Fixed and not tuned (`TrainConfig`): 3 epochs, batch 16, AdamW 2e-5, scale 20,
+linear warm-up over 10% of steps then linear decay, 3 negatives per question, seed 0 (torch and
+`random`). Weights go to `models/me5-small-ft/` (gitignored); `runs/finetune/train.json`
+(committed) records every setting, the synthetic hash, loss per epoch, seconds, device, machine.
+The result is a third encoder `me5-small-ft` and retriever `dense-multi-ft`; its cache
+fingerprint appends `weights_stamp` (sha256 of the weight files), so retraining never reuses
+stale vectors (amends D25, D28). Measurement is the existing `atr.eval.run` and
+`atr.eval.compare` on dev and on heldout.
+
+## D40. Refusal threshold (phase 6, main session, 2026-10-10)
+
+`src/atr/eval/refusal.py`, dev split only. A question is answerable unless its type is
+`out_of_scope`; false-premise questions have a gold passage and count as answerable (the right
+answer corrects the premise), and are reported on their own row. Two score sources are compared
+per track: the top score of the track's final first stage, and the top `bge-m3` reranker score
+over the final's top 20 (the decisions table names the reranker; phase 4 dropped it for
+accuracy, which does not say whether its score separates better). The source with the higher
+AUROC (answerable against out-of-scope; ties count half) is chosen, then the threshold is the
+observed score with the highest balanced accuracy (mean of the answer rate on answerable and the
+refusal rate on out-of-scope), ties going to the lower threshold. Balanced, because out-of-scope
+is one type of six and plain accuracy would never refuse. The curve is accuracy among answered
+questions (gold in the top 5; an answered out-of-scope question counts wrong) against the share
+answered. `runs/refusal/<track>.json` (committed, `RefusalChoice`) holds the source, the
+threshold, the AUROCs, the by-type and by-language rows and the curve; phases 7 and 9 read it
+with `load_choice(track)`. The reranker-scored runs are cached under `runs/refusal/runs/`, apart
+from the ablation directory, so the ablation table and plot show only the pre-registered chain.
+Known: track M's final rewrites the question as "a soccer question" (D38), which pushes
+out-of-scope questions toward the Laws and can only hurt its separation; that is reported, not
+patched, because the rewrite stage was kept under D29 on recall@5.
+
+## D41. Generation, judge and grading (phase 7, main session, 2026-10-10)
+
+`src/atr/answer/`. `generate.py`: `Generator(llm, model="qwen2.5:14b")`. `answer(question,
+language, passages)` prompts with ONLY the given passages, each labelled `[id] title`, asks for at
+most three sentences each ending in a bracketed id, in the question's language, and for the
+fixed `REFUSAL_TEXT[language]` when the passages do not answer. No passages means an immediate
+refusal with no call. `extract_citations(text, allowed)` keeps cited ids in order, deduplicated,
+and only ids the model was given (a hallucinated id is dropped, never shown). `is_refusal` matches
+the fixed text or its opening ("I don't know", "No lo sé"). `split_claims` makes one `Claim`
+per sentence with the ids cited inside it. `closed_book` is evaluation only and may cite any
+corpus id. The Spanish and code-switched refusal strings are drafts until mannie reviews them.
+`run.py`: systems `closed_book`, `full`, `oracle` over a split; `full` serves the track's final
+config, plus the `bge-m3` reranker only when phase 6 chose the reranker score (`serving_config`),
+takes the top 5, refuses under the D40 threshold without calling the generator, and passes
+passages in the question's language (Spanish edition for `es`, English otherwise, English when
+the Spanish twin is missing). `oracle` gets the gold passages. Records (`AnswerRecord`) go to
+`runs/answers/<system>__<track>__<split>/` with a meta file; the test split stays barred (D18).
+`score.py`: citation accuracy = among questions with gold, the answer was given and cites a
+gold passage (a wrong refusal counts 0); `all_gold_cited` too; refusal accuracy = refused exactly
+when out-of-scope; supported-claim rate = share of judged claims marked supported, only with
+labels. `error_split`: oracle minus full is the retrieval gap, 1 minus oracle the generation gap,
+full minus closed-book the value of retrieval, paired over question groups.
+`judge.py`: `gpt-oss:20b` with `think: low`, a different model from the generator so it never
+grades itself; one yes/no call per claim with the cited passages' English text; an uncited claim
+is unsupported without a call; an unreadable verdict is None and counts as unsupported. The
+judge runs on a full set only after `runs/answers/judge_accepted.json` exists.
+`grading.py`: `sheet` samples 60 non-refused answers round-robin over (type, language) cells
+with a seed, writes `docs/grading/sheet.md` where mannie marks each claim `[y]` or `[n]`;
+`agree` runs the judge on exactly those claims and writes percent agreement and Cohen's kappa to
+`runs/answers/judge_agreement.json`; `accept` records his acceptance. `report.py` prints the
+tables and the three-system split, with the judge's status next to the supported-claim column.
+
+## D42. Failure causes (phase 8, main session, 2026-10-10; entry written 2026-10-18)
+
+`src/atr/eval/errors.py`: one cause per failed question from a fixed list, by rules in a fixed
+order; the first rule that applies wins. Input: the track's serving config evaluated on the split
+(`Workbench.evaluate`, dev by default), the `full` answer run for that track when
+`runs/answers/full__<track>__<split>/records.jsonl` exists, and the judge's labels only when
+`runs/answers/judge_accepted.json` exists. A question fails when its gold is not all in the top 5
+(recall@5 < 1), or when the answer stage failed: an out-of-scope question was answered, an
+answerable question was refused, no gold passage was cited, or an accepted judge marked a claim
+unsupported. Causes, in order: `wrong refusal` (the answer problem is a refusal or an answered
+out-of-scope question); `unsupported claim` (an answer problem while retrieval found a gold
+passage); `language mismatch` (a non-English question whose English version found its gold);
+`needs two passages` (type `multi_rule` with 0 < recall@5 < 1); `glossary term` (any gold id
+starts with `G.`); `table or list lookup` (a gold passage is list-dominated: at least half of its
+non-blank lines are items); `negation or exception` (the question or the gold text holds a word
+from `NEGATION_MARKERS`, English and Spanish); otherwise `vocabulary mismatch`, with the
+question's content-word overlap with the gold (D12) as evidence. `docs/errors/overrides.json`
+maps a question id to a cause mannie chose; an unknown cause raises. Output: `docs/errors.txt`
+(counts by cause and language, committed) and `docs/errors/examples.md` (up to `--n-examples`,
+default 10, round-robin over causes, highest overlap first, each with up to 400 characters of
+gold text). `docs/errors/examples.md` and `docs/grading/` are gitignored because they quote
+passage text; the numbers derived from them (`docs/errors.txt`, `runs/answers/judge_agreement.json`)
+are committed.
+
+## D43. The demo (phase 9, main session, 2026-10-10; entry written 2026-10-18)
+
+`src/atr/web/app.py`, standard library only (`http.server`), bound to 127.0.0.1, one page of
+inline HTML and JavaScript. `uv run python -m atr.web.app --track T --port 8000`. Routes: `GET /`
+the question box; `GET /results` and `GET /api/results` the committed report files
+(`docs/ablation.txt`, `finetune.txt`, `refusal.txt`, `answers.txt`, `errors.txt`, whichever
+exist) verbatim; `GET /healthz`; `POST /api/ask` with `{"question": ...}`, trimmed to 500
+characters, 400 on anything else. `build_service` loads the track's phase 6 choice
+(`load_choice`), serves `serving_config(choice.config, choice)` through `Workbench.build` against
+`runs/ablation`, and a plain BM25 pipeline for the keyword comparison; the generator is the phase
+7 `Generator` over the same `OllamaLLM` cache. `Service.ask`: the language is detected from two
+word lists (English words, Spanish words; both present means `cs`); the full pipeline runs at
+k = 5; when the top score is under the D40 threshold the generator gets no passages and refuses
+without a call; otherwise the passages go in the question's language (`context_passages`, D41).
+The response carries the answer or the fixed refusal text, the citations, the top score and the
+threshold, per-stage latency plus generation time, and for each shown passage its title, both
+edition texts, the score, why it was found (`matched words: ...` from stems shared with the
+search query, else `semantic match`), whether it was cited, and the passage sentence the answer
+restates (`cited_sentence`: best Dice overlap of content words, ties to the earlier sentence).
+Passages are shown only when the question was answered. Every response ends with `DISCLAIMER`.
+Tests drive `Service` and `route` with fakes; no test loads a model or starts a server.
+
+## D44. Fixes from the phase 5 to 9 review (main session, 2026-10-18)
+
+Three review passes (general, silent failures, test coverage) ran on the uncommitted phase 5 to
+9 code before its first commit. Fixed, each with a test:
+- Training leak (amends D39): the ranking used for mining, the mined negatives and every text
+  embedded during training come from `training_passages` only; a held-out passage receives no
+  gradient, not even as a negative. One row per question holds all its negatives (replacing one
+  triplet per negative), rows carry passage ids, and `false_negative_mask` drops from the softmax
+  any column holding the row's own passage (another row's positive, or another row's mined
+  negative). `train` checks the synthetic questions against the manifest hash. The report
+  records `rows`, `negatives` and `rows_short_of_negatives`.
+- `is_refusal` matched any answer opening "no se" (the Spanish impersonal "No se permite ...")
+  or "I do not know of ..."; it now requires the refusal's first words followed by the end of the
+  text or punctuation.
+- `NEGATION_MARKERS` held the article "a" (meant for "a menos"), which labelled nearly every
+  failure "negation or exception"; the phrase check for "a menos" stays.
+- `detect_language` had "a" among its English words and sent plain Spanish questions down the
+  code-switched path.
+- `--split test` is refused by `atr.eval.errors`, `atr.answer.judge` and `atr.answer.report`,
+  as it already was by `atr.answer.run` and `atr.eval.run` (D18).
+- Hallucinated citation ids are stripped from the answer text the demo shows (D41: never shown).
+- Stale verdicts: `judgments.json` carries the sha256 of the records it judged and refuses to
+  load against other records; `write_answers` deletes a stale one. The grading sheet carries the
+  same stamp and `agree` refuses a sheet written for other answers; a malformed claim line raises
+  and unmarked ones are counted and printed. The acceptance records the judge model, its think
+  setting and the prompt hash; `judge.main` refuses a judge that differs from the accepted one.
+- `parse_verdict` reads through Markdown and a leading label ("**Yes**", "Answer: no").
+  Unreadable verdicts are counted and printed in `docs/answers.txt` next to the tables.
+- Answer runs are stamped with `ANSWER_SOURCES` (the ranking sources plus `answer/generate.py`)
+  and `report` refuses to pair runs whose stamp, generator, question set, corpus or split differ.
+- Cached records remember the fine-tuned weights: `RunMeta.weights_stamp` (Workbench) and
+  `RunInfo.encoder_fingerprint` (`atr.eval.run`), so retraining never reuses records (amends D39).
+- `fingerprint_of` raises on a missing `models/...` directory instead of asking the Hugging Face
+  hub for a repo of that name.
+- The oracle raises on a gold id missing from the corpus instead of refusing silently; the judge
+  raises on a cited id missing from the corpus; `label_failures` raises when the answer run lacks
+  records for the question set or an override names an unknown id; a serving config that
+  carries the reranker is evaluated under `runs/refusal/runs`, not `runs/ablation` (D40).
+- Demo: an error from the pipeline or Ollama returns 502 with the message instead of dropping
+  the connection; a question over 500 characters or a body over 64 KiB gets 413; the server is
+  the plain `HTTPServer`, one request at a time, because the pipeline and the cache are not
+  thread-safe.
+- `split_claims` drops a leading "¿" or "¡"; the demo's `cited_sentence` scores by Dice overlap.
+
+Known and left: `AnswerRecord.answer` and its claims are committed under `runs/answers/` (model
+restatements, at most three sentences each, not the Laws text); hallucinated ids are dropped but
+not counted; "hit" for a multi_rule question means any gold in the top 5 on the refusal curve
+(D40) but all gold for a failure (D42); a judge run that stops midway writes nothing.

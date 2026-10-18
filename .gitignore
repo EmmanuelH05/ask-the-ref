@@ -16,3 +16,8 @@ runs/cache/
 
 .DS_Store
 .env
+
+# The grading sheet and the failure examples quote passage text (D42). The numbers they
+# produce (judge_agreement.json, errors.txt) are committed.
+docs/grading/
+docs/errors/examples.md
